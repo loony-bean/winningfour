@@ -1,0 +1,6 @@
+build/
+simulator/
+bin/
+.settings/
+.classpath
+.project
