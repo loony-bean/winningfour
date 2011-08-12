@@ -13,5 +13,5 @@ public class KeyboardEvent extends Event
 		this.keycode = keycode;
 	}
 
-	public int keycode;
+	public final int keycode;
 }

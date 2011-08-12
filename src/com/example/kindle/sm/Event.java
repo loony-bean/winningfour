@@ -8,7 +8,8 @@ import com.example.kindle.sm.SignalEvent;
 /**
  *
  */
-public class Event {
+public class Event
+{
 	public boolean equals(Object other)
 	{
 		if (this == other) return true;

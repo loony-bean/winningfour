@@ -7,6 +7,7 @@ import com.example.kindle.boardgame.IBoard2D;
 import com.example.kindle.boardgame.IBoard2DItem;
 import com.example.kindle.boardgame.IPiece;
 import com.example.kindle.boardgame.IPosition2D;
+import com.example.kindle.boardgame.ITurn;
 import com.example.kindle.boardgame.Position2D;
 
 public class Board implements IBoard2D
@@ -22,6 +23,8 @@ public class Board implements IBoard2D
 				this.setPiece(null, new Position2D(i, j));
 			}
 		}
+		
+		this.turnsCount = 0;
 	}
 
 	public ArrayList getItems()
@@ -45,8 +48,14 @@ public class Board implements IBoard2D
 
 	public void setPiece(IPiece piece, IPosition2D position)
 	{
-		// TODO: TurnValidator, exception?
 		this.board[position.x()][position.y()] = (Piece)piece;
+
+		if (piece != null)
+		{
+			this.lastTurn = new Turn(piece, position, null);
+		}
+		
+		this.turnsCount += 1;
 	}
 	
 	public void putPiece(IPiece piece, int row)
@@ -56,7 +65,7 @@ public class Board implements IBoard2D
 			if (this.board[row][col] == null)
 			{
 				this.setPiece(piece, new Position2D(row, col));
-				return;
+				break;
 			}
 		}
 		// TODO: TurnValidator, exception?
@@ -68,11 +77,6 @@ public class Board implements IBoard2D
 		return null;
 	}
 
-	public void resize(Dimension size)
-	{
-		// TODO
-	}
-
 	public int getWidth()
 	{
 		return this.board.length;
@@ -82,6 +86,39 @@ public class Board implements IBoard2D
 	{
 		return this.board[0].length;
 	}
+	
+	public boolean isPositionOnBoard(IPosition2D p)
+	{
+		return (p.x() >= 0 && p.x() < this.getWidth() &&
+				p.y() >= 0 && p.y() < this.getHeight());
+	}
 
-	private Piece[][] board;
+	public boolean isTurnAvailable(ITurn turn)
+	{
+		IPosition2D p = turn.getPosition();
+		if (isPositionOnBoard(p))
+		{
+			if(this.board[p.x()][0] == null)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	public ITurn getLastTurn()
+	{
+		return this.lastTurn;
+	}
+
+	public int getTurnsCount()
+	{
+		return this.turnsCount;
+	}
+
+	private final Piece[][] board;
+	// here could be history
+	private Turn lastTurn;
+	private int turnsCount;
 }

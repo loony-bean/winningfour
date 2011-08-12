@@ -14,7 +14,7 @@ public class State
 {
 	public State(String name)
 	{
-		transitions = new ArrayList();
+		this.transitions = new ArrayList();
 		this.name = name;
 	}
 	
@@ -30,7 +30,7 @@ public class State
 	
 	public void addTransition(Event event, State to)
 	{
-		transitions.add(new Transition(event, to));
+		this.transitions.add(new Transition(event, to));
 	}
 	
 	public void onSignal(String signal, State to)
@@ -45,7 +45,7 @@ public class State
 
 	public ArrayList transitions()
 	{
-		return transitions;
+		return this.transitions;
 	}
 
 	public boolean equals(Object other)
@@ -58,6 +58,6 @@ public class State
 		return this.name.equals(otherState.name);
 	}
 
-	private ArrayList transitions;
-	private String name;
+	private final ArrayList transitions;
+	private final String name;
 }

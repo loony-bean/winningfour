@@ -26,6 +26,7 @@ public class OptionsPage extends PageState
 	OptionsPage(final KindletContext context, final String name)
 	{
 		super(context, name);
+		this.panel = new ImagePanel("background.gif");
 		this.focusOwner = this.panel;
 
 		this.options = new KTextOptionPane();

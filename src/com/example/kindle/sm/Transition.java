@@ -14,6 +14,6 @@ public class Transition
 		this.to = to;
 	}
 
-	State to;
-	Event event;
+	public final State to;
+	public final Event event;
 }

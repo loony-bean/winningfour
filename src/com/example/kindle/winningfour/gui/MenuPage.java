@@ -3,7 +3,10 @@
  */
 package com.example.kindle.winningfour.gui;
 
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,8 +14,11 @@ import java.awt.event.ActionListener;
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.ui.KButton;
 import com.amazon.kindle.kindlet.ui.KPanel;
+import com.amazon.kindle.kindlet.ui.KindletUIResources;
+import com.amazon.kindle.kindlet.ui.KindletUIResources.KFontStyle;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.winningfour.App;
+import com.example.kindle.winningfour.AppResources;
 
 /**
  *
@@ -22,7 +28,15 @@ public class MenuPage extends PageState
 	MenuPage(final KindletContext context, final String name)
 	{
 		super(context, name);
-        this.panel.add(this.createMainMenu());
+		this.panel = new ImagePanel("background.gif");
+		this.panel.setLayout(new GridLayout(0, 1));
+		KPanel inner = new KPanel();
+		inner.setPreferredSize(new Dimension(300, 300));
+        Color transparent = new Color(0x000000FF, true);
+		inner.setBackground(transparent);
+		inner.setLayout(new GridLayout(0, 1));
+        inner.add(createMainMenu());
+		((ImagePanel) this.panel).setInner(inner);
 	}
 
 	public void enter()
@@ -33,7 +47,10 @@ public class MenuPage extends PageState
 
     public Container createMainMenu()
     {
-        final KPanel panel = new KPanel(new GridLayout(0, 1));
+    	final GridLayout layout = new GridLayout(0, 1, 8, 8);
+        final KPanel panel = new KPanel(layout);
+        Color transparent = new Color(0x000000FF, true);
+		panel.setBackground(transparent);
         
         boolean first = true;
         String[] menuItems = {"menu_new_game", "menu_options", "menu_instructions", "menu_exit"};
@@ -52,6 +69,7 @@ public class MenuPage extends PageState
             	this.focusOwner = option;
             	first = false;
             }
+
             panel.add(option);
         }
 
@@ -67,6 +85,8 @@ public class MenuPage extends PageState
     protected Container addOption(final String name, final Runnable action)
     {
         KButton button = new KButton(name);
+		button.setFont(AppResources.getFont(AppResources.ID_FONT_MENU));
+
         button.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -74,6 +94,7 @@ public class MenuPage extends PageState
                 action.run();
             }
         });
+
         return button;
     }
 }

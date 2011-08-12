@@ -4,7 +4,6 @@
 package com.example.kindle.utils;
 
 import java.awt.Component;
-import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 

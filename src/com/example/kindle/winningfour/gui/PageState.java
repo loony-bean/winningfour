@@ -10,7 +10,6 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.FocusListener;
 
 import com.amazon.kindle.kindlet.KindletContext;
-import com.amazon.kindle.kindlet.ui.KPanel;
 
 import com.example.kindle.sm.State;
 
@@ -24,13 +23,14 @@ public class PageState extends State
 		super(name);
 		this.context = context;
 		this.root = context.getRootContainer();
-		this.panel = new KPanel();
+		this.focusOwner = this.root;
 		this.active = false;
 	}
 
 	public void enter()
 	{
 		super.enter();
+		this.panel.setBounds(this.root.getBounds());
         this.root.add(this.panel, BorderLayout.CENTER);
         this.focusOwner.requestFocus();
         this.active = true;
@@ -45,7 +45,7 @@ public class PageState extends State
 	}
 
 	boolean active;
-	KPanel panel;
+	Container panel;
 	Container root;
 	KindletContext context;
 	Component focusOwner;

@@ -1,13 +1,12 @@
 package com.example.kindle.winningfour.boardgame.states;
 
-import java.awt.Color;
-
-import com.example.kindle.winningfour.boardgame.HumanPlayer;
+import com.example.kindle.boardgame.IPlayer;
+import com.example.kindle.winningfour.boardgame.GameController;
 
 public class Player1Win extends WinState
 {
-	public Player1Win()
+	public Player1Win(GameController game, IPlayer player)
 	{
-		super(new HumanPlayer(Color.yellow), "Player1Win");
+		super(game, player, "Player1Win");
 	}
 }

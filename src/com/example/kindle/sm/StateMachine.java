@@ -22,28 +22,30 @@ public class StateMachine
 		this.states = new ArrayList();
 		this.running = false;
 		
-		keyEventDispatcher = new KeyEventDispatcher() {
+		keyEventDispatcher = new KeyEventDispatcher()
+		{
             public boolean dispatchKeyEvent(final KeyEvent key)
             {
                 if (key.getKeyCode() == KindleKeyCodes.VK_BACK)
                 {
                     key.consume();
                 	App.log("VK_BACK");
-                	App.pager.pushEvent(new KeyboardEvent(KindleKeyCodes.VK_BACK));
+                	StateMachine.this.pushEvent(new KeyboardEvent(KindleKeyCodes.VK_BACK));
                     return true;
                 }
                 else if (key.getKeyCode() == KindleKeyCodes.VK_TEXT)
                 {
                     key.consume();
                 	App.log("VK_TEXT");
-                	App.pager.pushEvent(new KeyboardEvent(KindleKeyCodes.VK_TEXT));
+                	StateMachine.this.pushEvent(new KeyboardEvent(KindleKeyCodes.VK_TEXT));
                     return true;
                 }
 
                 return false;
             }
 		};
-    	KeyboardFocusManager fm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+    	
+		KeyboardFocusManager fm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         fm.addKeyEventDispatcher(this.keyEventDispatcher);
 	}
 	
@@ -78,8 +80,8 @@ public class StateMachine
 
 	public void restart()
 	{
-		this.start();
 		this.stop();
+		this.start();
 	}
 
 	public void back()
@@ -113,20 +115,23 @@ public class StateMachine
 				this.jump(t.to);
 			}
 		}
+		
 		App.log("App::pushEvent done");
 	}
 
 	private void jump(State state)
 	{
 		App.log("App::jump " + state.getClass().getSimpleName());
-		if (currentState != null)
+		
+		if (this.currentState != null)
 		{
-			currentState.leave();
+			this.currentState.leave();
 		}
 		
-		historyState = currentState; 
-		currentState = state;
-		currentState.enter();
+		this.historyState = this.currentState; 
+		this.currentState = state;
+		this.currentState.enter();
+		
 		App.log("App::jump done");
 	}
 	
@@ -142,7 +147,7 @@ public class StateMachine
 
 	public State getCurrentState()
 	{
-		return currentState;
+		return this.currentState;
 	}
 
 	public void addState(State state)
@@ -157,7 +162,7 @@ public class StateMachine
 	private State initialState;
 	private State finalState;
 
-	boolean running;
+	private boolean running;
 	
 	private KeyEventDispatcher keyEventDispatcher;
 }

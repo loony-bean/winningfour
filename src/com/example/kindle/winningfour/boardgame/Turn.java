@@ -1,16 +1,23 @@
 package com.example.kindle.winningfour.boardgame;
 
-import com.example.kindle.boardgame.IBoard2DItem;
+import java.util.Date;
+
 import com.example.kindle.boardgame.IPiece;
 import com.example.kindle.boardgame.IPosition2D;
-import com.example.kindle.boardgame.Position2D;
+import com.example.kindle.boardgame.ITurn;
 
-public class BoardItem implements IBoard2DItem
+public class Turn implements ITurn
 {
-	public BoardItem(Piece piece, Position2D position)
+	public Turn(IPiece piece, IPosition2D position, Date date)
 	{
 		this.piece = piece;
 		this.position = position;
+		this.date = date;
+	}
+
+	public Date getDate()
+	{
+		return this.date;
 	}
 
 	public IPiece getPiece()
@@ -22,7 +29,8 @@ public class BoardItem implements IBoard2DItem
 	{
 		return this.position;
 	}
-	
-	private final Piece piece;
-	private final Position2D position;
+
+	private Date date;
+	private IPosition2D position;
+	private IPiece piece;
 }
