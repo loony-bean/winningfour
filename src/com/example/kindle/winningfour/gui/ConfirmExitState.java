@@ -4,7 +4,6 @@
 package com.example.kindle.winningfour.gui;
 
 import com.amazon.kindle.kindlet.KindletContext;
-import com.amazon.kindle.kindlet.ui.KOptionPane;
 import com.example.kindle.sm.State;
 import com.example.kindle.utils.DialogHelper;
 import com.example.kindle.winningfour.App;

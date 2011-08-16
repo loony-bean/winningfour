@@ -1,61 +1,22 @@
 package com.example.kindle.winningfour.boardgame;
 
 import java.awt.Color;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import com.amazon.kindle.kindlet.event.KindleKeyCodes;
 import com.example.kindle.boardgame.IPiece;
-import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.winningfour.App;
 
-public class HumanPlayer implements IPlayer
+public class HumanPlayer extends Player
 {
-	public HumanPlayer(final GameController game, final Color color, final String name)
+	public HumanPlayer(final Color color, final String name)
 	{
-		this.color = color;
-		this.name = name;
-		this.game = game;
-		
-		this.keyAdapter = new KeyAdapter()
-		{
-			public void keyPressed(KeyEvent event)
-			{ 
-				HumanPlayer.this.onKeyboard(event);
-			}
-		};
+		super(color, name);
 	}
 	
-	public void destroy()
-	{
-		if (this.keyAdapter != null)
-		{
-			this.keyAdapter = null;
-		}
-	}
-
-	public Color getColor()
-	{
-		return this.color;
-	}
-
-	public String getName()
-	{
-		return this.name;
-	}
-	
-	public KeyAdapter getKeyAdapter()
-	{
-		return this.keyAdapter;
-	}
-
-	public void interrupt()
-	{
-	}
-
-	private void onKeyboard(KeyEvent event)
+	protected void onKeyboard(KeyEvent event)
 	{
 		int key = event.getKeyCode();
 		App.log("HumanPlayer::onKeyboard" + event);
@@ -75,44 +36,25 @@ public class HumanPlayer implements IPlayer
 					case KindleKeyCodes.VK_FIVE_WAY_UP:
 					{
 						IPiece piece = new Piece(this);
-						IPosition2D pos = new Position2D(this.game.getSelectedRow(), 0);
-						this.game.makeTurn(new Turn(piece, pos, null));
+						IPosition2D pos = new Position2D(App.gamer.getSelectedRow(), 0);
+						App.gamer.makeTurn(new Turn(piece, pos, null));
 						break;
 					}
 					case KindleKeyCodes.VK_FIVE_WAY_LEFT:
-						this.game.selectPrev();
+						App.gamer.selectPrev();
 						break;
 					case KindleKeyCodes.VK_FIVE_WAY_RIGHT:
-						this.game.selectNext();
+						App.gamer.selectNext();
 						break;
-					default: key = 0; break; // ignore
+					default:
+						key = 0;
+						break;
 	            }
+				
 				event.consume();
             }
         }
-		//this.game.repaint();
 
 		App.log("HumanPlayer::onKeyboard done");
 	}
-
-	public boolean equals(Object other)
-	{
-		if (this == other) return true;
-		if (other == null) return false;
-		if (getClass() != other.getClass()) return false;
-
-		if (getClass() == IPlayer.class)
-		{
-			IPlayer lhs = (IPlayer) this;
-			IPlayer rhs = (IPlayer) other;
-			return rhs.getName().equals(lhs.getName());
-		}
-
-		return false;
-	}
-
-	private KeyAdapter keyAdapter;
-	private GameController game;
-	private Color color;
-	private String name;
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import com.example.kindle.boardgame.IPlayer;
+import com.example.kindle.winningfour.boardgame.ComputerPlayer;
 import com.example.kindle.winningfour.boardgame.HumanPlayer;
 
 public class AppOptions
@@ -18,11 +19,11 @@ public class AppOptions
 			
 			if (key.equals("human"))
 			{
-				//result = new HumanPlayer(color, name);
+				result = new HumanPlayer(color, name);
 			}
 			else if (key.equals("computer"))
 			{
-				//result = new ComputerPlayer(color, name);
+				result = new ComputerPlayer(color, name);
 			}
 			
 			return result;

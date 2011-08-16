@@ -4,13 +4,10 @@
 package com.example.kindle.winningfour.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
-import java.awt.KeyboardFocusManager;
 
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.event.KindleKeyCodes;
-import com.amazon.kindle.kindlet.ui.KOptionPane;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.sm.State;
 import com.example.kindle.sm.StateMachine;

@@ -10,7 +10,6 @@ import java.awt.Dimension;
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.ui.KPanel;
 import com.example.kindle.winningfour.App;
-import com.example.kindle.winningfour.boardgame.GameController;
 import com.example.kindle.winningfour.boardgame.GameView;
 
 /**

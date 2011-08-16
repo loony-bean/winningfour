@@ -18,8 +18,8 @@ public class GameController implements IGame
 {
 	public GameController(GameView gameView)
 	{
-		IPlayer p1 = new HumanPlayer(this, Color.yellow, "Plato");
-		IPlayer p2 = new HumanPlayer(this, Color.blue, "Socrates");
+		IPlayer p1 = new HumanPlayer(Color.yellow, "Plato");
+		IPlayer p2 = new HumanPlayer(Color.blue, "Socrates");
 
 		this.gameView = gameView;
 		this.stateMachine = new GameStateMachine(this, this.gameView, p1, p2);

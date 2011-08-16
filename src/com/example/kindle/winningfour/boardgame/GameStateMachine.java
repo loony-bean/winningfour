@@ -76,6 +76,12 @@ public class GameStateMachine extends StateMachine
 			this.status = "" + this.getPlayer().getName() + "'s turn";
 			this.keyAdapter = this.getPlayer().getKeyAdapter();
 		}
+		
+		public void enter()
+		{
+			super.enter();
+			this.getPlayer().think();
+		}
 	}
 
 	private class Player1Turn extends TurnState
