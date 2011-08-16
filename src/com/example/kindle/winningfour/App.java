@@ -6,15 +6,12 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.util.ResourceBundle;
 
 import com.amazon.kindle.kindlet.AbstractKindlet;
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.event.KindleKeyCodes;
-import com.amazon.kindle.kindlet.ui.KTextOptionListMenu;
 import com.amazon.kindle.kindlet.ui.KTextOptionPane;
 import com.amazon.kindle.kindlet.ui.KindleOrientation;
 import com.example.kindle.sm.KeyboardEvent;
@@ -110,7 +107,10 @@ public class App extends AbstractKindlet {
 		}
 		
 		// Menus
-		this.options = this.createOptions();
+		//this.options = this.createOptions();
+		AppOptions appOptions = new AppOptions();
+		appOptions.init();
+		this.options = appOptions.createTextOptionPane();
 		this.context.setTextOptionPane(this.options);
 
 		// Setting up globals
@@ -141,7 +141,7 @@ public class App extends AbstractKindlet {
 
                 if (consumed)
                 {
-                	App.log("Action key pressed: " + code);
+                	App.log("Key pressed: " + code);
                     key.consume();
                     return true;
                 }
@@ -164,34 +164,6 @@ public class App extends AbstractKindlet {
 		App.log("App::initalStart done");
 	}
 
-	private KTextOptionPane createOptions()
-	{
-		KTextOptionPane options = new KTextOptionPane();
-		options.addListMenu(createOptionItem("Board Size", new String[]{"7x6", "8x7", "9x7", "10x7"}));
-		options.addListMenu(createOptionItem("Opponent", new String[]{"computer", "human"}));
-		options.addListMenu(createOptionItem("First turn", new String[]{"you", "opponent", "random"}));
-		options.addListMenu(createOptionItem("Timer", new String[]{"off", "5 sec", "10 sec", "15 sec"}));
-		options.addListMenu(createOptionItem("Skin", new String[]{"classic", "magnetic", "baloons", "pirates"}));
-		return options;
-	}
-
-	private KTextOptionListMenu createOptionItem(final String header, final String[] values)
-	{
-		KTextOptionListMenu item = new KTextOptionListMenu(header, values);
-		item.addItemListener(new ItemListener()
-		{
-			public void itemStateChanged(ItemEvent e)
-			{
-				if (e.getStateChange() == ItemEvent.SELECTED)
-				{
-					App.log(e.paramString());
-				}
-			}
-		});
-		
-		return item;
-	}
-	
 	public void stop()
     {
 		App.log("App::stop");

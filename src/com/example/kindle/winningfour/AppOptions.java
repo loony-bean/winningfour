@@ -1,16 +1,38 @@
 package com.example.kindle.winningfour;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.util.ArrayList;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 
+import com.amazon.kindle.kindlet.ui.KTextOptionListMenu;
+import com.amazon.kindle.kindlet.ui.KTextOptionPane;
 import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.winningfour.boardgame.ComputerPlayer;
 import com.example.kindle.winningfour.boardgame.HumanPlayer;
 
 public class AppOptions
 {
+	private class OptionUpdater implements ItemListener
+	{
+		public OptionUpdater(final String key)
+		{
+			this.key = key;
+		}
+		
+		public void itemStateChanged(ItemEvent e)
+		{
+			if (e.getStateChange() == ItemEvent.SELECTED)
+			{
+				App.log(this.key);
+				App.log("" + e.getItem());
+			}
+		}
+
+		private String key;
+	}
+
 	private class PlayerFactory
 	{
 		public IPlayer create(final String key, final Color color, final String name)
@@ -30,46 +52,28 @@ public class AppOptions
 		}
 	}
 	
-	private class OptPair
+	private class OptionValues
 	{
-		public OptPair(String key, Object value)
+		public OptionValues(String[] values, int selected)
 		{
-			this.setKey(key);
-			this.setValue(value);
+			this.values = values;
+			this.selected = selected;
 		}
 			
-		public void setKey(String key)
-		{
-			this.key = key;
-		}
-
-		public String getKey()
-		{
-			return this.key;
-		}
-
-		public void setValue(Object value)
-		{
-			this.value = value;
-		}
-
-		public Object getValue()
-		{
-			return this.value;
-		}
-
-		private String key;
-		private Object value;
+		public String[] values;
+		public int selected;
 	}
 	
 	public void init()
 	{
-		ArrayList sizes = new ArrayList();
-		sizes.add(new OptPair("7x6", new Dimension(7, 6)));
-		sizes.add(new OptPair("8x7", new Dimension(8, 7)));
-		sizes.add(new OptPair("9x7", new Dimension(9, 7)));
-		sizes.add(new OptPair("10x7", new Dimension(10, 7)));
-		this.model.put("Board Size", sizes);
+		this.model = new LinkedHashMap();
+		this.options = new LinkedHashMap();
+
+		this.model.put("Board Size", new OptionValues(new String[]{"6x7", "8x7", "9x7", "10x7"}, 0));
+		this.model.put("Opponent", new OptionValues(new String[]{"computer", "human"}, 0));
+		this.model.put("First turn", new OptionValues(new String[]{"you", "opponent", "random"}, 0));
+		this.model.put("Timer", new OptionValues(new String[]{"off", "5 sec", "10 sec", "15 sec"}, 0));
+		this.model.put("Skin", new OptionValues(new String[]{"classic", "magnetic", "baloons", "pirates"}, 0));
 
 		if (!this.load())
 		{
@@ -79,6 +83,31 @@ public class AppOptions
 			this.options.put("Timer", "off");
 			this.options.put("Skin", "classic");
 		}
+	}
+
+	public KTextOptionPane createTextOptionPane()
+	{
+		KTextOptionPane options = new KTextOptionPane();
+		Iterator i = this.model.keySet().iterator();
+		while (i.hasNext())
+		{
+			String key = (String)i.next();
+			OptionValues items = (OptionValues)this.model.get(key);
+			OptionUpdater updater = new OptionUpdater(key);
+
+			options.addListMenu(createOptionListMenu(key, items.values, items.selected, updater));
+
+		}
+
+		return options;
+	}
+
+	private KTextOptionListMenu createOptionListMenu(final String title, final String[] values, int sel, OptionUpdater updater)
+	{
+		KTextOptionListMenu item = new KTextOptionListMenu(title, values);
+		item.addItemListener(updater);
+		
+		return item;
 	}
 
 	public void set(final String key, final Object value)
