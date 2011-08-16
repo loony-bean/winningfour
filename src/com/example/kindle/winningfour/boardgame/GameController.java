@@ -1,7 +1,6 @@
 package com.example.kindle.winningfour.boardgame;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -37,7 +36,7 @@ public class GameController implements IGame
 
 		this.setSelectedRow(this.board.getWidth()/2);
 		this.gameView.setItems(this.board.getItems());
-		
+
 		this.rules = new Rules();
 		this.rules.setEventListener(new IGameEventListener()
 		{
@@ -47,19 +46,31 @@ public class GameController implements IGame
 				{
 					GameController.this.pulse(new SignalEvent(GameStateMachine.WIN));
 				}
+				else if (event == GameEvent.DRAW)
+				{
+					GameController.this.pulse(new SignalEvent(GameStateMachine.DRAW));
+				}
 			}
 		});
 		
 		this.repaint();
 	}
-	
+
+	public void restart()
+	{
+		this.stop();
+		this.start();
+	}
+
 	public void start()
 	{
 		this.stateMachine.start();
+		this.setStopped(false);
 	}
 
 	public void stop()
 	{
+		this.setStopped(true);
 		this.stateMachine.stop();
 	}
 
@@ -112,7 +123,7 @@ public class GameController implements IGame
 		this.gameView.setSelectedRow(this.selectedRow);
 	}
 
-	public Component getFocusOwner()
+	public GameView getView()
 	{
 		return this.gameView;
 	}
@@ -133,6 +144,18 @@ public class GameController implements IGame
 		});
 	}
 
+	public void setStopped(boolean flag)
+	{
+		this.stopped = flag;
+	}
+	
+	public boolean isStopped()
+	{
+		return this.stopped;
+	}
+
+	private boolean stopped = true;
+	
 	private final GameView gameView;
 	private final GameStateMachine stateMachine;
 	private Board board;

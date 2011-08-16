@@ -1,6 +1,5 @@
 package com.example.kindle.winningfour;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Image;
@@ -22,8 +21,17 @@ import com.example.kindle.utils.ImageHelper;
  */
 public class AppResources extends ListResourceBundle
 {
-	public static final int ID_FONT_MENU = 1;
-	public static final int ID_FONT_GAME_STATUS = 2;
+	public static final int ID_FONT_MENU 				= 1;
+	public static final int ID_FONT_GAME_STATUS 		= 2;
+	
+	public static final String KEY_MENU_NEW_GAME 		= "menu_new_game";
+	public static final String KEY_MENU_RESUME_GAME		= "menu_resume_game";
+	public static final String KEY_MENU_OPTIONS 		= "menu_options";
+	public static final String KEY_MENU_INSTRUCTIONS 	= "menu_instructions";
+	public static final String KEY_MENU_EXIT 			= "menu_exit";
+
+	public static final String KEY_CONFIRM_NEW_GAME 	= "confirm_new_game";
+	public static final String KEY_CONFIRM_EXIT 		= "confirm_exit";
 
 	/**
      * {@inheritDoc}
@@ -38,10 +46,13 @@ public class AppResources extends ListResourceBundle
      */
     static final Object[][] contents =
     {
-        { "menu_new_game", "New Game" },
-        { "menu_options", "Options" },
-        { "menu_instructions", "Instructions" },
-        { "menu_exit", "Exit" }
+        { KEY_MENU_NEW_GAME, "New Game" },
+        { KEY_MENU_RESUME_GAME, "Resume Game" },
+        { KEY_MENU_OPTIONS, "Options" },
+        { KEY_MENU_INSTRUCTIONS, "Instructions" },
+        { KEY_MENU_EXIT, "Exit" },
+        { KEY_CONFIRM_NEW_GAME, "You have a game in progress. Do you want to start a new game?" },
+        { KEY_CONFIRM_EXIT, "Exit game?" }
     };
     
     public static Image getImage(String key, Container parent)

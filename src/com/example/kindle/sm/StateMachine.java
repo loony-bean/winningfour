@@ -3,13 +3,9 @@
  */
 package com.example.kindle.sm;
 
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.amazon.kindle.kindlet.event.KindleKeyCodes;
 import com.example.kindle.winningfour.App;
 
 /**
@@ -21,38 +17,6 @@ public class StateMachine
 	{
 		this.states = new ArrayList();
 		this.running = false;
-		
-		keyEventDispatcher = new KeyEventDispatcher()
-		{
-            public boolean dispatchKeyEvent(final KeyEvent key)
-            {
-                if (key.getKeyCode() == KindleKeyCodes.VK_BACK)
-                {
-                    key.consume();
-                	App.log("VK_BACK");
-                	StateMachine.this.pushEvent(new KeyboardEvent(KindleKeyCodes.VK_BACK));
-                    return true;
-                }
-                else if (key.getKeyCode() == KindleKeyCodes.VK_TEXT)
-                {
-                    key.consume();
-                	App.log("VK_TEXT");
-                	StateMachine.this.pushEvent(new KeyboardEvent(KindleKeyCodes.VK_TEXT));
-                    return true;
-                }
-
-                return false;
-            }
-		};
-    	
-		KeyboardFocusManager fm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-        fm.addKeyEventDispatcher(this.keyEventDispatcher);
-	}
-	
-	public void destroy()
-	{
-    	KeyboardFocusManager fm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-        fm.removeKeyEventDispatcher(this.keyEventDispatcher);
 	}
 	
 	public void start()
@@ -60,7 +24,7 @@ public class StateMachine
 		if (!this.running)
 		{
 			this.running = true;
-			this.jump(initialState);
+			this.jump(this.initialState);
 		}
 	}
 
@@ -69,7 +33,7 @@ public class StateMachine
 		if (this.running)
 		{
 			this.running = false;
-			this.jump(finalState);
+			this.jump(this.finalState);
 		}
 	}
 
@@ -106,7 +70,7 @@ public class StateMachine
 	{
 		App.log("App::pushEvent " + event.getClass().getSimpleName());
 
-		Iterator i = currentState.transitions().iterator();
+		Iterator i = this.currentState.transitions().iterator();
 		while(i.hasNext())
 		{
 			Transition t = (Transition) i.next(); 
@@ -121,6 +85,12 @@ public class StateMachine
 
 	private void jump(State state)
 	{
+		if (state == null)
+		{
+			App.log("App::jump null");
+			return;
+		}
+		
 		App.log("App::jump " + state.getClass().getSimpleName());
 		
 		if (this.currentState != null)
@@ -163,6 +133,4 @@ public class StateMachine
 	private State finalState;
 
 	private boolean running;
-	
-	private KeyEventDispatcher keyEventDispatcher;
 }

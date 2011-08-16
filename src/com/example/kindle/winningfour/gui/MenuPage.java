@@ -6,16 +6,14 @@ package com.example.kindle.winningfour.gui;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.WeakHashMap;
 
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.ui.KButton;
 import com.amazon.kindle.kindlet.ui.KPanel;
-import com.amazon.kindle.kindlet.ui.KindletUIResources;
-import com.amazon.kindle.kindlet.ui.KindletUIResources.KFontStyle;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
@@ -25,35 +23,54 @@ import com.example.kindle.winningfour.AppResources;
  */
 public class MenuPage extends PageState
 {
-	MenuPage(final KindletContext context, final String name)
+	MenuPage(final KindletContext context, final ImagePanel parent, final String name)
 	{
-		super(context, name);
-		this.panel = new ImagePanel("background.gif");
+		super(context, parent, name);
+		this.panel = new KPanel();
+		this.panel.setPreferredSize(new Dimension(300, 300));
+		this.panel.setBackground(new Color(0x000000FF, true));
 		this.panel.setLayout(new GridLayout(0, 1));
-		KPanel inner = new KPanel();
-		inner.setPreferredSize(new Dimension(300, 300));
-        Color transparent = new Color(0x000000FF, true);
-		inner.setBackground(transparent);
-		inner.setLayout(new GridLayout(0, 1));
-        inner.add(createMainMenu());
-		((ImagePanel) this.panel).setInner(inner);
+		this.panel.add(createMainMenu());
 	}
 
 	public void enter()
 	{
 		super.enter();
-		this.root.repaint();
+
+		KButton newOption = (KButton) this.options.get(AppResources.KEY_MENU_NEW_GAME);
+		KButton resumeOption = (KButton) this.options.get(AppResources.KEY_MENU_RESUME_GAME);
+
+		if (App.gamer.isStopped())
+        {
+			if (resumeOption.isFocusOwner())
+			{
+				newOption.requestFocus();
+			}
+
+			resumeOption.setEnabled(false);
+        }
+		else
+		{
+			if (resumeOption.isEnabled() == false)
+			{
+				resumeOption.setEnabled(true);
+				resumeOption.requestFocus();
+			}
+		}
 	}
 
     public Container createMainMenu()
     {
     	final GridLayout layout = new GridLayout(0, 1, 8, 8);
         final KPanel panel = new KPanel(layout);
-        Color transparent = new Color(0x000000FF, true);
-		panel.setBackground(transparent);
+		panel.setBackground(new Color(0x000000FF, true));
+		this.options = new WeakHashMap();
         
-        boolean first = true;
-        String[] menuItems = {"menu_new_game", "menu_options", "menu_instructions", "menu_exit"};
+        String[] menuItems = {AppResources.KEY_MENU_NEW_GAME,
+        					  AppResources.KEY_MENU_RESUME_GAME,
+        					  AppResources.KEY_MENU_OPTIONS,
+        					  AppResources.KEY_MENU_INSTRUCTIONS,
+        					  AppResources.KEY_MENU_EXIT};
         for(int i = 0; i < menuItems.length; i++)
         {
         	final String key = menuItems[i];
@@ -64,12 +81,10 @@ public class MenuPage extends PageState
                 	App.pager.pushEvent(new SignalEvent(key));
                 }
             });
-            if (first)
-            {
-            	this.focusOwner = option;
-            	first = false;
-            }
-
+            
+            
+            this.focusOwner = panel;
+            this.options.put(key, option);
             panel.add(option);
         }
 
@@ -97,4 +112,6 @@ public class MenuPage extends PageState
 
         return button;
     }
+    
+    WeakHashMap options;
 }

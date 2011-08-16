@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -84,7 +83,7 @@ public class GameView extends Container
 		this.gameSelector.setLocation(this.gameSelector.getLocation().x, hy - s);
 
 		Dimension sz = this.statusLabel.getPreferredSize();
-		this.statusLabel.setBounds(0, size.height - sz.height, size.width, sz.height);
+		this.statusLabel.setBounds(0, sz.height, size.width, sz.height);
 		
 		App.log("GameView::doLayout done");
 	}
@@ -92,24 +91,8 @@ public class GameView extends Container
 	public void paint(Graphics g)
 	{
 		App.log("GameView::paint in clipBounds " + g.getClipBounds());
-		super.paint(g);
-		
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.setColor(Color.black);
-		
-		Dimension d = this.getSize();
-		for (int i = 0; i < d.width - 10; i += 15)
-		{
-			g2d.fillOval(i+2, 10, 10, 10);
-		}
-		
-		Rectangle rl = this.statusLabel.getBounds();
-		g2d.setColor(Color.WHITE);
-		for (int i = 0; i < d.width - 10; i += 15)
-		{
-			g2d.fillRect(i + 2, rl.y - 15, 10, 10);
-		}
 
+		super.paint(g);
 		this.paintItems(this.items, g);
 	}
 	
@@ -137,6 +120,7 @@ public class GameView extends Container
 	public void setItems(ArrayList items)
 	{
 		this.items = items;
+		this.repaint();
 	}
 
 	public void setSelectedRow(int row)
@@ -150,6 +134,8 @@ public class GameView extends Container
 			this.gameSelector.setLocation(hx + row*(s+gap), hy - s);
 			this.gameSelector.setVisible(true);
 		}
+
+		this.gameSelector.repaint();
 	}
 
 	public void setStatusText(String text)

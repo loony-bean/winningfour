@@ -1,12 +1,26 @@
 package com.example.kindle.winningfour;
 
+import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.util.ResourceBundle;
 
 import com.amazon.kindle.kindlet.AbstractKindlet;
 import com.amazon.kindle.kindlet.KindletContext;
+import com.amazon.kindle.kindlet.event.KindleKeyCodes;
+import com.amazon.kindle.kindlet.ui.KTextOptionListMenu;
+import com.amazon.kindle.kindlet.ui.KTextOptionPane;
 import com.amazon.kindle.kindlet.ui.KindleOrientation;
+import com.example.kindle.sm.KeyboardEvent;
+import com.example.kindle.utils.KeyboardHelper;
+import com.example.kindle.winningfour.boardgame.GameController;
+import com.example.kindle.winningfour.boardgame.GameView;
 import com.example.kindle.winningfour.gui.PageController;
 
 import org.apache.log4j.Logger;
@@ -33,6 +47,9 @@ public class App extends AbstractKindlet {
 
 		this.root.setLayout(null);  // no need to waste time on implicit root-layout calls down from here 
 		this.root.removeAll();
+
+    	KeyboardFocusManager fm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        fm.removeKeyEventDispatcher(this.keyEventDispatcher);
 
 		// TODO: destroy() everything
 		// TODO: null out pointers
@@ -92,10 +109,53 @@ public class App extends AbstractKindlet {
 			return; 
 		}
 		
+		// Menus
+		this.options = this.createOptions();
+		this.context.setTextOptionPane(this.options);
+
+		// Setting up globals
+		App.screenSize = this.root.getSize();
+
 		// Options
 		this.context.getOrientationController().lockOrientation(KindleOrientation.PORTRAIT);
+		
+		// Global Events
+		this.keyEventDispatcher = new KeyEventDispatcher()
+		{
+            public boolean dispatchKeyEvent(final KeyEvent key)
+            {
+            	boolean consumed = false;
+            	int code = key.getKeyCode();
+                
+            	if (code == KindleKeyCodes.VK_BACK)
+                {
+                	consumed = true;
+                	App.pager.pushEvent(new KeyboardEvent(code));
+                }
+                else if (code == KindleKeyCodes.VK_TEXT)
+                {
+                	consumed = true;
+            		Component focused = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+                	KeyboardHelper.simulateKey(focused, code);
+                }
+
+                if (consumed)
+                {
+                	App.log("Action key pressed: " + code);
+                    key.consume();
+                    return true;
+                }
+
+                return false;
+            }
+		};
+    	
+		KeyboardFocusManager fm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        fm.addKeyEventDispatcher(this.keyEventDispatcher);
 
 		// App start code
+		this.gameView = new GameView();
+		App.gamer = new GameController(this.gameView);
 		App.pager = new PageController(this.context);
 		App.pager.start();
 		
@@ -104,6 +164,34 @@ public class App extends AbstractKindlet {
 		App.log("App::initalStart done");
 	}
 
+	private KTextOptionPane createOptions()
+	{
+		KTextOptionPane options = new KTextOptionPane();
+		options.addListMenu(createOptionItem("Board Size", new String[]{"7x6", "8x7", "9x7", "10x7"}));
+		options.addListMenu(createOptionItem("Opponent", new String[]{"computer", "human"}));
+		options.addListMenu(createOptionItem("First turn", new String[]{"you", "opponent", "random"}));
+		options.addListMenu(createOptionItem("Timer", new String[]{"off", "5 sec", "10 sec", "15 sec"}));
+		options.addListMenu(createOptionItem("Skin", new String[]{"classic", "magnetic", "baloons", "pirates"}));
+		return options;
+	}
+
+	private KTextOptionListMenu createOptionItem(final String header, final String[] values)
+	{
+		KTextOptionListMenu item = new KTextOptionListMenu(header, values);
+		item.addItemListener(new ItemListener()
+		{
+			public void itemStateChanged(ItemEvent e)
+			{
+				if (e.getStateChange() == ItemEvent.SELECTED)
+				{
+					App.log(e.paramString());
+				}
+			}
+		});
+		
+		return item;
+	}
+	
 	public void stop()
     {
 		App.log("App::stop");
@@ -132,6 +220,10 @@ public class App extends AbstractKindlet {
 
     public static ResourceBundle bundle = ResourceBundle.getBundle("com.example.kindle.winningfour.AppResources");
     public static PageController pager;
+    public static Dimension screenSize;
+    public static GameController gamer;
+
+    private GameView gameView;
 
     private KindletContext context;
     private Container root;
@@ -139,6 +231,9 @@ public class App extends AbstractKindlet {
     
     private static long startTime = System.currentTimeMillis();
 	private static Logger logger = Logger.getLogger("App");
+	
+	private KeyEventDispatcher keyEventDispatcher;
+	private KTextOptionPane options;
 	
 	public static void log(String msg)
 	{

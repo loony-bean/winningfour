@@ -71,6 +71,8 @@ public class HumanPlayer implements IPlayer
 				switch (key)
 				{
 					case KindleKeyCodes.VK_FIVE_WAY_SELECT:
+					case KindleKeyCodes.VK_FIVE_WAY_DOWN:
+					case KindleKeyCodes.VK_FIVE_WAY_UP:
 					{
 						IPiece piece = new Piece(this);
 						IPosition2D pos = new Position2D(this.game.getSelectedRow(), 0);
@@ -88,7 +90,7 @@ public class HumanPlayer implements IPlayer
 				event.consume();
             }
         }
-		this.game.repaint();
+		//this.game.repaint();
 
 		App.log("HumanPlayer::onKeyboard done");
 	}

@@ -59,6 +59,11 @@ public class ImagePanel extends KPanel
 		super.paint(g);
 	}
 	
+	public Container getInner()
+	{
+		return this.inner; 
+	}
+	
 	public void setInner(Container inner)
 	{
 		if (this.inner != null)
@@ -70,7 +75,13 @@ public class ImagePanel extends KPanel
 		this.remove(this.backgroundPane);
 		this.add(this.inner);
 		this.add(this.backgroundPane);
-		this.layoutSize = null;
+		
+		if (this.layoutSize != null)
+		{
+			Dimension sz = this.inner.getPreferredSize();
+			Dimension pz = new Dimension((this.layoutSize.width - sz.width)/2, (this.layoutSize.height - sz.height)/2); 
+			this.inner.setBounds(pz.width, pz.height, sz.width, sz.height);
+		}
 	}
 
 	private static final long serialVersionUID = 1L;

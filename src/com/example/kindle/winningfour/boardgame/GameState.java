@@ -1,4 +1,4 @@
-package com.example.kindle.winningfour.boardgame.states;
+package com.example.kindle.winningfour.boardgame;
 
 import java.awt.event.KeyAdapter;
 
@@ -20,7 +20,7 @@ public class GameState extends State
 	{
 		if (this.keyAdapter != null)
 		{
-			this.game.getFocusOwner().addKeyListener(this.keyAdapter);
+			this.game.getView().addKeyListener(this.keyAdapter);
 		}
 
 		this.game.setStatusText(this.status);
@@ -30,7 +30,7 @@ public class GameState extends State
 	{
 		if (this.keyAdapter != null)
 		{
-			this.game.getFocusOwner().removeKeyListener(this.keyAdapter);
+			this.game.getView().removeKeyListener(this.keyAdapter);
 		}
 	}
 	
