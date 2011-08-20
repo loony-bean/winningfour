@@ -31,14 +31,16 @@ public class PageController extends StateMachine
 		{
 			if (App.gamer.isStopped() == false)
 			{
-				DialogHelper.ConfirmDialog(App.bundle.getString(AppResources.KEY_CONFIRM_NEW_GAME), new Runnable()
-				{
-					public void run()
-					{
-            			App.gamer.stop();
-            			App.pager.pushEvent(new SignalEvent(AppResources.KEY_MENU_NEW_GAME));
-					}
-				});
+				DialogHelper.ConfirmDialog(App.bundle.getString(AppResources.KEY_CONFIRM_NEW_GAME),
+					new Runnable() {
+						public void run() {
+							App.gamer.stop();
+							App.pager.pushEvent(new SignalEvent(AppResources.KEY_MENU_NEW_GAME));
+						}},
+					new Runnable() {
+						public void run() {
+            				App.pager.back();
+						}});
 			}
 			else
 			{

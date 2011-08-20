@@ -21,8 +21,10 @@ import com.example.kindle.utils.ImageHelper;
  */
 public class AppResources extends ListResourceBundle
 {
-	public static final int ID_FONT_MENU 				= 1;
-	public static final int ID_FONT_GAME_STATUS 		= 2;
+	public static final int ID_FONT_NORMAL 				= 1;
+	public static final int ID_FONT_MENU 				= 2;
+	public static final int ID_FONT_GAME_STATUS 		= 3;
+	public static final int ID_FONT_PAGE_TITLE			= 4;
 	
 	public static final String KEY_MENU_NEW_GAME 		= "menu_new_game";
 	public static final String KEY_MENU_RESUME_GAME		= "menu_resume_game";
@@ -80,6 +82,14 @@ public class AppResources extends ListResourceBundle
     	else if (id == ID_FONT_MENU)
     	{
     		return KindletUIResources.getInstance().getFont(KindletUIResources.KFontFamilyName.SANS_SERIF, 31, KFontStyle.PLAIN, false);
+    	}
+    	else if (id == ID_FONT_NORMAL)
+    	{
+    		return KindletUIResources.getInstance().getFont(KindletUIResources.KFontFamilyName.SANS_SERIF, 25, KFontStyle.PLAIN, false);
+    	}
+    	else if (id == ID_FONT_PAGE_TITLE)
+    	{
+    		return KindletUIResources.getInstance().getFont(KindletUIResources.KFontFamilyName.SANS_SERIF, 36, KFontStyle.PLAIN, false);
     	}
 		
     	return KindletUIResources.getInstance().getFont(KindletUIResources.KFontFamilyName.MONOSPACE, 21, KFontStyle.PLAIN, false);

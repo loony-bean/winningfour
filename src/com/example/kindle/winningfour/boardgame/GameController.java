@@ -1,28 +1,41 @@
 package com.example.kindle.winningfour.boardgame;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.security.auth.login.AppConfigurationEntry;
 
 import com.example.kindle.boardgame.GameEvent;
 import com.example.kindle.boardgame.IGame;
 import com.example.kindle.boardgame.IGameContext;
 import com.example.kindle.boardgame.IGameEventListener;
+import com.example.kindle.boardgame.IPiece;
 import com.example.kindle.boardgame.IPlayer;
+import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.boardgame.IRules;
 import com.example.kindle.boardgame.ITurn;
+import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.sm.SignalEvent;
+import com.example.kindle.utils.FileHelper;
+import com.example.kindle.utils.StringHelper;
+import com.example.kindle.winningfour.App;
+import com.example.kindle.winningfour.AppOptions;
+import com.example.kindle.winningfour.OptionsFactory;
 import com.example.kindle.winningfour.boardgame.rules.classic.Rules;
 
 public class GameController implements IGame
 {
 	public GameController(GameView gameView)
 	{
-		IPlayer p1 = new HumanPlayer(Color.yellow, "Plato");
-		IPlayer p2 = new HumanPlayer(Color.blue, "Socrates");
-
 		this.gameView = gameView;
-		this.stateMachine = new GameStateMachine(this, this.gameView, p1, p2);
+		this.stateMachine = new GameStateMachine(this, this.gameView);
+		this.recorder = new Recorder(AppOptions.FILE_NAME_GAMELOG);
+		this.listeners = new ArrayList();
 	}
 
 	public IGameContext getContext()
@@ -30,12 +43,17 @@ public class GameController implements IGame
 		return null;
 	}
 
+	public IPlayer[] getPlayers()
+	{
+		return this.players;
+	}
+
 	public void reset()
 	{
-		this.board = new Board(new Dimension(7, 6));
+		OptionsFactory opfact = new OptionsFactory();
 
-		this.setSelectedRow(this.board.getWidth()/2);
-		this.gameView.setItems(this.board.getItems());
+		this.board = new Board(opfact.createBoardSize());
+		this.players = opfact.createPlayers();
 
 		this.rules = new Rules();
 		this.rules.setEventListener(new IGameEventListener()
@@ -52,7 +70,10 @@ public class GameController implements IGame
 				}
 			}
 		});
-		
+
+		this.setSelectedRow(this.board.getWidth()/2);
+		this.gameView.setItems(this.board.getItems());
+
 		this.repaint();
 	}
 
@@ -64,16 +85,62 @@ public class GameController implements IGame
 
 	public void start()
 	{
-		this.stateMachine.start();
-		this.setStopped(false);
+		if (!this.stateMachine.isRunning())
+		{
+			this.stateMachine.start();
+			this.setStopped(false);
+
+			this.recorder.start();
+		}
 	}
 
 	public void stop()
 	{
 		this.setStopped(true);
 		this.stateMachine.stop();
+		
+		this.recorder.stop();
+	}
+	
+	public boolean isSuspended()
+	{
+		return (this.recorder.hasData());
 	}
 
+	public void resume()
+	{
+		ArrayList recording = this.recorder.load();
+		if (recording != null)
+		{
+			this.start();
+			this.recorder.setEnabled(false);
+			
+			IPiece piece1 = new Piece(this.players[0]);
+			IPiece piece2 = new Piece(this.players[1]);
+
+			Iterator i = recording.iterator();
+			int turnnum = 0;
+			while (i.hasNext())
+			{
+				ITurn turn = null;
+				IPosition2D pos = (IPosition2D) i.next();
+				if (turnnum % 2 == 0)
+				{
+					turn = new Turn(piece1, pos, null);
+				}
+				else
+				{
+					turn = new Turn(piece2, pos, null);
+				}
+
+				turnnum += 1;
+				this.makeTurn(turn);
+			}
+
+			this.recorder.setEnabled(true);
+		}
+	}
+	
 	public void makeTurn(ITurn turn)
 	{
 		if(this.board.isTurnAvailable(turn))
@@ -81,6 +148,8 @@ public class GameController implements IGame
 			this.board.putPiece(turn.getPiece(), turn.getPosition().x());
 			this.rules.afterPlayerTurn(this.board);
 			this.gameView.setItems(this.board.getItems());
+
+			this.recorder.record(this.board.getLastTurn());
 			
 			this.pulse(new SignalEvent(GameStateMachine.TURN));
 		}
@@ -147,11 +216,30 @@ public class GameController implements IGame
 	public void setStopped(boolean flag)
 	{
 		this.stopped = flag;
+
+		Iterator i = this.listeners.iterator();
+		while (i.hasNext())
+		{
+			IGameStateListener listener = (IGameStateListener) i.next();
+			if (flag == true)
+			{
+				listener.onStop();
+			}
+			else
+			{
+				listener.onStart();
+			}
+		}
 	}
 	
 	public boolean isStopped()
 	{
 		return this.stopped;
+	}
+	
+	public void addStateListener(IGameStateListener listener)
+	{
+		this.listeners.add(listener);
 	}
 
 	private boolean stopped = true;
@@ -161,4 +249,7 @@ public class GameController implements IGame
 	private Board board;
 	private int selectedRow;
 	private IRules rules;
+	private IPlayer[] players;
+	private Recorder recorder;
+	private ArrayList listeners;
 }

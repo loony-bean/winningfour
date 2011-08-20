@@ -9,11 +9,11 @@ import com.example.kindle.winningfour.boardgame.GameController;
 
 public class GameState extends State
 {
-	public GameState(GameController game, IPlayer player, final String name)
+	public GameState(GameController game, int player, final String name)
 	{
 		super(name);
-		this.game = game;
 		this.player = player;
+		this.game = game;
 	}
 
 	public void enter()
@@ -34,19 +34,19 @@ public class GameState extends State
 		}
 	}
 	
+	public IPlayer getPlayer()
+	{
+		return this.game.getPlayers()[this.player];
+	}
+	
 	public void pulse(SignalEvent signal)
 	{
 		this.game.pulse(signal);
 	}
 
-	public IPlayer getPlayer()
-	{
-		return this.player;
-	}
-
 	protected String status;
 	protected GameState state;
 	protected KeyAdapter keyAdapter;
-	private IPlayer player;
+	protected int player;
 	private GameController game;
 }

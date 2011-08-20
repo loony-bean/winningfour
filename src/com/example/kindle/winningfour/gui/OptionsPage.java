@@ -11,6 +11,7 @@ import java.awt.event.FocusListener;
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.event.KindleKeyCodes;
 import com.example.kindle.sm.State;
+import com.example.kindle.utils.DialogHelper;
 import com.example.kindle.utils.KeyboardHelper;
 import com.example.kindle.winningfour.App;
 
@@ -22,6 +23,7 @@ public class OptionsPage extends State
 	OptionsPage(final KindletContext context, final ImagePanel parent, final String name)
 	{
 		super(name);
+		this.context = context;
 		this.active = false;
 		this.focusListener = new FocusListener()
 		{
@@ -44,9 +46,14 @@ public class OptionsPage extends State
 	public void enter()
 	{
 		super.enter();
+		
 		this.focused = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 		this.focused.addFocusListener(this.focusListener);
-		this.focused.setIgnoreRepaint(true);
+		
+		this.context.setTextOptionPane(App.opts.getTextOptionPane());
+
+		App.opts.restart();
+		
 		KeyboardHelper.simulateKey(this.focused, KindleKeyCodes.VK_TEXT);
 	}
 
@@ -54,8 +61,29 @@ public class OptionsPage extends State
 	{
 		super.leave();
 		this.focused.removeFocusListener(this.focusListener);
-	}
+		
+		if (!App.gamer.isStopped())
+		{
+			DialogHelper.ConfirmDialog("Pressing OK will apply new options and start a new game.",
+					new Runnable() {
+						public void run() {
+							App.gamer.stop();
+							App.opts.commit();
+						}},
+					new Runnable() {
+						public void run() {
+							App.opts.revert();
+						}});
+		}
+		else
+		{
+			App.opts.commit();
+		}
 
+		this.context.setTextOptionPane(null);
+}
+
+	KindletContext context;
 	boolean active;
 	Component focused;
 	FocusListener focusListener;

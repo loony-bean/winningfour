@@ -4,7 +4,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import com.amazon.kindle.kindlet.event.KindleKeyCodes;
-import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.sm.State;
 import com.example.kindle.sm.StateMachine;
@@ -17,16 +16,16 @@ public class GameStateMachine extends StateMachine
 	public static final String WIN = "win";
 	public static final String DRAW = "draw";
 
-	public GameStateMachine(GameController game, GameView gameView, IPlayer p1, IPlayer p2)
+	public GameStateMachine(GameController game, GameView gameView)
 	{
 		super();
 		
 		NewGame newGame = new NewGame(game);
 		DrawState drawState = new DrawState(game);
-		Player1Turn player1Turn = new Player1Turn(game, p1);
-		Player2Turn player2Turn = new Player2Turn(game, p2);
-		Player1Win player1Win = new Player1Win(game, p1);
-		Player2Win player2Win = new Player2Win(game, p2);
+		Player1Turn player1Turn = new Player1Turn(game);
+		Player2Turn player2Turn = new Player2Turn(game);
+		Player1Win player1Win = new Player1Win(game);
+		Player2Win player2Win = new Player2Win(game);
 
 		this.addState(newGame);
 		this.addState(drawState);
@@ -70,42 +69,43 @@ public class GameStateMachine extends StateMachine
 
 	private class TurnState extends GameState
 	{
-		public TurnState(GameController game, IPlayer player, final String name)
+		public TurnState(GameController game, int player, final String name)
 		{
 			super(game, player, name);
-			this.status = "" + this.getPlayer().getName() + "'s turn";
-			this.keyAdapter = this.getPlayer().getKeyAdapter();
 		}
 		
 		public void enter()
 		{
+			this.status = "" + this.getPlayer().getName() + "'s turn";
+			this.keyAdapter = this.getPlayer().getKeyAdapter();
+
 			super.enter();
+
 			this.getPlayer().think();
 		}
 	}
 
 	private class Player1Turn extends TurnState
 	{
-		public Player1Turn(GameController game, IPlayer player)
+		public Player1Turn(GameController game)
 		{
-			super(game, player, "Player1Turn");
+			super(game, 0, "Player1Turn");
 		}
 	}
 
 	private class Player2Turn extends TurnState
 	{
-		public Player2Turn(GameController game, IPlayer player)
+		public Player2Turn(GameController game)
 		{
-			super(game, player, "Player2Turn");
+			super(game, 1, "Player2Turn");
 		}
 	}
 
 	private class WinState extends GameState
 	{
-		public WinState(GameController game, IPlayer player, final String name)
+		public WinState(GameController game, int player, final String name)
 		{
 			super(game, player, name);
-			this.status = "" + this.getPlayer().getName() + " wins. Press Select or N";
 			this.keyAdapter = new KeyAdapter()
 			{
 				public void keyPressed(KeyEvent event)
@@ -122,24 +122,27 @@ public class GameStateMachine extends StateMachine
 		
 		public void enter()
 		{
+			this.status = "" + this.getPlayer().getName() + " wins. Press Select or N";
+
 			super.enter();
+
 			App.gamer.stop();
 		}
 	}
 
 	private class Player1Win extends WinState
 	{
-		public Player1Win(GameController game, IPlayer player)
+		public Player1Win(GameController game)
 		{
-			super(game, player, "Player1Win");
+			super(game, 0, "Player1Win");
 		}
 	}
 
 	private class Player2Win extends WinState
 	{
-		public Player2Win(GameController game, IPlayer player)
+		public Player2Win(GameController game)
 		{
-			super(game, player, "Player2Win");
+			super(game, 1, "Player2Win");
 		}
 	}
 
@@ -147,7 +150,7 @@ public class GameStateMachine extends StateMachine
 	{
 		public DrawState(GameController game)
 		{
-			super(game, null, "DrawState");
+			super(game, 0, "DrawState");
 			this.status = "Drawn game. Press Select or N";
 			this.keyAdapter = new KeyAdapter()
 			{

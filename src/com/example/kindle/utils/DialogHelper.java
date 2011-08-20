@@ -4,11 +4,10 @@ import java.awt.Component;
 import java.awt.KeyboardFocusManager;
 
 import com.amazon.kindle.kindlet.ui.KOptionPane;
-import com.example.kindle.winningfour.App;
 
 public class DialogHelper
 {
-	public static void ConfirmDialog(final String text, final Runnable okrunner)
+	public static void ConfirmDialog(final String text, final Runnable onOk, final Runnable onCancel)
 	{
 		Component focused = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 		KOptionPane.showConfirmDialog(focused, text, "Confirmation", 
@@ -18,11 +17,11 @@ public class DialogHelper
                     {
                     	if (option == KOptionPane.OK_OPTION)
                     	{
-                    		okrunner.run();
+                    		onOk.run();
                     	}
                     	else
                     	{
-                    		App.pager.back();
+                    		onCancel.run();
                     	}
                     }
                 });

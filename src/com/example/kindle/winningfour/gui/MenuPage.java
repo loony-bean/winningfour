@@ -17,6 +17,7 @@ import com.amazon.kindle.kindlet.ui.KPanel;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
+import com.example.kindle.winningfour.boardgame.IGameStateListener;
 
 /**
  *
@@ -31,12 +32,40 @@ public class MenuPage extends PageState
 		this.panel.setBackground(new Color(0x000000FF, true));
 		this.panel.setLayout(new GridLayout(0, 1));
 		this.panel.add(createMainMenu());
+		
+		this.gameStateListener = new IGameStateListener()
+		{
+			public void onStart()
+			{
+				KButton resumeOption = (KButton) MenuPage.this.options.get(AppResources.KEY_MENU_RESUME_GAME);
+				resumeOption.setEnabled(true);
+				resumeOption.requestFocus();
+			}
+
+			public void onStop()
+			{
+				KButton newOption = (KButton) MenuPage.this.options.get(AppResources.KEY_MENU_NEW_GAME);
+				KButton resumeOption = (KButton) MenuPage.this.options.get(AppResources.KEY_MENU_RESUME_GAME);
+				
+				if (resumeOption.isFocusOwner())
+				{
+					newOption.requestFocus();
+				}
+
+				resumeOption.setEnabled(false);
+			}
+		};
+
+		App.gamer.addStateListener(this.gameStateListener);
 	}
 
 	public void enter()
 	{
 		super.enter();
-
+	}
+	
+	public void adjustMenu()
+	{
 		KButton newOption = (KButton) this.options.get(AppResources.KEY_MENU_NEW_GAME);
 		KButton resumeOption = (KButton) this.options.get(AppResources.KEY_MENU_RESUME_GAME);
 
@@ -58,8 +87,8 @@ public class MenuPage extends PageState
 			}
 		}
 	}
-
-    public Container createMainMenu()
+    
+	public Container createMainMenu()
     {
     	final GridLayout layout = new GridLayout(0, 1, 8, 8);
         final KPanel panel = new KPanel(layout);
@@ -81,8 +110,7 @@ public class MenuPage extends PageState
                 	App.pager.pushEvent(new SignalEvent(key));
                 }
             });
-            
-            
+
             this.focusOwner = panel;
             this.options.put(key, option);
             panel.add(option);
@@ -113,5 +141,6 @@ public class MenuPage extends PageState
         return button;
     }
     
+    IGameStateListener gameStateListener;
     WeakHashMap options;
 }

@@ -1,6 +1,5 @@
 package com.example.kindle.winningfour;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -15,7 +14,6 @@ import com.amazon.kindle.kindlet.event.KindleKeyCodes;
 import com.amazon.kindle.kindlet.ui.KTextOptionPane;
 import com.amazon.kindle.kindlet.ui.KindleOrientation;
 import com.example.kindle.sm.KeyboardEvent;
-import com.example.kindle.utils.KeyboardHelper;
 import com.example.kindle.winningfour.boardgame.GameController;
 import com.example.kindle.winningfour.boardgame.GameView;
 import com.example.kindle.winningfour.gui.PageController;
@@ -105,16 +103,10 @@ public class App extends AbstractKindlet {
 			App.log("App::initalStart early exit (stopped)");
 			return; 
 		}
-		
-		// Menus
-		//this.options = this.createOptions();
-		AppOptions appOptions = new AppOptions();
-		appOptions.init();
-		this.options = appOptions.createTextOptionPane();
-		this.context.setTextOptionPane(this.options);
 
 		// Setting up globals
 		App.screenSize = this.root.getSize();
+		App.clientSize = new Dimension(App.screenSize.width - 20, App.screenSize.height - 20);
 
 		// Options
 		this.context.getOrientationController().lockOrientation(KindleOrientation.PORTRAIT);
@@ -132,12 +124,6 @@ public class App extends AbstractKindlet {
                 	consumed = true;
                 	App.pager.pushEvent(new KeyboardEvent(code));
                 }
-                else if (code == KindleKeyCodes.VK_TEXT)
-                {
-                	consumed = true;
-            		Component focused = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-                	KeyboardHelper.simulateKey(focused, code);
-                }
 
                 if (consumed)
                 {
@@ -149,9 +135,12 @@ public class App extends AbstractKindlet {
                 return false;
             }
 		};
-    	
+
 		KeyboardFocusManager fm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         fm.addKeyEventDispatcher(this.keyEventDispatcher);
+
+		// Menus
+		App.opts = new AppOptions();
 
 		// App start code
 		this.gameView = new GameView();
@@ -159,6 +148,11 @@ public class App extends AbstractKindlet {
 		App.pager = new PageController(this.context);
 		App.pager.start();
 		
+		if (App.gamer.isSuspended())
+		{
+			App.gamer.resume();
+		}
+
 		this.initialStartDone = true;
 	
 		App.log("App::initalStart done");
@@ -171,6 +165,7 @@ public class App extends AbstractKindlet {
 		
 		synchronized (this)
 		{
+			App.opts.save();
 	    	App.log("App::stop syncrhonized");
 			/* TODO: ... tear down timers if you have any... */
 		}
@@ -193,7 +188,9 @@ public class App extends AbstractKindlet {
     public static ResourceBundle bundle = ResourceBundle.getBundle("com.example.kindle.winningfour.AppResources");
     public static PageController pager;
     public static Dimension screenSize;
+    public static Dimension clientSize;
     public static GameController gamer;
+    public static AppOptions opts;
 
     private GameView gameView;
 
@@ -205,7 +202,6 @@ public class App extends AbstractKindlet {
 	private static Logger logger = Logger.getLogger("App");
 	
 	private KeyEventDispatcher keyEventDispatcher;
-	private KTextOptionPane options;
 	
 	public static void log(String msg)
 	{

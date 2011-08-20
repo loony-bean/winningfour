@@ -57,7 +57,7 @@ public class Board implements IBoard2D
 		
 		this.turnsCount += 1;
 	}
-	
+
 	public void putPiece(IPiece piece, int row)
 	{
 		for (int col = this.board[row].length - 1; col >= 0; col--)

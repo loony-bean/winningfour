@@ -1,55 +1,49 @@
 package com.example.kindle.winningfour;
 
-import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import com.amazon.kindle.kindlet.ui.KTextOptionListMenu;
+import com.amazon.kindle.kindlet.ui.KTextOptionMenuItem;
 import com.amazon.kindle.kindlet.ui.KTextOptionPane;
-import com.example.kindle.boardgame.IPlayer;
-import com.example.kindle.winningfour.boardgame.ComputerPlayer;
-import com.example.kindle.winningfour.boardgame.HumanPlayer;
+import com.example.kindle.utils.FileHelper;
 
 public class AppOptions
 {
+	public final static String FILE_NAME_OPTIONS	= "options.json";
+	public final static String FILE_NAME_GAMELOG	= "gamelog.txt";
+	
+	public final static String OP_T_BOARD_SIZE		= "Board Size";
+	public final static String OP_T_OPPONENT 		= "Opponent";
+	public final static String OP_T_FIRST_TURN		= "First turn";
+	public final static String OP_T_TIMER			= "Timer";
+	public final static String OP_T_SKIN			= "Skin";
+
 	private class OptionUpdater implements ItemListener
 	{
-		public OptionUpdater(final String key)
+		public OptionUpdater(final String key, JSONObject opts)
 		{
 			this.key = key;
+			this.opts = opts;
 		}
 		
 		public void itemStateChanged(ItemEvent e)
 		{
 			if (e.getStateChange() == ItemEvent.SELECTED)
 			{
-				App.log(this.key);
-				App.log("" + e.getItem());
+				App.log(this.key + ":" + e.getItem());
+				this.opts.put(this.key, e.getItem());
 			}
 		}
 
+		private JSONObject opts;
 		private String key;
-	}
-
-	private class PlayerFactory
-	{
-		public IPlayer create(final String key, final Color color, final String name)
-		{
-			IPlayer result = null;
-			
-			if (key.equals("human"))
-			{
-				result = new HumanPlayer(color, name);
-			}
-			else if (key.equals("computer"))
-			{
-				result = new ComputerPlayer(color, name);
-			}
-			
-			return result;
-		}
 	}
 	
 	private class OptionValues
@@ -63,68 +57,77 @@ public class AppOptions
 		public String[] values;
 		public int selected;
 	}
+
+	public AppOptions()
+	{
+		this.init();
+	}
 	
 	public void init()
 	{
 		this.model = new LinkedHashMap();
-		this.options = new LinkedHashMap();
+		this.pendingOptions = new JSONObject();
+		this.currentOptions = new JSONObject();
 
-		this.model.put("Board Size", new OptionValues(new String[]{"6x7", "8x7", "9x7", "10x7"}, 0));
-		this.model.put("Opponent", new OptionValues(new String[]{"computer", "human"}, 0));
-		this.model.put("First turn", new OptionValues(new String[]{"you", "opponent", "random"}, 0));
-		this.model.put("Timer", new OptionValues(new String[]{"off", "5 sec", "10 sec", "15 sec"}, 0));
-		this.model.put("Skin", new OptionValues(new String[]{"classic", "magnetic", "baloons", "pirates"}, 0));
+		this.model.put(OP_T_BOARD_SIZE, new OptionValues(new String[]{"7x6", "8x7", "9x7", "10x7"}, 0));
+		this.model.put(OP_T_OPPONENT, new OptionValues(new String[]{"human", "computer"}, 0));
+		this.model.put(OP_T_FIRST_TURN, new OptionValues(new String[]{"you", "opponent", "random"}, 0));
+		this.model.put(OP_T_TIMER, new OptionValues(new String[]{"off", "5 sec", "10 sec", "15 sec"}, 0));
+		this.model.put(OP_T_SKIN, new OptionValues(new String[]{"classic", "magnetic", "baloons", "pirates"}, 0));
 
 		if (!this.load())
 		{
-			this.options.put("Board Size", "7x6");
-			this.options.put("Opponent", "human");
-			this.options.put("First turn", "you");
-			this.options.put("Timer", "off");
-			this.options.put("Skin", "classic");
+			Iterator i = this.model.keySet().iterator();
+			while (i.hasNext())
+			{
+				String key = (String)i.next();
+				OptionValues items = (OptionValues)this.model.get(key);
+				this.currentOptions.put(key, items.values[items.selected]);
+			}
+			
+			this.save();
 		}
+		
+		this.textOptionPane = createTextOptionPane();
+		this.syncTextOptionPane();
+	}
+	
+	public KTextOptionPane getTextOptionPane()
+	{
+		return this.textOptionPane;
 	}
 
-	public KTextOptionPane createTextOptionPane()
+	private KTextOptionPane createTextOptionPane()
 	{
-		KTextOptionPane options = new KTextOptionPane();
+		KTextOptionPane optionPane = new KTextOptionPane();
 		Iterator i = this.model.keySet().iterator();
 		while (i.hasNext())
 		{
 			String key = (String)i.next();
 			OptionValues items = (OptionValues)this.model.get(key);
-			OptionUpdater updater = new OptionUpdater(key);
-
-			options.addListMenu(createOptionListMenu(key, items.values, items.selected, updater));
-
+			OptionUpdater updater = new OptionUpdater(key, this.pendingOptions);
+			optionPane.addListMenu(createOptionListMenu(key, items.values, items.selected, updater));
 		}
 
-		return options;
+		return optionPane;
 	}
 
 	private KTextOptionListMenu createOptionListMenu(final String title, final String[] values, int sel, OptionUpdater updater)
 	{
 		KTextOptionListMenu item = new KTextOptionListMenu(title, values);
+		item.setSelectedIndex(sel);
 		item.addItemListener(updater);
 		
 		return item;
-	}
-
-	public void set(final String key, final Object value)
-	{
-		if (this.options.containsKey(key))
-		{
-			this.options.put(key, value);
-		}
 	}
 
 	public Object get(final String key)
 	{
 		Object result = null;
 		
-		if (this.options.containsKey(key))
+		if (this.currentOptions.containsKey(key))
 		{
-			result = this.options.get(key);
+			result = this.currentOptions.get(key);
 		}
 		
 		return result;
@@ -132,13 +135,86 @@ public class AppOptions
 	
 	public boolean load()
 	{
-		return false;
+		boolean result = false;
+		JSONParser parser = new JSONParser();
+		this.currentOptions.clear();
+
+		try
+		{
+			String[] text = FileHelper.read(FILE_NAME_OPTIONS);
+			if (text.length != 0)
+			{
+				this.currentOptions = (JSONObject) parser.parse(text[0]);
+				result = true;
+			}
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		};
+		
+		return result;
 	}
 	
 	public void save()
 	{
+		FileHelper.write(FILE_NAME_OPTIONS, this.currentOptions.toString(), false);
+	}
+
+	public void restart()
+	{
+		this.pendingOptions.clear();
+	}
+
+	public void commit()
+	{
+		Iterator i = this.pendingOptions.keySet().iterator();
+		while (i.hasNext())
+		{
+			String key = (String)i.next();
+			if (this.currentOptions.containsKey(key))
+			{
+				this.currentOptions.put(key, this.pendingOptions.get(key));
+			}
+		}
+		
+		this.syncTextOptionPane();
+		this.save();
+	}
+
+	public void revert()
+	{
+		this.pendingOptions.clear();
+		this.syncTextOptionPane();
 	}
 	
-	private LinkedHashMap options;
+	private void syncTextOptionPane()
+	{
+		Iterator i = this.textOptionPane.get().iterator();
+		while (i.hasNext())
+		{
+			KTextOptionListMenu menu = (KTextOptionListMenu)i.next();
+			int selected = 0;
+			String key = menu.getTitle();
+			Iterator j = menu.get().iterator();
+			while (j.hasNext())
+			{
+				KTextOptionMenuItem item = (KTextOptionMenuItem)j.next();
+				if(item.getValue().equals(this.currentOptions.get(key)))
+				{
+					menu.setSelectedIndex(selected);
+					break;
+				}
+				else
+				{
+					selected += 1;
+				}
+			}
+		}
+	}
+
+	private JSONObject currentOptions;
+	private JSONObject pendingOptions;
 	private LinkedHashMap model;
+	private KTextOptionPane textOptionPane;
 }
