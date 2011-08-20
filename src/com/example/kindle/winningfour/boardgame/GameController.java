@@ -2,13 +2,8 @@ package com.example.kindle.winningfour.boardgame;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import javax.security.auth.login.AppConfigurationEntry;
 
 import com.example.kindle.boardgame.GameEvent;
 import com.example.kindle.boardgame.IGame;
@@ -19,14 +14,10 @@ import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.boardgame.IRules;
 import com.example.kindle.boardgame.ITurn;
-import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.sm.SignalEvent;
-import com.example.kindle.utils.FileHelper;
-import com.example.kindle.utils.StringHelper;
-import com.example.kindle.winningfour.App;
-import com.example.kindle.winningfour.AppOptions;
-import com.example.kindle.winningfour.OptionsFactory;
 import com.example.kindle.winningfour.boardgame.rules.classic.Rules;
+import com.example.kindle.winningfour.options.AppOptions;
+import com.example.kindle.winningfour.options.OptionsFactory;
 
 public class GameController implements IGame
 {

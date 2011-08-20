@@ -52,7 +52,7 @@ public class OptionsPage extends State
 		
 		this.context.setTextOptionPane(App.opts.getTextOptionPane());
 
-		App.opts.restart();
+		App.opts.revert();
 		
 		KeyboardHelper.simulateKey(this.focused, KindleKeyCodes.VK_TEXT);
 	}

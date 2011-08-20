@@ -11,18 +11,20 @@ import java.util.ResourceBundle;
 import com.amazon.kindle.kindlet.AbstractKindlet;
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.event.KindleKeyCodes;
-import com.amazon.kindle.kindlet.ui.KTextOptionPane;
 import com.amazon.kindle.kindlet.ui.KindleOrientation;
 import com.example.kindle.sm.KeyboardEvent;
 import com.example.kindle.winningfour.boardgame.GameController;
 import com.example.kindle.winningfour.boardgame.GameView;
 import com.example.kindle.winningfour.gui.PageController;
+import com.example.kindle.winningfour.options.AppOptions;
 
 import org.apache.log4j.Logger;
 
 /**
+ * Program life-cycle class.
  */
-public class App extends AbstractKindlet {
+public class App extends AbstractKindlet
+{
     /** {@inheritDoc} */
     public void create(final KindletContext context)
     {
@@ -34,11 +36,10 @@ public class App extends AbstractKindlet {
 		App.log("App::create done");
     }
 
+    /** {@inheritDoc} */
     public void destroy()
     {
 		App.log("App::destroy");
-
-		// TODO: save game state/options to file
 
 		this.root.setLayout(null);  // no need to waste time on implicit root-layout calls down from here 
 		this.root.removeAll();
@@ -48,12 +49,15 @@ public class App extends AbstractKindlet {
 
 		// TODO: destroy() everything
 		// TODO: null out pointers
+        
+        //this.gameView.destroy();
 
 		System.gc();
 		
 		App.log("App::destroy done.\n\nOver and out!");
 	}
 
+    /** {@inheritDoc} */
     public void start()
     {
 		App.log("App::start");
@@ -90,10 +94,13 @@ public class App extends AbstractKindlet {
 			
 			/* TODO: build timers and possibly background threads (if any) ... */
 		}
-		
+
 		App.log("App::start done");
     }
 
+    /** 
+     * Method that is called only for the first time the application starts.
+     */
     protected void initalStart()
     {
 		App.log("App::initalStart");
@@ -158,6 +165,7 @@ public class App extends AbstractKindlet {
 		App.log("App::initalStart done");
 	}
 
+    /** {@inheritDoc} */
 	public void stop()
     {
 		App.log("App::stop");
@@ -172,37 +180,74 @@ public class App extends AbstractKindlet {
 		
 		App.log("App::stop done");
 	}
-    
+
+    /**
+     * Sets the application stopped/running status.
+     * 
+     * @param flag Stopped flag.
+     */
 	public static void setStopped(boolean flag)
 	{
 		App.stopped = flag;
 	}
-	
+
+    /**
+     * Returns if the application has been stopped.
+     * 
+     * @return True if stopped, false otherwise.
+     */
 	public static boolean isStopped()
 	{
 		return App.stopped;
 	}
 
+    /** Indicates if the application has been stopped. */
     private static boolean stopped = false;
 
+    /** Resource manager for centralized management and access of strings, fonts and images. */
     public static ResourceBundle bundle = ResourceBundle.getBundle("com.example.kindle.winningfour.AppResources");
+    
+    /** Page switching state machine.  */
     public static PageController pager;
+    
+    /** Current screen dimensions. */
     public static Dimension screenSize;
+    
+    /** Screen client area dimensions. */
     public static Dimension clientSize;
+    
+    /** Game state machine. */
     public static GameController gamer;
+    
+    /** Game options handler */
     public static AppOptions opts;
 
+    /** GUI panel with game elements like board, pieces, selector, etc. */
     private GameView gameView;
 
+    /** Application context. */
     private KindletContext context;
+    
+    /** Application root container. */
     private Container root;
+    
+    /** Indicates that first start routines have finished. */
     private boolean initialStartDone;
     
+    /** Application start time used for logger. */
     private static long startTime = System.currentTimeMillis();
-	private static Logger logger = Logger.getLogger("App");
 	
+    /** Application logger. */
+    private static Logger logger = Logger.getLogger("App");
+	
+    /**
+     * Global keys dispatcher. Used for VK_BACK handling.
+     */
 	private KeyEventDispatcher keyEventDispatcher;
 	
+    /**
+     * Puts log message into logging stream.
+     */
 	public static void log(String msg)
 	{
 		double timestamp = (System.currentTimeMillis() - App.startTime)/1000.0;
