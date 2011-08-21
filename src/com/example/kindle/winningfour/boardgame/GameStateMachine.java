@@ -38,11 +38,11 @@ public class GameStateMachine extends StateMachine
     	player1Turn.onSignal(WIN, player1Win);
     	player1Turn.onSignal(DRAW, drawState);
     	player1Turn.onSignal(TURN, player2Turn);
-    	//player1Turn.onTimer("game_timer", player2Win);
+    	//player1Turn.onTimeout(player2Win);
     	player2Turn.onSignal(WIN, player2Win);
     	player2Turn.onSignal(DRAW, drawState);
     	player2Turn.onSignal(TURN, player1Turn);
-    	//player2Turn.onTimer("game_timer", player1Win);
+    	//player2Turn.onTimeout(player1Win);
     	player1Win.onSignal(NEW, newGame);
     	player2Win.onSignal(NEW, newGame);
 
@@ -62,6 +62,16 @@ public class GameStateMachine extends StateMachine
 			this.game.reset();
 			this.game.pulse(new SignalEvent(GameStateMachine.TURN));
 			this.game.repaint();
+		}
+		
+		public void destroy()
+		{
+			App.log("GameStateMachine::destroy");
+
+			super.destroy();
+			this.game = null;
+
+			App.log("GameStateMachine::destroy done");
 		}
 
 		private GameController game;

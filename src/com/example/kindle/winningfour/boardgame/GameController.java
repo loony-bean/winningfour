@@ -15,6 +15,7 @@ import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.boardgame.IRules;
 import com.example.kindle.boardgame.ITurn;
 import com.example.kindle.sm.SignalEvent;
+import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.rules.classic.Rules;
 import com.example.kindle.winningfour.options.AppOptions;
 import com.example.kindle.winningfour.options.OptionsFactory;
@@ -98,7 +99,7 @@ public class GameController implements IGame
 		return (this.recorder.hasData());
 	}
 
-	public void resume()
+	public void restore()
 	{
 		ArrayList recording = this.recorder.load();
 		if (recording != null)
@@ -233,10 +234,41 @@ public class GameController implements IGame
 		this.listeners.add(listener);
 	}
 
+	public void destroy()
+	{
+		App.log("GameController::destroy");
+
+		this.gameView = null;
+		
+		this.stateMachine.destroy();
+		this.stateMachine = null;
+
+		this.board.destroy();
+		this.board = null;
+
+		this.rules.destroy();
+		this.rules = null;
+
+		for (int i = 0; i < this.players.length; i++)
+		{
+			this.players[i].destroy();
+			this.players[i] = null;
+		}
+		this.players = null;
+
+		this.recorder.destroy();
+		this.recorder = null;
+
+		this.listeners.clear();
+		this.listeners = null;
+
+		App.log("GameController::destroy done");
+}
+
 	private boolean stopped = true;
 	
-	private final GameView gameView;
-	private final GameStateMachine stateMachine;
+	private GameView gameView;
+	private GameStateMachine stateMachine;
 	private Board board;
 	private int selectedRow;
 	private IRules rules;

@@ -141,6 +141,19 @@ public class MenuPage extends PageState
         return button;
     }
     
+    public void destroy()
+    {
+		App.log("MenuPage::destroy");
+
+    	super.destroy();
+    	
+    	this.gameStateListener = null;
+    	this.options.clear();
+    	this.options = null;
+
+    	App.log("MenuPage::destroy done");
+    }
+    
     IGameStateListener gameStateListener;
     WeakHashMap options;
 }

@@ -48,4 +48,15 @@ public class GamePage extends PageState
 		super.leave();
 		this.parent.repaint();
 	}
+	
+    public void destroy()
+    {
+		App.log("GamePage::destroy");
+
+    	((ImagePanel) this.panel).destroy();
+    	
+    	super.destroy();
+
+    	App.log("GamePage::destroy done");
+    }
 }

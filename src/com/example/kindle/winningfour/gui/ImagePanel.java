@@ -7,6 +7,7 @@ import java.awt.Image;
 
 import com.amazon.kindle.kindlet.ui.KImage;
 import com.amazon.kindle.kindlet.ui.KPanel;
+import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
 
 public class ImagePanel extends KPanel
@@ -19,17 +20,6 @@ public class ImagePanel extends KPanel
 		this.name = name;
 	}
 	
-	void destroy()
-	{
-		this.removeAll();
-
-		this.backgroundPane.setImage(null);
-		this.backgroundPane = null;
-		
-		this.backgroundImage.flush();
-		this.backgroundImage = null;
-	}
-
 	public void doLayout()
 	{
 		final Dimension size = this.getSize();
@@ -82,6 +72,27 @@ public class ImagePanel extends KPanel
 			Dimension pz = new Dimension((this.layoutSize.width - sz.width)/2, (this.layoutSize.height - sz.height)/2); 
 			this.inner.setBounds(pz.width, pz.height, sz.width, sz.height);
 		}
+	}
+
+	void destroy()
+	{
+		App.log("ImagePanel::destroy");
+
+		this.removeAll();
+
+		this.backgroundPane.setImage(null);
+		this.backgroundPane = null;
+		
+		if (this.backgroundImage != null)
+		{
+			this.backgroundImage.flush();
+			this.backgroundImage = null;
+		}
+		
+		this.layoutSize = null;
+		this.inner = null;
+
+		App.log("ImagePanel::destroy done");
 	}
 
 	private static final long serialVersionUID = 1L;

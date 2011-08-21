@@ -5,6 +5,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import com.example.kindle.boardgame.IPlayer;
+import com.example.kindle.winningfour.App;
 
 public class Player implements IPlayer
 {
@@ -22,14 +23,6 @@ public class Player implements IPlayer
 		};
 	}
 	
-	public void destroy()
-	{
-		if (this.keyAdapter != null)
-		{
-			this.keyAdapter = null;
-		}
-	}
-
 	public Color getColor()
 	{
 		return this.color;
@@ -73,7 +66,16 @@ public class Player implements IPlayer
 		return false;
 	}
 
+	public void destroy()
+	{
+		App.log("Player::destroy");
+
+		this.keyAdapter = null;
+
+		App.log("Player::destroy done");
+	}
+
 	private KeyAdapter keyAdapter;
-	private Color color;
-	private String name;
+	private final Color color;
+	private final String name;
 }

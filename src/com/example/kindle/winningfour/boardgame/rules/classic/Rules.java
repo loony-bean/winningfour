@@ -9,6 +9,7 @@ import com.example.kindle.boardgame.IRules;
 import com.example.kindle.boardgame.ITurn;
 import com.example.kindle.boardgame.ITurnValidator;
 import com.example.kindle.boardgame.Position2D;
+import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.Board;
 
 public class Rules implements IRules
@@ -41,6 +42,7 @@ public class Rules implements IRules
 			}
 		}
 
+		// four pieces connected
 		if (max >= 4)
 		{
 			this.gameEventListener.onGameEvent(GameEvent.WIN);
@@ -105,7 +107,17 @@ public class Rules implements IRules
 	{
 		this.gameEventListener = gameEventListener;
 	}
-	
+
+	public void destroy()
+	{
+		App.log("Rules::destroy");
+
+		this.gameEventListener = null;
+
+		App.log("Rules::destroy done");
+	}
+
+	// TODO: remove turn validator
 	private ITurnValidator turnValidator;
 	private IGameEventListener gameEventListener;
 }

@@ -7,4 +7,5 @@ public interface IRules
 	public void beforePlayerTurn();
 	public ITurnValidator getTurnValidator();
 	public void setEventListener(IGameEventListener gameEventListener);
+	public void destroy();
 }

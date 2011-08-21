@@ -8,5 +8,5 @@ public interface IGame
 	public void start();
 	public void stop();
 	public void makeTurn(ITurn turn);
-
+	public void destroy();
 }

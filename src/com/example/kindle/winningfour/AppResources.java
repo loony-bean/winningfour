@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.Iterator;
 import java.util.ListResourceBundle;
 import java.util.WeakHashMap;
 
@@ -93,6 +94,23 @@ public class AppResources extends ListResourceBundle
     	}
 		
     	return KindletUIResources.getInstance().getFont(KindletUIResources.KFontFamilyName.MONOSPACE, 21, KFontStyle.PLAIN, false);
+    }
+    
+    static public void destroy()
+    {
+    	Iterator i = imagesMap.keySet().iterator();
+    	while (i.hasNext())
+    	{
+    		String key = (String)i.next();
+    		Image image = (Image) imagesMap.get(key);
+    		if (image != null)
+    		{
+    			image.flush();
+    			image = null;
+    		}
+    	}
+
+    	imagesMap.clear();
     }
     
     static private final WeakHashMap imagesMap = new WeakHashMap();

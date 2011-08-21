@@ -37,28 +37,11 @@ public class GameView extends Container
 		this.add(this.statusLabel);
 
 		this.gameSelector.setFocusable(false);
-		
+
 		this.setFocusable(true);
 	    this.setFocusTraversalKeysEnabled(false);
 		
 		App.log("GameView::GameView done");
-	}
-
-	void destroy()
-	{
-		App.log("GameView::destroy");
-
-		this.removeAll();
-
-		this.gameSelector.destroy();
-		this.gameSelector = null;
-
-		this.statusLabel = null;
-
-		this.selectorImage.flush();
-		this.selectorImage = null;
-
-		App.log("GameView::destroy done");
 	}
 
 	public void doLayout()
@@ -141,6 +124,28 @@ public class GameView extends Container
 	public void setStatusText(String text)
 	{
 		this.statusLabel.setText(text);
+	}
+
+	public void destroy()
+	{
+		App.log("GameView::destroy");
+
+		this.removeAll();
+
+		this.gameSelector.destroy();
+		this.gameSelector = null;
+
+		this.statusLabel = null;
+
+		this.selectorImage.flush();
+		this.selectorImage = null;
+		
+		this.items.clear();
+		this.items = null;
+		
+		this.layoutSize = null;
+
+		App.log("GameView::destroy done");
 	}
 
 	private static final long serialVersionUID = 1;

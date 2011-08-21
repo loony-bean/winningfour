@@ -9,6 +9,7 @@ import com.example.kindle.boardgame.IPiece;
 import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.boardgame.ITurn;
 import com.example.kindle.boardgame.Position2D;
+import com.example.kindle.winningfour.App;
 
 public class Board implements IBoard2D
 {
@@ -23,7 +24,7 @@ public class Board implements IBoard2D
 				this.setPiece(null, new Position2D(i, j));
 			}
 		}
-		
+
 		this.turnsCount = 0;
 	}
 
@@ -38,6 +39,7 @@ public class Board implements IBoard2D
 				result.add(item);
 			}
 		}
+
 		return result;
 	}
 
@@ -117,7 +119,25 @@ public class Board implements IBoard2D
 		return this.turnsCount;
 	}
 
-	private final Piece[][] board;
+	public void destroy()
+	{
+		App.log("Board::destroy");
+
+		for (int i = 0; i < this.board.length; i++)
+		{
+			for (int j = 0; j < this.board[i].length; j++)
+			{
+				this.board[i][j] = null;
+			}
+		}
+
+		this.board = null;
+		this.lastTurn = null;
+
+		App.log("Board::destroy done");
+}
+
+	private Piece[][] board;
 	// here could be history
 	private Turn lastTurn;
 	private int turnsCount;

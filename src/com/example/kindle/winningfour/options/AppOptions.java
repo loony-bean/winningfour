@@ -293,6 +293,28 @@ public class AppOptions
 		}
 	}
 
+	/**
+	 * Object destruction.
+	 */
+	public void destroy()
+	{
+		this.currentOptions.clear();
+		this.currentOptions = null;
+		
+		this.pendingOptions.clear();
+		this.pendingOptions = null;
+		
+		this.model.clear();
+		this.model = null;
+
+		for (int i = 0; i < this.textOptionPane.size(); i++)
+		{
+			this.textOptionPane.remove(i);
+		}
+		
+		this.textOptionPane = null;
+	}
+	
 	/** Currently active options data. */
 	private JSONObject currentOptions;
 

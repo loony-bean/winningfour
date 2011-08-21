@@ -15,7 +15,7 @@ import com.amazon.kindle.kindlet.ui.KindleOrientation;
 import com.example.kindle.sm.KeyboardEvent;
 import com.example.kindle.winningfour.boardgame.GameController;
 import com.example.kindle.winningfour.boardgame.GameView;
-import com.example.kindle.winningfour.gui.PageController;
+import com.example.kindle.winningfour.gui.PageStateMachine;
 import com.example.kindle.winningfour.options.AppOptions;
 
 import org.apache.log4j.Logger;
@@ -47,10 +47,29 @@ public class App extends AbstractKindlet
     	KeyboardFocusManager fm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         fm.removeKeyEventDispatcher(this.keyEventDispatcher);
 
-		// TODO: destroy() everything
+        // TODO: destroy() everything
 		// TODO: null out pointers
+
+        App.opts.destroy();
+        App.opts = null;
         
-        //this.gameView.destroy();
+        AppResources.destroy();
+        bundle = null;
+        
+        App.pager.destroy();
+        App.pager = null;
+
+        App.screenSize = null;
+        App.clientSize = null;
+        
+        App.gamer.destroy();
+        App.gamer = null;
+
+        this.context = null;
+        this.root = null;
+        
+        this.gameView.destroy();
+        this.gameView = null;
 
 		System.gc();
 		
@@ -146,18 +165,18 @@ public class App extends AbstractKindlet
 		KeyboardFocusManager fm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         fm.addKeyEventDispatcher(this.keyEventDispatcher);
 
-		// Menus
+		// Options
 		App.opts = new AppOptions();
 
 		// App start code
 		this.gameView = new GameView();
 		App.gamer = new GameController(this.gameView);
-		App.pager = new PageController(this.context);
+		App.pager = new PageStateMachine(this.context);
 		App.pager.start();
 		
 		if (App.gamer.isSuspended())
 		{
-			App.gamer.resume();
+			App.gamer.restore();
 		}
 
 		this.initialStartDone = true;
@@ -208,7 +227,7 @@ public class App extends AbstractKindlet
     public static ResourceBundle bundle = ResourceBundle.getBundle("com.example.kindle.winningfour.AppResources");
     
     /** Page switching state machine.  */
-    public static PageController pager;
+    public static PageStateMachine pager;
     
     /** Current screen dimensions. */
     public static Dimension screenSize;

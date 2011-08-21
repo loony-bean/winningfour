@@ -11,4 +11,5 @@ public interface IPlayer
 	public void think();
 	public KeyAdapter getKeyAdapter();
 	public boolean equals(Object other);
+	public void destroy();
 }

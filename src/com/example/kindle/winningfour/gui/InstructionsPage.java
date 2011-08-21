@@ -59,4 +59,13 @@ public class InstructionsPage extends PageState
 		super.leave();
 		this.parent.repaint();
 	}
+	
+    public void destroy()
+    {
+		App.log("InstructionsPage::destroy");
+
+    	super.destroy();
+
+    	App.log("InstructionsPage::destroy done");
+    }
 }

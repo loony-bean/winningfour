@@ -16,15 +16,6 @@ public class GameImage extends Container
 		this.setImage(image);
 	}
 
-	public void destroy()
-	{
-		if (this.image != null)
-		{
-			this.image.flush();
-			this.image = null;
-		}
-	}
-	
 	public void setImage(Image image)
 	{
 		if (this.image != null)
@@ -53,6 +44,19 @@ public class GameImage extends Container
 			g2d.setColor(Color.black);
 			g2d.fillRect(0, 0, d.width - 1, d.height - 1);
 		}
+	}
+
+	public void destroy()
+	{
+		App.log("GameImage::destroy");
+
+		if (this.image != null)
+		{
+			this.image.flush();
+			this.image = null;
+		}
+
+		App.log("GameImage::destroy done");
 	}
 
 	private static final long serialVersionUID = 1L;

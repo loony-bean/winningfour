@@ -11,6 +11,7 @@ import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.ui.KPanel;
 
 import com.example.kindle.sm.State;
+import com.example.kindle.winningfour.App;
 
 /**
  *
@@ -44,11 +45,24 @@ public class PageState extends State
 		this.focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
         this.active = false;
 	}
+	
+	public void destroy()
+	{
+		App.log("PageState::destroy");
+
+		super.destroy();
+		
+		this.panel = null;
+		this.context = null;
+		this.focusOwner = null;
+		this.parent = null;
+
+		App.log("PageState::destroy done");
+	}
 
 	boolean active;
 	KPanel panel;
 	ImagePanel parent;
 	KindletContext context;
 	Component focusOwner;
-	FocusListener focusListener;
 }

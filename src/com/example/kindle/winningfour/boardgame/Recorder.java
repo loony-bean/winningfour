@@ -28,15 +28,19 @@ public class Recorder
 
 	public void start()
 	{
+		App.log("Recorder::destroy");
+
 		try
 		{
 			this.writer = new FileWriter(this.file, true);
 		}
 		catch (IOException e)
-		{ 
+		{
 			App.log("Recorder::start exception for file " + this.file.getName()); 
 		}
-	}
+
+		App.log("Recorder::destroy done");
+}
 
 	public void stop()
 	{
@@ -93,6 +97,21 @@ public class Recorder
 	public boolean isEnabled()
 	{
 		return this.enabled;
+	}
+
+	public void destroy()
+	{
+		if (writer != null)
+		{ 
+			try
+			{
+				writer.close();
+			}
+			catch (IOException e)
+			{
+				App.log("Recorder::destroy exception");
+			} 
+		} 
 	}
 
 	private boolean enabled;

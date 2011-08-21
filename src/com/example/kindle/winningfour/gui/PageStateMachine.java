@@ -18,8 +18,39 @@ import com.example.kindle.winningfour.AppResources;
 /**
  *
  */
-public class PageController extends StateMachine
+public class PageStateMachine extends StateMachine
 {
+	public PageStateMachine(KindletContext context)
+	{
+		super();
+		
+		Container root = context.getRootContainer();
+		this.panel = new ImagePanel("background.gif");
+		panel.setPreferredSize(root.getPreferredSize());
+		root.add(panel, BorderLayout.CENTER);
+		
+		ResetGame resetGame = new ResetGame("ResetGame");
+		GamePage gamePage = new GamePage(context, panel, "Game");
+		MenuPage menuPage = new MenuPage(context, panel, "Menu");
+		OptionsPage optionsPage = new OptionsPage(context, panel, "Options");
+		InstructionsPage instructionsPage = new InstructionsPage(context, panel, "Instructions");
+		ConfirmExitState confirmExitState = new ConfirmExitState(context, panel, "ConfirmExit");
+    	this.addState(menuPage);
+    	this.addState(gamePage);
+    	this.addState(optionsPage);
+    	this.addState(instructionsPage);
+    	resetGame.onSignal(AppResources.KEY_MENU_NEW_GAME, gamePage);
+    	menuPage.onSignal(AppResources.KEY_MENU_NEW_GAME, resetGame);
+    	menuPage.onSignal(AppResources.KEY_MENU_RESUME_GAME, gamePage);
+    	menuPage.onSignal(AppResources.KEY_MENU_OPTIONS, optionsPage);
+    	menuPage.onSignal(AppResources.KEY_MENU_INSTRUCTIONS, instructionsPage);
+    	menuPage.onSignal(AppResources.KEY_MENU_EXIT, confirmExitState);
+    	gamePage.onKey(KindleKeyCodes.VK_BACK, menuPage);
+    	instructionsPage.onKey(KindleKeyCodes.VK_BACK, menuPage);
+
+    	this.setInitialState(menuPage);
+	}
+
 	private class ResetGame extends State
 	{
 		public ResetGame(String name)
@@ -49,36 +80,17 @@ public class PageController extends StateMachine
 		}
 	}
 	
-	public PageController(KindletContext context)
+	public void destroy()
 	{
-		super();
+		App.log("PageStateMachine::destroy");
+
+		super.destroy();
 		
-		Container root = context.getRootContainer();
-		ImagePanel panel = new ImagePanel("background.gif");
-		panel.setPreferredSize(root.getPreferredSize());
-		root.add(panel, BorderLayout.CENTER);
-		
-		ResetGame resetGame = new ResetGame("ResetGame");
-		GamePage gamePage = new GamePage(context, panel, "Game");
-		MenuPage menuPage = new MenuPage(context, panel, "Menu");
-		OptionsPage optionsPage = new OptionsPage(context, panel, "Options");
-		InstructionsPage instructionsPage = new InstructionsPage(context, panel, "Instructions");
-		ConfirmExitState confirmExitState = new ConfirmExitState(context, panel, "ConfirmExit");
-    	this.addState(menuPage);
-    	this.addState(gamePage);
-    	this.addState(optionsPage);
-    	this.addState(instructionsPage);
-    	resetGame.onSignal(AppResources.KEY_MENU_NEW_GAME, gamePage);
-    	menuPage.onSignal(AppResources.KEY_MENU_NEW_GAME, resetGame);
-    	menuPage.onSignal(AppResources.KEY_MENU_RESUME_GAME, gamePage);
-    	menuPage.onSignal(AppResources.KEY_MENU_OPTIONS, optionsPage);
-    	menuPage.onSignal(AppResources.KEY_MENU_INSTRUCTIONS, instructionsPage);
-    	menuPage.onSignal(AppResources.KEY_MENU_EXIT, confirmExitState);
-    	gamePage.onKey(KindleKeyCodes.VK_BACK, menuPage);
-    	instructionsPage.onKey(KindleKeyCodes.VK_BACK, menuPage);
-    	//gamePage.onKey(KindleKeyCodes.VK_TEXT, optionsPage);
-    	//optionsPage.onKey(KindleKeyCodes.VK_BACK, menuPage);
-    	//optionsPage.onKey(KindleKeyCodes.VK_TEXT, menuPage);
-    	this.setInitialState(menuPage);
+		this.panel.destroy();
+		this.panel = null;
+
+		App.log("PageStateMachine::destroy done");
 	}
+	
+	private ImagePanel panel;
 }

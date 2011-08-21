@@ -6,10 +6,12 @@ package com.example.kindle.sm;
 import com.example.kindle.sm.SignalEvent;
 
 /**
- *
+ * Base event class. Events are disposed by state machine. If there is an 
+ * appropriate event transition registered then the transition takes place.
  */
 public class Event
 {
+	/** {@inheritDoc} */
 	public boolean equals(Object other)
 	{
 		if (this == other) return true;

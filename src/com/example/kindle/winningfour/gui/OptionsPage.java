@@ -81,7 +81,25 @@ public class OptionsPage extends State
 		}
 
 		this.context.setTextOptionPane(null);
-}
+	}
+
+	public void destroy()
+	{
+		App.log("OptionsPage::destroy");
+
+		super.destroy();
+		
+		this.context = null;
+		
+		if (this.focusListener != null && this.focused != null)
+		{
+			this.focused.removeFocusListener(this.focusListener);
+			this.focusListener = null;
+			this.focused = null;
+		}
+
+		App.log("OptionsPage::destroy done");
+	}
 
 	KindletContext context;
 	boolean active;
