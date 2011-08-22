@@ -15,6 +15,15 @@ public class ComputerPlayer extends Player
 	public void think()
 	{
 		App.log("ComputerPlayer::think");
+		
+		App.log("ComputerPlayer::think done");
+	}
+
+	public void interrupt()
+	{
+		App.log("ComputerPlayer::interrupt");
+		
+		App.log("ComputerPlayer::done");
 	}
 
 	protected void onKeyboard(KeyEvent event)

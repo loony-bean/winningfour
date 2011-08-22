@@ -93,6 +93,13 @@ public class GameStateMachine extends StateMachine
 
 			this.getPlayer().think();
 		}
+
+		public void leave()
+		{
+			this.getPlayer().interrupt();
+
+			super.leave();
+		}
 	}
 
 	private class Player1Turn extends TurnState

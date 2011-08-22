@@ -14,6 +14,7 @@ import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.boardgame.IRules;
 import com.example.kindle.boardgame.ITurn;
+import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.rules.classic.Rules;
@@ -118,11 +119,11 @@ public class GameController implements IGame
 				IPosition2D pos = (IPosition2D) i.next();
 				if (turnnum % 2 == 0)
 				{
-					turn = new Turn(piece1, pos, null);
+					turn = new Turn(piece1, pos);
 				}
 				else
 				{
-					turn = new Turn(piece2, pos, null);
+					turn = new Turn(piece2, pos);
 				}
 
 				turnnum += 1;
@@ -132,10 +133,42 @@ public class GameController implements IGame
 			this.recorder.setEnabled(true);
 		}
 	}
+
+	public boolean isTurnAvailable(ITurn turn)
+	{
+		IPosition2D pos = turn.getPosition();
+		if (this.board.isPositionOnBoard(pos))
+		{
+			if(this.board.getPiece(new Position2D(pos.x(), 0)) == null)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
+	public ArrayList getAvailableTurns(IPlayer player)
+	{
+		ArrayList result = new ArrayList();
+		
+		for (int i = 0; i < this.board.getWidth(); i++)
+		{
+			Position2D pos = new Position2D(i, 0);
+			ITurn turn = new Turn(new Piece(player), pos);
+			
+			if(this.isTurnAvailable(turn))
+			{
+				result.add(turn);
+			}
+		}
+		
+		return result;
+	}
+
 	public void makeTurn(ITurn turn)
 	{
-		if(this.board.isTurnAvailable(turn))
+		if(this.isTurnAvailable(turn))
 		{
 			this.board.putPiece(turn.getPiece(), turn.getPosition().x());
 			this.rules.afterPlayerTurn(this.board);

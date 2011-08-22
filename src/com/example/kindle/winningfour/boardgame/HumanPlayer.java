@@ -37,7 +37,7 @@ public class HumanPlayer extends Player
 					{
 						IPiece piece = new Piece(this);
 						IPosition2D pos = new Position2D(App.gamer.getSelectedRow(), 0);
-						App.gamer.makeTurn(new Turn(piece, pos, null));
+						App.gamer.makeTurn(new Turn(piece, pos));
 						break;
 					}
 					case KindleKeyCodes.VK_FIVE_WAY_LEFT:

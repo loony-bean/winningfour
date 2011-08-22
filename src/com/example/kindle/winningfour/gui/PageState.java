@@ -5,7 +5,6 @@ package com.example.kindle.winningfour.gui;
 
 import java.awt.Component;
 import java.awt.KeyboardFocusManager;
-import java.awt.event.FocusListener;
 
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.ui.KPanel;

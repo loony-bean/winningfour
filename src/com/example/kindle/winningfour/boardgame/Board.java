@@ -26,6 +26,23 @@ public class Board implements IBoard2D
 		}
 
 		this.turnsCount = 0;
+		this.lastTurn = null;
+	}
+
+	public Board(Board b)
+	{
+		this.board = new Piece[b.getWidth()][b.getHeight()];
+
+		for (int i = 0; i < this.board.length; i++)
+		{
+			for (int j = 0; j < this.board[i].length; j++)
+			{
+				IPosition2D pos = new Position2D(i, j);
+				this.setPiece(b.getPiece(pos), pos);
+			}
+		}
+		
+		this.lastTurn = (Turn) b.getLastTurn();
 	}
 
 	public ArrayList getItems()
@@ -48,13 +65,13 @@ public class Board implements IBoard2D
 		return this.board[position.x()][position.y()];
 	}
 
-	public void setPiece(IPiece piece, IPosition2D position)
+	public void setPiece(IPiece piece, IPosition2D pos)
 	{
-		this.board[position.x()][position.y()] = (Piece)piece;
+		this.board[pos.x()][pos.y()] = (Piece)piece;
 
 		if (piece != null)
 		{
-			this.lastTurn = new Turn(piece, position, null);
+			this.lastTurn = new Turn(piece, pos);
 		}
 		
 		this.turnsCount += 1;
@@ -73,12 +90,6 @@ public class Board implements IBoard2D
 		// TODO: TurnValidator, exception?
 	}
 
-	public ArrayList search(IPiece piece)
-	{
-		// TODO
-		return null;
-	}
-
 	public int getWidth()
 	{
 		return this.board.length;
@@ -88,25 +99,16 @@ public class Board implements IBoard2D
 	{
 		return this.board[0].length;
 	}
-	
+
+	public Dimension getSize()
+	{
+		return new Dimension(this.getWidth(), this.getHeight());
+	}
+
 	public boolean isPositionOnBoard(IPosition2D p)
 	{
 		return (p.x() >= 0 && p.x() < this.getWidth() &&
 				p.y() >= 0 && p.y() < this.getHeight());
-	}
-
-	public boolean isTurnAvailable(ITurn turn)
-	{
-		IPosition2D p = turn.getPosition();
-		if (isPositionOnBoard(p))
-		{
-			if(this.board[p.x()][0] == null)
-			{
-				return true;
-			}
-		}
-		
-		return false;
 	}
 
 	public ITurn getLastTurn()
@@ -117,6 +119,13 @@ public class Board implements IBoard2D
 	public int getTurnsCount()
 	{
 		return this.turnsCount;
+	}
+
+	public Object clone()
+	{
+		App.log("Board::clone");
+
+		return new Board(this);
 	}
 
 	public void destroy()

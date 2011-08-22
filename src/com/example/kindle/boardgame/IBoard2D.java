@@ -10,8 +10,6 @@ public interface IBoard2D
 	public ITurn getLastTurn();
 	public int getTurnsCount();
 	public boolean isPositionOnBoard(IPosition2D p);
-	public boolean isTurnAvailable(ITurn turn);
-	public ArrayList search(IPiece piece);
 	public int getWidth();
 	public int getHeight();
 	public void destroy();
