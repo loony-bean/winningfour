@@ -18,6 +18,12 @@ public class Position2D implements IPosition2D
 		return this.y;
 	}
 
+	public void adjust(int incx, int incy)
+	{
+		this.x += incx;
+		this.y += incy;
+	}
+
 	private int x;
 	private int y;
 }

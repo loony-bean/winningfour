@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import com.example.kindle.boardgame.IGameContext;
 import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.winningfour.App;
 
@@ -46,7 +47,7 @@ public class Player implements IPlayer
 	{
 	}
 
-	public void think()
+	public void think(IGameContext context)
 	{
 	}
 

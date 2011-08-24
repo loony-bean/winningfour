@@ -29,7 +29,7 @@ public class Board implements IBoard2D
 		this.lastTurn = null;
 	}
 
-	public Board(Board b)
+	public Board(IBoard2D b)
 	{
 		this.board = new Piece[b.getWidth()][b.getHeight()];
 
@@ -41,8 +41,10 @@ public class Board implements IBoard2D
 				this.setPiece(b.getPiece(pos), pos);
 			}
 		}
-		
-		this.lastTurn = (Turn) b.getLastTurn();
+
+		this.turnsCount = b.getTurnsCount();
+		ITurn last = b.getLastTurn();
+		this.lastTurn = new Turn(new Piece(last.getPiece().getPlayer()), last.getPosition());
 	}
 
 	public ArrayList getItems()
@@ -71,7 +73,7 @@ public class Board implements IBoard2D
 
 		if (piece != null)
 		{
-			this.lastTurn = new Turn(piece, pos);
+			this.lastTurn = new Turn(piece, new Position2D(pos.x(), pos.y()));
 		}
 		
 		this.turnsCount += 1;
@@ -90,6 +92,17 @@ public class Board implements IBoard2D
 		// TODO: TurnValidator, exception?
 	}
 
+	public void undo()
+	{
+		if (this.lastTurn != null)
+		{
+			IPosition2D pos = this.lastTurn.getPosition();
+			this.board[pos.x()][pos.y()] = null;
+			this.lastTurn = null;
+			this.turnsCount -= 1;
+		}
+	}
+	
 	public int getWidth()
 	{
 		return this.board.length;
@@ -123,7 +136,7 @@ public class Board implements IBoard2D
 
 	public Object clone()
 	{
-		App.log("Board::clone");
+		//App.log("Board::clone");
 
 		return new Board(this);
 	}

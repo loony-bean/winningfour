@@ -14,7 +14,6 @@ import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.boardgame.IRules;
 import com.example.kindle.boardgame.ITurn;
-import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.rules.classic.Rules;
@@ -33,7 +32,7 @@ public class GameController implements IGame
 
 	public IGameContext getContext()
 	{
-		return null;
+		return new GameContext(board, rules, players);
 	}
 
 	public IPlayer[] getPlayers()
@@ -82,7 +81,6 @@ public class GameController implements IGame
 		{
 			this.stateMachine.start();
 			this.setStopped(false);
-
 			this.recorder.start();
 		}
 	}
@@ -95,6 +93,16 @@ public class GameController implements IGame
 		this.recorder.stop();
 	}
 	
+	public void setRestoring(boolean flag)
+	{
+		this.restoring = flag;
+	}
+
+	public boolean isRestoring()
+	{
+		return this.restoring;
+	}
+
 	public boolean isSuspended()
 	{
 		return (this.recorder.hasData());
@@ -105,6 +113,8 @@ public class GameController implements IGame
 		ArrayList recording = this.recorder.load();
 		if (recording != null)
 		{
+			this.setRestoring(true);
+			
 			this.start();
 			this.recorder.setEnabled(false);
 			
@@ -130,45 +140,15 @@ public class GameController implements IGame
 				this.makeTurn(turn);
 			}
 
+			this.setRestoring(false);
+
 			this.recorder.setEnabled(true);
 		}
 	}
 
-	public boolean isTurnAvailable(ITurn turn)
-	{
-		IPosition2D pos = turn.getPosition();
-		if (this.board.isPositionOnBoard(pos))
-		{
-			if(this.board.getPiece(new Position2D(pos.x(), 0)) == null)
-			{
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public ArrayList getAvailableTurns(IPlayer player)
-	{
-		ArrayList result = new ArrayList();
-		
-		for (int i = 0; i < this.board.getWidth(); i++)
-		{
-			Position2D pos = new Position2D(i, 0);
-			ITurn turn = new Turn(new Piece(player), pos);
-			
-			if(this.isTurnAvailable(turn))
-			{
-				result.add(turn);
-			}
-		}
-		
-		return result;
-	}
-
 	public void makeTurn(ITurn turn)
 	{
-		if(this.isTurnAvailable(turn))
+		if(this.rules.isTurnAvailable(this.board, turn))
 		{
 			this.board.putPiece(turn.getPiece(), turn.getPosition().x());
 			this.rules.afterPlayerTurn(this.board);
@@ -298,6 +278,7 @@ public class GameController implements IGame
 		App.log("GameController::destroy done");
 }
 
+	private boolean restoring = false;
 	private boolean stopped = true;
 	
 	private GameView gameView;

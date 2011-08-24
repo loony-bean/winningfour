@@ -91,7 +91,10 @@ public class GameStateMachine extends StateMachine
 
 			super.enter();
 
-			this.getPlayer().think();
+			if (!App.gamer.isRestoring())
+			{
+				this.getPlayer().think(App.gamer.getContext());
+			}
 		}
 
 		public void leave()
