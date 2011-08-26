@@ -13,9 +13,13 @@ import com.example.kindle.winningfour.App;
 
 public class ComputerPlayer extends Player
 {
+	public final static int MAXVAL = 100;
+    public final static int DEPTH = 6;
+
 	public ComputerPlayer(final Color color, final String name)
 	{
 		super(color, name);
+		this.hash = new TranspositionTable();
 	}
 
 	public void think(IGameContext context)
@@ -29,7 +33,6 @@ public class ComputerPlayer extends Player
 		this.pid = (this.players[0] == this) ? 0 : 1;
 
 		ITurn best = null;
-		int MAXVAL = 100;
         int maxscore = -MAXVAL;
         int score = 0;
         
@@ -40,19 +43,23 @@ public class ComputerPlayer extends Player
         	ITurn turn = (ITurn) i.next();
 
             ((Board) cloned).putPiece(new Piece(this), turn.getPosition().x());
-            score = -this.negascout(cloned, depth-1, -MAXVAL, MAXVAL, this.nextPlayer(this.pid));
+            score = -this.negascout(cloned, DEPTH-1, -MAXVAL, MAXVAL, this.nextPlayer(this.pid));
             cloned.undo();
             
-            //App.log("D: " + depth + " P: " + turn.getPosition().x() + " S: " + score);
-            //App.log("");
+            App.log("S: " + score);
 
-            if (score > maxscore && this.rules.isTurnAvailable(cloned, turn))
+            if (this.rules.isTurnAvailable(cloned, turn))
             {
-                best = turn;
-                maxscore = score;
+                if (score > maxscore)
+                {
+                    best = turn;
+                    maxscore = score;
+                }
             }
         }
         
+        cloned = null;
+
         App.gamer.makeTurn(best);
 
 		App.log("ComputerPlayer::think done");
@@ -60,21 +67,29 @@ public class ComputerPlayer extends Player
 
 	private int nextPlayer(int pid)
 	{
-		int next = (pid == 0) ? 1 : 0;
-		return next;
+		return (pid == 0) ? 1 : 0;
 	}
 	
 	private int negascout(IBoard2D board, int depth, int alpha, int beta, int pid)
 	{
+		int score = -MAXVAL;
+		int range = TranspositionTableItem.FailLow;
+
+		score = this.hash.lookup(board.hashCode(), depth, alpha, beta);
+		
+		if (score != TranspositionTableItem.Unknown)
+		{
+			return score;
+		}
+
 		if (this.rules.isEndGame(board) || depth == 0)
 		{
-			return -this.rules.evaluate(board) - (this.depth - depth);
+			return -this.rules.evaluate(board, depth);
 		}
 
 		// (* initial window is (-beta, -alpha) *)
 		int b = beta;
 		boolean first = true;
-		int score = -100;
 
 		IBoard2D cloned = (IBoard2D) board.clone();
 		
@@ -100,25 +115,24 @@ public class ComputerPlayer extends Player
             
             if (score > alpha)
             {
+            	range = TranspositionTableItem.ExactValue;
             	alpha = score;
             }
 
             if (alpha >= beta)
             {
                 // 'beta cut-off'
-                return alpha;
+            	range = TranspositionTableItem.FailHigh;
+            	break;
             }
         	// (* set new null window *)
-            b = alpha + 1;                                       
+            b = alpha + 1;
         }
         
+        cloned = null;
+        
+		this.hash.add(board.hashCode(), depth, alpha, range);
         return alpha;
-	}
-
-	private IPlayer opponent(IPlayer player)
-	{
-		IPlayer opponent = (player == this.players[0]) ? players[1] : players[0];
-		return opponent;
 	}
 
 	public void interrupt()
@@ -132,11 +146,28 @@ public class ComputerPlayer extends Player
 	{
 		App.log("ComputerPlayer::onKeyboard" + event);
 	}
-	
+
+	public void destroy()
+	{
+		App.log("ComputerPlayer::destroy");
+		
+		super.destroy();
+
+		this.board.destroy();
+		this.board = null;
+		
+		this.rules = null;
+		this.players = null;
+		
+		this.hash.destroy();
+		this.hash = null;
+
+		App.log("ComputerPlayer::destroy done");
+	}
+
 	private IBoard2D board;
 	private IRules rules;
 	private IPlayer[] players;
 	private int pid;
-    private final int depth = 6;
-
+	private TranspositionTable hash;
 }

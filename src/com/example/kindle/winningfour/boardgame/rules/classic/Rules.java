@@ -13,11 +13,16 @@ import com.example.kindle.boardgame.ITurn;
 import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.Board;
+import com.example.kindle.winningfour.boardgame.ComputerPlayer;
 import com.example.kindle.winningfour.boardgame.Piece;
 import com.example.kindle.winningfour.boardgame.Turn;
 
 public class Rules implements IRules
 {
+	public static final int PLAYERS_MAX = 2;
+	public static final int WIDTH_MAX = 10;
+	public static final int HEIGHT_MAX = 7;
+
 	public Rules()
 	{
 		//this.turnValidator = new TurnValidator();
@@ -53,19 +58,18 @@ public class Rules implements IRules
 		{
 			if (counts[i] > max)
 			{
-				max = counts[i];			
+				max = counts[i];		
 			}
 		}
 
-		// four pieces connected
 		if (max >= 4)
 		{
+			// four pieces connected
 			result = GameEvent.WIN;
 		}
-
-		// drawn game
-		if (board.getTurnsCount() >= board.getWidth() * board.getHeight())
+		else if (board.getTurnsCount() >= board.getWidth() * board.getHeight())
 		{
+			// no turns left
 			result = GameEvent.DRAW;
 		}
 		
@@ -169,20 +173,22 @@ public class Rules implements IRules
 		return result;
 	}
 
-	public int evaluate(IBoard2D board)
+	public int evaluate(IBoard2D board, int depth)
 	{
 		int event = checkGameEvent(board);
+		int distance = ComputerPlayer.DEPTH - depth;
+		int result = 0;
 		
 		if (event == GameEvent.WIN)
 		{
-			return 10;
+			result = 10;
 		}
 		else if (event == GameEvent.DRAW)
 		{
-			return 5;
+			result = 5;
 		}
 		
-		return 0;
+		return result - distance;
 	}
 
 	public boolean isEndGame(IBoard2D board)

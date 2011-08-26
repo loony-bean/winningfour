@@ -25,6 +25,7 @@ public class GameState extends State
 		}
 
 		this.game.setStatusText(this.status);
+		this.game.repaint();
 	}
 	
 	public void leave()

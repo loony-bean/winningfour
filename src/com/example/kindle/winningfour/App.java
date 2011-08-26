@@ -13,6 +13,7 @@ import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.event.KindleKeyCodes;
 import com.amazon.kindle.kindlet.ui.KindleOrientation;
 import com.example.kindle.sm.KeyboardEvent;
+import com.example.kindle.winningfour.boardgame.Board;
 import com.example.kindle.winningfour.boardgame.GameController;
 import com.example.kindle.winningfour.boardgame.GameView;
 import com.example.kindle.winningfour.gui.PageStateMachine;
@@ -71,6 +72,8 @@ public class App extends AbstractKindlet
         this.gameView.destroy();
         this.gameView = null;
 
+        Board.clearHash();
+        
 		System.gc();
 		
 		App.log("App::destroy done.\n\nOver and out!");
@@ -167,6 +170,9 @@ public class App extends AbstractKindlet
 
 		// Options
 		App.opts = new AppOptions();
+
+		// Zobrist hash keys for board
+		Board.initHash();
 
 		// App start code
 		this.gameView = new GameView();

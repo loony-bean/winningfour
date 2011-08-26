@@ -9,7 +9,7 @@ public interface IRules
 	public void beforePlayerTurn(IBoard2D board);
 
 	public boolean isEndGame(IBoard2D board);
-	public int evaluate(IBoard2D board);
+	public int evaluate(IBoard2D board, int depth);
 
 	public ArrayList getAvailableTurns(IBoard2D board, IPlayer player);
 	public boolean isTurnAvailable(IBoard2D board, ITurn turn);

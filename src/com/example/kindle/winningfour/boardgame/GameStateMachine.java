@@ -43,6 +43,7 @@ public class GameStateMachine extends StateMachine
     	player2Turn.onSignal(DRAW, drawState);
     	player2Turn.onSignal(TURN, player1Turn);
     	//player2Turn.onTimeout(player1Win);
+    	drawState.onSignal(NEW, newGame);
     	player1Win.onSignal(NEW, newGame);
     	player2Win.onSignal(NEW, newGame);
 
@@ -66,12 +67,12 @@ public class GameStateMachine extends StateMachine
 		
 		public void destroy()
 		{
-			App.log("GameStateMachine::destroy");
+			App.log("NewGame::destroy");
 
 			super.destroy();
 			this.game = null;
 
-			App.log("GameStateMachine::destroy done");
+			App.log("NewGame::destroy done");
 		}
 
 		private GameController game;
@@ -143,9 +144,7 @@ public class GameStateMachine extends StateMachine
 		public void enter()
 		{
 			this.status = "" + this.getPlayer().getName() + " wins. Press Select or N";
-
 			super.enter();
-
 			App.gamer.stop();
 		}
 	}
@@ -184,6 +183,12 @@ public class GameStateMachine extends StateMachine
 					}
 				}
 			};
+		}
+		
+		public void enter()
+		{
+			super.enter();
+			App.gamer.stop();
 		}
 	}
 }

@@ -89,8 +89,10 @@ public class GameController implements IGame
 	{
 		this.setStopped(true);
 		this.stateMachine.stop();
-		
+
 		this.recorder.stop();
+		
+		System.gc();
 	}
 	
 	public void setRestoring(boolean flag)
