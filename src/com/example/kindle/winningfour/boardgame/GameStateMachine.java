@@ -100,8 +100,6 @@ public class GameStateMachine extends StateMachine
 
 		public void leave()
 		{
-			this.getPlayer().interrupt();
-
 			super.leave();
 		}
 	}

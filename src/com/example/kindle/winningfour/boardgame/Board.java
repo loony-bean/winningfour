@@ -46,8 +46,13 @@ public class Board implements IBoard2D
 		}
 
 		this.turnsCount = b.getTurnsCount();
+		
 		ITurn last = b.getLastTurn();
-		this.lastTurn = new Turn(new Piece(last.getPiece().getPlayer()), last.getPosition());
+		if (last != null)
+		{
+			this.lastTurn = new Turn(new Piece(last.getPiece().getPlayer()), last.getPosition());
+		}
+
 		this.hashCode = b.hashCode();
 	}
 

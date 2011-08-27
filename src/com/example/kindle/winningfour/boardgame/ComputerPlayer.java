@@ -19,9 +19,53 @@ public class ComputerPlayer extends Player
 	public ComputerPlayer(final Color color, final String name)
 	{
 		super(color, name);
-		this.hash = new TranspositionTable();
-	}
 
+		App.log("ComputerPlayer::create");
+
+		this.hash = new TranspositionTable();
+		
+		this.contextReady = new Object();
+		this.workerReady = new Object();
+		this.ready = false;
+		this.worker = new Thread(new Runnable()
+		{
+			public void run()
+			{
+				try
+				{
+					App.log("ComputerPlayer::worker started");
+
+					while (true)
+					{
+						App.log("ComputerPlayer::worker entered");
+						ComputerPlayer.this.waitForTurn();
+						ComputerPlayer.this.makeBestTurn();
+					}
+				}
+				catch(InterruptedException e)
+				{
+					App.log("ComputerPlayer::worker interrupted");
+					Thread.currentThread().interrupt();
+				}
+			}
+		}, "AI");
+		
+
+		this.worker.start();
+		
+		App.log("ComputerPlayer::create done");
+	}
+	
+	public void started()
+	{
+		synchronized (this.workerReady)
+		{
+			App.log("ComputerPlayer::workerReady notify");
+			this.ready = true;
+			this.workerReady.notifyAll();
+		}
+	}
+	
 	public void think(IGameContext context)
 	{
 		App.log("ComputerPlayer::think");
@@ -29,12 +73,54 @@ public class ComputerPlayer extends Player
 		this.board = (IBoard2D) context.getBoard().clone();
 		this.rules = context.getRules();
 		this.players = context.getPlayers();
-		
+
+		synchronized (this.workerReady)
+		{
+			try
+			{
+				while(!this.ready)
+				{
+					this.workerReady.wait(100);
+				}
+				
+				App.log("ComputerPlayer::worker wait ended");
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		synchronized (this.contextReady)
+		{
+			App.log("ComputerPlayer::think notify AI worker");
+			this.contextReady.notifyAll();
+		}
+
+		App.log("ComputerPlayer::think done");
+	}
+
+	public void waitForTurn() throws InterruptedException
+	{
+		synchronized (this.contextReady)
+		{
+			this.started();
+
+			App.log("ComputerPlayer::waitForTurn");
+			this.contextReady.wait();
+		}
+	}
+	
+	public void makeBestTurn()
+	{
+		App.log("ComputerPlayer::makeBestTurn");
+
 		this.pid = (this.players[0] == this) ? 0 : 1;
 
 		ITurn best = null;
         int maxscore = -MAXVAL;
         int score = 0;
+        boolean empty = true;
         
         IBoard2D cloned = (IBoard2D) this.board.clone();
         Iterator i = this.rules.getAvailableTurns(cloned, this).iterator();
@@ -48,28 +134,39 @@ public class ComputerPlayer extends Player
             
             App.log("S: " + score);
 
-            if (this.rules.isTurnAvailable(cloned, turn))
+            if (empty)
             {
-                if (score > maxscore)
-                {
-                    best = turn;
-                    maxscore = score;
-                }
+            	best = turn;
+            	empty = false;
+            }
+
+            if (score > maxscore)
+            {
+                best = turn;
+                maxscore = score;
             }
         }
-        
+
         cloned = null;
 
-        App.gamer.makeTurn(best);
+        if(empty)
+        {
+        	App.log("No available turns");
+        	// TODO: game error handler to stop the game and return to main menu
+        }
+        else
+        {
+            App.gamer.makeTurn(best);
+        }
 
-		App.log("ComputerPlayer::think done");
+		App.log("ComputerPlayer::makeBestTurn done");
 	}
 
 	private int nextPlayer(int pid)
 	{
 		return (pid == 0) ? 1 : 0;
 	}
-	
+
 	private int negascout(IBoard2D board, int depth, int alpha, int beta, int pid)
 	{
 		int score = -MAXVAL;
@@ -135,9 +232,12 @@ public class ComputerPlayer extends Player
         return alpha;
 	}
 
-	public void interrupt()
+	public void interrupt() throws InterruptedException
 	{
 		App.log("ComputerPlayer::interrupt");
+		
+		//this.worker.interrupt();
+		//this.worker.join();
 		
 		App.log("ComputerPlayer::done");
 	}
@@ -161,6 +261,16 @@ public class ComputerPlayer extends Player
 		
 		this.hash.destroy();
 		this.hash = null;
+		
+		this.worker.interrupt();
+		try
+		{
+			this.worker.join();
+		}
+		catch (InterruptedException e)
+		{
+			// doesn't matter, we are going to destroy the class
+		}
 
 		App.log("ComputerPlayer::destroy done");
 	}
@@ -170,4 +280,8 @@ public class ComputerPlayer extends Player
 	private IPlayer[] players;
 	private int pid;
 	private TranspositionTable hash;
+	private Thread worker;
+	private Object contextReady;
+	private Object workerReady;
+	boolean ready;
 }

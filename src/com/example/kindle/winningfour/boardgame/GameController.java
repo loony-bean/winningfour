@@ -24,10 +24,14 @@ public class GameController implements IGame
 {
 	public GameController(GameView gameView)
 	{
+		App.log("GameController::create");
+		
 		this.gameView = gameView;
 		this.stateMachine = new GameStateMachine(this, this.gameView);
 		this.recorder = new Recorder(AppOptions.FILE_NAME_GAMELOG);
 		this.listeners = new ArrayList();
+
+		App.log("GameController::create done");
 	}
 
 	public IGameContext getContext()
@@ -42,6 +46,8 @@ public class GameController implements IGame
 
 	public void reset()
 	{
+		App.log("GameController::reset");
+
 		OptionsFactory opfact = new OptionsFactory();
 
 		this.board = new Board(opfact.createBoardSize());
@@ -67,32 +73,46 @@ public class GameController implements IGame
 		this.gameView.setItems(this.board.getItems());
 
 		this.repaint();
+
+		App.log("GameController::reset done");
 	}
 
 	public void restart()
 	{
+		App.log("GameController::restart");
+
 		this.stop();
 		this.start();
+
+		App.log("GameController::restart done");
 	}
 
 	public void start()
 	{
+		App.log("GameController::start");
+
 		if (!this.stateMachine.isRunning())
 		{
 			this.stateMachine.start();
 			this.setStopped(false);
 			this.recorder.start();
 		}
+
+		App.log("GameController::start done");
 	}
 
 	public void stop()
 	{
+		App.log("GameController::stop");
+
 		this.setStopped(true);
 		this.stateMachine.stop();
 
 		this.recorder.stop();
 		
 		System.gc();
+
+		App.log("GameController::stop done");
 	}
 	
 	public void setRestoring(boolean flag)
@@ -112,6 +132,8 @@ public class GameController implements IGame
 
 	public void restore()
 	{
+		App.log("GameController::restore");
+
 		ArrayList recording = this.recorder.load();
 		if (recording != null)
 		{
@@ -146,10 +168,14 @@ public class GameController implements IGame
 
 			this.recorder.setEnabled(true);
 		}
+
+		App.log("GameController::restore done");
 	}
 
 	public void makeTurn(ITurn turn)
 	{
+		App.log("GameController::makeTurn");
+
 		if(this.rules.isTurnAvailable(this.board, turn))
 		{
 			this.board.putPiece(turn.getPiece(), turn.getPosition().x());
@@ -160,6 +186,8 @@ public class GameController implements IGame
 			
 			this.pulse(new SignalEvent(GameStateMachine.TURN));
 		}
+
+		App.log("GameController::makeTurn done");
 	}
 	
 	public void pulse(SignalEvent signal)
@@ -211,6 +239,8 @@ public class GameController implements IGame
 
 	public void repaint()
 	{
+		App.log("GameController::repaint");
+
 		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
@@ -218,6 +248,8 @@ public class GameController implements IGame
 				GameController.this.gameView.repaint();
 			}
 		});
+
+		App.log("GameController::repaint will post runnable");
 	}
 
 	public void setStopped(boolean flag)
@@ -246,7 +278,11 @@ public class GameController implements IGame
 	
 	public void addStateListener(IGameStateListener listener)
 	{
+		App.log("GameController::addStateListener");
+
 		this.listeners.add(listener);
+
+		App.log("GameController::addStateListener done");
 	}
 
 	public void destroy()
@@ -278,7 +314,7 @@ public class GameController implements IGame
 		this.listeners = null;
 
 		App.log("GameController::destroy done");
-}
+	}
 
 	private boolean restoring = false;
 	private boolean stopped = true;

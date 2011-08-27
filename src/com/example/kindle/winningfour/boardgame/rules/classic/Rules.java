@@ -137,11 +137,20 @@ public class Rules implements IRules
 	{
 		ArrayList result = new ArrayList();
 
+		ITurn best = null;
 		ITurn last = board.getLastTurn();
-		ITurn lastturn = new Turn(new Piece(player), last.getPosition());
-		if(this.isTurnAvailable(board, lastturn))
+		if (last != null)
 		{
-			result.add(lastturn);			
+			best = new Turn(new Piece(player), last.getPosition());
+		}
+		else
+		{
+			best = new Turn(new Piece(player), new Position2D((board.getWidth() - 1)/2, 0));
+		}
+		
+		if(this.isTurnAvailable(board, best))
+		{
+			result.add(best);			
 		}
 
 		int inc = 1;
@@ -150,26 +159,28 @@ public class Rules implements IRules
 		while(onboard)
 		{
 			onboard = false;
-			Position2D left = new Position2D(last.getPosition().x() + inc, 0);
-			Position2D right = new Position2D(last.getPosition().x() - inc, 0);
-			ITurn leftturn = new Turn(new Piece(player), left);
-			ITurn rightturn = new Turn(new Piece(player), right);
-			
-			if(this.isTurnAvailable(board, leftturn))
-			{
-				result.add(leftturn);
-				onboard = true;
-			}
+			Position2D[] candidates = new Position2D[2];
+			candidates[0] = new Position2D(best.getPosition().x() + inc, 0);
+			candidates[1] = new Position2D(best.getPosition().x() - inc, 0);
 
-			if(this.isTurnAvailable(board, rightturn))
+			for (int i = 0; i < candidates.length; i++)
 			{
-				result.add(rightturn);
-				onboard = true;
+				if (board.isPositionOnBoard(candidates[i]))
+				{
+					ITurn t = new Turn(new Piece(player), candidates[i]);
+
+					if(this.isTurnAvailable(board, t))
+					{
+						result.add(t);
+					}
+
+					onboard = true;
+				}
 			}
 			
 			inc += 1;
 		}
-		
+
 		return result;
 	}
 

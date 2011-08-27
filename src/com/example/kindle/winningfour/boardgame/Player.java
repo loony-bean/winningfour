@@ -43,7 +43,7 @@ public class Player implements IPlayer
 	{
 	}
 
-	public void interrupt()
+	public void interrupt() throws InterruptedException
 	{
 	}
 
