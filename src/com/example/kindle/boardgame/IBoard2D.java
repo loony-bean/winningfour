@@ -8,6 +8,7 @@ public interface IBoard2D
 	public IPiece getPiece(IPosition2D position);
 	public ArrayList getItems();
 	public ITurn getLastTurn();
+	public void turn(ITurn turn);
 	public void undo();
 	public int getTurnsCount();
 	public boolean isPositionOnBoard(IPosition2D p);

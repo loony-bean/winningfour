@@ -14,8 +14,6 @@ import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.Board;
 import com.example.kindle.winningfour.boardgame.ComputerPlayer;
-import com.example.kindle.winningfour.boardgame.Piece;
-import com.example.kindle.winningfour.boardgame.Turn;
 
 public class Rules implements IRules
 {
@@ -25,7 +23,6 @@ public class Rules implements IRules
 
 	public Rules()
 	{
-		//this.turnValidator = new TurnValidator();
 	}
 	
 	public void afterPlayerTurn(IBoard2D board)
@@ -45,7 +42,7 @@ public class Rules implements IRules
 		// win
 		ITurn turn = board.getLastTurn();
 		IPlayer p = turn.getPiece().getPlayer();
-		IPosition2D pos = new Position2D(turn.getPosition().x(), turn.getPosition().y());
+		IPosition2D pos = (IPosition2D) turn.getPosition().clone();
 
 		int max = 0;
 		int counts[] = new int[4];
@@ -86,7 +83,7 @@ public class Rules implements IRules
 	{
 		int local = 0;
 		int count = 0;
-		IPosition2D p = new Position2D(pos.x(), pos.y());
+		IPosition2D p = (IPosition2D) pos.clone();
 
 		while (((Board) board).isPositionOnBoard(p))
 		{
@@ -121,12 +118,15 @@ public class Rules implements IRules
 
 	public boolean isTurnAvailable(IBoard2D board, ITurn turn)
 	{
-		IPosition2D pos = turn.getPosition();
-		if (board.isPositionOnBoard(pos))
+		if (turn != null)
 		{
-			if(board.getPiece(new Position2D(pos.x(), 0)) == null)
+			IPosition2D pos = turn.getPosition();
+			if (board.isPositionOnBoard(pos))
 			{
-				return true;
+				if(board.getPiece(new Position2D(pos.x(), 0)) == null)
+				{
+					return true;
+				}
 			}
 		}
 		
@@ -139,14 +139,8 @@ public class Rules implements IRules
 
 		ITurn best = null;
 		ITurn last = board.getLastTurn();
-		if (last != null)
-		{
-			best = new Turn(new Piece(player), last.getPosition());
-		}
-		else
-		{
-			best = new Turn(new Piece(player), new Position2D((board.getWidth() - 1)/2, 0));
-		}
+		int lastx = (last != null) ? last.getPosition().x() : (board.getWidth() - 1)/2;
+		best = ((Board) board).createTurn(player, lastx);
 		
 		if(this.isTurnAvailable(board, best))
 		{
@@ -155,19 +149,17 @@ public class Rules implements IRules
 
 		int inc = 1;
 		boolean onboard = true;
-		
+
 		while(onboard)
 		{
 			onboard = false;
-			Position2D[] candidates = new Position2D[2];
-			candidates[0] = new Position2D(best.getPosition().x() + inc, 0);
-			candidates[1] = new Position2D(best.getPosition().x() - inc, 0);
+			int[] candidates = {lastx + inc, lastx - inc};
 
 			for (int i = 0; i < candidates.length; i++)
 			{
-				if (board.isPositionOnBoard(candidates[i]))
+				if (board.isPositionOnBoard(new Position2D(candidates[i], 0)))
 				{
-					ITurn t = new Turn(new Piece(player), candidates[i]);
+					ITurn t = ((Board) board).createTurn(player, candidates[i]);
 
 					if(this.isTurnAvailable(board, t))
 					{

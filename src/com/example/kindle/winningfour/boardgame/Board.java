@@ -7,6 +7,7 @@ import java.util.Random;
 import com.example.kindle.boardgame.IBoard2D;
 import com.example.kindle.boardgame.IBoard2DItem;
 import com.example.kindle.boardgame.IPiece;
+import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.boardgame.ITurn;
 import com.example.kindle.boardgame.Position2D;
@@ -104,7 +105,7 @@ public class Board implements IBoard2D
 
 		if (piece != null)
 		{
-			Turn turn = new Turn(piece, new Position2D(pos.x(), pos.y()));
+			Turn turn = new Turn(piece, (IPosition2D) pos.clone());
 			this.lastTurn = turn;
 			
 			this.hashCode ^= turn.hashCode();
@@ -116,15 +117,15 @@ public class Board implements IBoard2D
 
 	public void putPiece(IPiece piece, int row)
 	{
-		for (int col = this.board[row].length - 1; col >= 0; col--)
+		this.turn(this.createTurn(piece.getPlayer(), row));
+	}
+
+	public void turn(ITurn turn)
+	{
+		if (turn != null)
 		{
-			if (this.board[row][col] == null)
-			{
-				this.setPiece(piece, new Position2D(row, col));
-				break;
-			}
+			this.setPiece(turn.getPiece(), turn.getPosition());
 		}
-		// TODO: TurnValidator, exception?
 	}
 
 	public void undo()
@@ -160,6 +161,22 @@ public class Board implements IBoard2D
 	{
 		return (p.x() >= 0 && p.x() < this.getWidth() &&
 				p.y() >= 0 && p.y() < this.getHeight());
+	}
+
+	public ITurn createTurn(IPlayer player, int row)
+	{
+		ITurn result = null;
+		
+		for (int col = this.board[row].length - 1; col >= 0; col--)
+		{
+			if (this.board[row][col] == null)
+			{
+				result = new Turn(new Piece(player), new Position2D(row, col));
+				break;
+			}
+		}
+		
+		return result;
 	}
 
 	public ITurn getLastTurn()

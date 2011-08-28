@@ -128,7 +128,7 @@ public class ComputerPlayer extends Player
         {
         	ITurn turn = (ITurn) i.next();
 
-            ((Board) cloned).putPiece(new Piece(this), turn.getPosition().x());
+            cloned.turn(turn);
             score = -this.negascout(cloned, DEPTH-1, -MAXVAL, MAXVAL, this.nextPlayer(this.pid));
             cloned.undo();
             
@@ -193,7 +193,7 @@ public class ComputerPlayer extends Player
         while (i.hasNext())
         {
         	ITurn turn = (ITurn) i.next();
-        	((Board) cloned).putPiece(new Piece(this.players[pid]), turn.getPosition().x());
+        	cloned.turn(turn);
 
             score = -this.negascout(cloned, depth - 1, -b, -alpha, this.nextPlayer(pid));
 

@@ -23,6 +23,11 @@ public class Position2D implements IPosition2D
 		this.x += incx;
 		this.y += incy;
 	}
+	
+	public Object clone()
+	{
+		return new Position2D(this.x, this.y);
+	}
 
 	private int x;
 	private int y;
