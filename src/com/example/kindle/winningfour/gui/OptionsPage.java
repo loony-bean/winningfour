@@ -64,7 +64,7 @@ public class OptionsPage extends State
 		
 		if (!App.gamer.isStopped())
 		{
-			DialogHelper.ConfirmDialog("Pressing OK will apply new options and start a new game.",
+			DialogHelper.confirm("Pressing OK will apply new options and start a new game.",
 					new Runnable() {
 						public void run() {
 							App.gamer.stop();

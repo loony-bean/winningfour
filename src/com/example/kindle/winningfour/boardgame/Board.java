@@ -96,12 +96,12 @@ public class Board implements IBoard2D
 
 	public IPiece getPiece(IPosition2D position)
 	{
-		return this.board[position.x()][position.y()];
+		return this.board[position.row()][position.col()];
 	}
 
 	public void setPiece(IPiece piece, IPosition2D pos)
 	{
-		this.board[pos.x()][pos.y()] = (Piece)piece;
+		this.board[pos.row()][pos.col()] = (Piece)piece;
 
 		if (piece != null)
 		{
@@ -136,7 +136,7 @@ public class Board implements IBoard2D
 			this.hashCode ^= Board.zobristMove;
 
 			IPosition2D pos = this.lastTurn.getPosition();
-			this.board[pos.x()][pos.y()] = null;
+			this.board[pos.row()][pos.col()] = null;
 			this.lastTurn = null;
 			this.turnsCount -= 1;
 		}
@@ -159,8 +159,8 @@ public class Board implements IBoard2D
 
 	public boolean isPositionOnBoard(IPosition2D p)
 	{
-		return (p.x() >= 0 && p.x() < this.getWidth() &&
-				p.y() >= 0 && p.y() < this.getHeight());
+		return (p.row() >= 0 && p.row() < this.getWidth() &&
+				p.col() >= 0 && p.col() < this.getHeight());
 	}
 
 	public ITurn createTurn(IPlayer player, int row)

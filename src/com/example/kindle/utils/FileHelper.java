@@ -40,7 +40,7 @@ public class FileHelper
 		}
 	}
 
-	public static String[] read(String filename)
+	public static String[] read(final String filename)
 	{
 		ArrayList list = new ArrayList();
 		BufferedReader reader = null;

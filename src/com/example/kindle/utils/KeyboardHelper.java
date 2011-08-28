@@ -14,7 +14,7 @@ import com.amazon.kindle.kindlet.event.KindleSimulatedKeyEvent;
  */
 public class KeyboardHelper
 {
-	public static void simulateKey(Component component, int keyCode)
+	public static void simulateKey(final Component component, int keyCode)
 	{
 		//Component focused = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 		

@@ -23,7 +23,7 @@ public class ConfirmExitState extends State
 
 	public void enter()
 	{
-		DialogHelper.ConfirmDialog(App.bundle.getString(AppResources.KEY_CONFIRM_EXIT),
+		DialogHelper.confirm(App.bundle.getString(AppResources.KEY_CONFIRM_EXIT),
 			new Runnable() {
 				public void run() {
 					App.pager.stop();

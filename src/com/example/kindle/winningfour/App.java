@@ -235,7 +235,7 @@ public class App extends AbstractKindlet
      */
 	public static void error(final String msg)
 	{
-		DialogHelper.ErrorMessageDialog("Internal error: " + msg);
+		DialogHelper.error("Internal error: " + msg);
 	}
 
     /** Indicates if the application has been stopped. */

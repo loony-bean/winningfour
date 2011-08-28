@@ -38,7 +38,7 @@ public class GameState extends State
 	
 	public IPlayer getPlayer()
 	{
-		return this.game.getPlayers()[this.player];
+		return this.game.getContext().getPlayers()[this.player];
 	}
 	
 	public void pulse(SignalEvent signal)

@@ -35,6 +35,8 @@ public class AppResources extends ListResourceBundle
 
 	public static final String KEY_CONFIRM_NEW_GAME 	= "confirm_new_game";
 	public static final String KEY_CONFIRM_EXIT 		= "confirm_exit";
+	
+	public static final String KEY_ERROR_NO_TURNS 		= "error_no_turns";
 
 	/**
      * {@inheritDoc}
@@ -55,7 +57,8 @@ public class AppResources extends ListResourceBundle
         { KEY_MENU_INSTRUCTIONS, "Instructions" },
         { KEY_MENU_EXIT, "Exit" },
         { KEY_CONFIRM_NEW_GAME, "You have a game in progress. Do you want to start a new game?" },
-        { KEY_CONFIRM_EXIT, "Exit game?" }
+        { KEY_CONFIRM_EXIT, "Exit game?" },
+        { KEY_ERROR_NO_TURNS, "No available turns." }
     };
     
     public static Image getImage(String key, Container parent)

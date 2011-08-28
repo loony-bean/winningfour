@@ -39,11 +39,6 @@ public class GameController implements IGame
 		return new GameContext(board, rules, players);
 	}
 
-	public IPlayer[] getPlayers()
-	{
-		return this.players;
-	}
-
 	public void reset()
 	{
 		App.log("GameController::reset");
@@ -178,7 +173,7 @@ public class GameController implements IGame
 
 		if(this.rules.isTurnAvailable(this.board, turn))
 		{
-			this.board.putPiece(turn.getPiece(), turn.getPosition().x());
+			this.board.putPiece(turn.getPiece(), turn.getPosition().row());
 			this.rules.afterPlayerTurn(this.board);
 			this.gameView.setItems(this.board.getItems());
 

@@ -1,34 +1,43 @@
 package com.example.kindle.boardgame;
 
+/**
+ * Basic implementation of position on two square dimensional board.
+ */
 public class Position2D implements IPosition2D
 {
-	public Position2D (int x, int y)
+	/**
+	 * Position constructor given row and column numbers (starting from 0).
+	 * 
+	 * @param row Row number.
+	 * @param col Column number.
+	 */
+	public Position2D(int row, int col)
 	{
-		this.x = x;
-		this.y = y;
+		this.row = row;
+		this.col = col;
 	}
 
-	public int x()
+	/** {@inheritDoc} */
+	public int row()
 	{
-		return this.x;
+		return this.row;
 	}
 
-	public int y()
+	/** {@inheritDoc} */
+	public int col()
 	{
-		return this.y;
+		return this.col;
 	}
 
-	public void adjust(int incx, int incy)
-	{
-		this.x += incx;
-		this.y += incy;
-	}
-	
+	/** {@inheritDoc} */
 	public Object clone()
 	{
-		return new Position2D(this.x, this.y);
+		return new Position2D(this.row, this.col);
 	}
 
-	private int x;
-	private int y;
+	/** Row number on board (from 0). */
+	private int row;
+
+	/** Column number on board (from 0). */
+	private int col;
 }

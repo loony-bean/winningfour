@@ -10,6 +10,7 @@ import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.boardgame.IRules;
 import com.example.kindle.boardgame.ITurn;
 import com.example.kindle.winningfour.App;
+import com.example.kindle.winningfour.AppResources;
 
 public class ComputerPlayer extends Player
 {
@@ -151,7 +152,7 @@ public class ComputerPlayer extends Player
 
         if(empty)
         {
-        	App.error("No available turns");
+        	App.error(App.bundle.getString(AppResources.KEY_ERROR_NO_TURNS));
         }
         else
         {
@@ -274,6 +275,10 @@ public class ComputerPlayer extends Player
 			// doesn't matter, we are going to destroy the class
 			App.log("ComputerPlayer::destroy worker interrupt ecxeption");
 		}
+		this.worker = null;
+
+		this.contextReady = null;
+		this.workerReady = null;
 
 		App.log("ComputerPlayer::destroy done");
 	}

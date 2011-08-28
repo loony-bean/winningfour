@@ -83,11 +83,12 @@ public class Rules implements IRules
 	{
 		int local = 0;
 		int count = 0;
-		IPosition2D p = (IPosition2D) pos.clone();
+		int x = pos.row();
+		int y = pos.col();
 
-		while (((Board) board).isPositionOnBoard(p))
+		while (((Board) board).isPositionOnBoard(new Position2D(x, y)))
 		{
-			IPiece piece = board.getPiece(p);
+			IPiece piece = board.getPiece(new Position2D(x, y));
 			if (piece != null && piece.getPlayer().equals(player))
 			{
 				local += 1;
@@ -102,7 +103,8 @@ public class Rules implements IRules
 				break;
 			}
 			
-			p.adjust(incx, incy);
+			x += incx;
+			y += incy;
 		}
 		
 		return count;
@@ -123,7 +125,7 @@ public class Rules implements IRules
 			IPosition2D pos = turn.getPosition();
 			if (board.isPositionOnBoard(pos))
 			{
-				if(board.getPiece(new Position2D(pos.x(), 0)) == null)
+				if(board.getPiece(new Position2D(pos.row(), 0)) == null)
 				{
 					return true;
 				}
@@ -139,7 +141,7 @@ public class Rules implements IRules
 
 		ITurn best = null;
 		ITurn last = board.getLastTurn();
-		int lastx = (last != null) ? last.getPosition().x() : (board.getWidth() - 1)/2;
+		int lastx = (last != null) ? last.getPosition().row() : (board.getWidth() - 1)/2;
 		best = ((Board) board).createTurn(player, lastx);
 		
 		if(this.isTurnAvailable(board, best))

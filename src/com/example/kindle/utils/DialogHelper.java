@@ -8,7 +8,7 @@ import com.example.kindle.winningfour.App;
 
 public class DialogHelper
 {
-	public static void ConfirmDialog(final String msg, final Runnable onOk, final Runnable onCancel)
+	public static void confirm(final String msg, final Runnable onOk, final Runnable onCancel)
 	{
 		Component focused = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 		KOptionPane.showConfirmDialog(focused, msg, "Confirmation", 
@@ -27,8 +27,8 @@ public class DialogHelper
                     }
                 });
 	}
-	
-	public static void ErrorMessageDialog(final String msg)
+
+	public static void error(final String msg)
 	{
 		App.log("DialogHelper::ErrorMessageDialog: " + msg);
 

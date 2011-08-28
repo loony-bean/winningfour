@@ -8,7 +8,7 @@ import com.example.kindle.winningfour.App;
 
 public class ImageHelper
 {
-	public static void waitForImage(Image image, Component component)
+	public static void waitForImage(final Image image, final Component component)
 	{
 		App.log("ImageLoader::waitforimage");
 		

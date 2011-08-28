@@ -4,7 +4,7 @@ import java.util.StringTokenizer;
 
 public class StringHelper
 {
-	public static String[] split(String what, String token) 
+	public static String[] split(final String what, final String token) 
 	{
 		StringTokenizer st = new StringTokenizer(what, token);
 	    String[] splitlist = new String[st.countTokens()];

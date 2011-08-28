@@ -62,7 +62,7 @@ public class PageStateMachine extends StateMachine
 		{
 			if (App.gamer.isStopped() == false)
 			{
-				DialogHelper.ConfirmDialog(App.bundle.getString(AppResources.KEY_CONFIRM_NEW_GAME),
+				DialogHelper.confirm(App.bundle.getString(AppResources.KEY_CONFIRM_NEW_GAME),
 					new Runnable() {
 						public void run() {
 							App.gamer.stop();

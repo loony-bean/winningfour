@@ -78,7 +78,7 @@ public class Recorder
 			try
 			{
 				IPosition2D pos = turn.getPosition();
-				String entry = "" + pos.x() + "-" + pos.y() + "\n";
+				String entry = "" + pos.row() + "-" + pos.col() + "\n";
 				this.writer.write(entry);
 				this.writer.flush();
 			}

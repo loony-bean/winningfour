@@ -92,7 +92,7 @@ public class GameView extends Container
 				Position2D pos = (Position2D)item.getPosition();
 				Color color = item.getPiece().getPlayer().getColor();
 				g2d.setColor(color);
-				g2d.fillOval(hx + pos.x()*(s+gap), hy + pos.y()*(s+gap), s, s);
+				g2d.fillOval(hx + pos.row()*(s+gap), hy + pos.col()*(s+gap), s, s);
 			}
 		}
 
