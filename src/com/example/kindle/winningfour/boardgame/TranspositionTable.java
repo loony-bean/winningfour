@@ -18,16 +18,16 @@ public class TranspositionTable
 
 		if (item != null && (item.depth >= depth))
 		{
-			switch ( item.range )
+			switch (item.range)
 			{
 			case TranspositionTableItem.FailLow:
-				if ( item.score <= alpha )
+				if (item.score <= alpha)
 				{
 					result = alpha;
 				}
 				break;
 			case TranspositionTableItem.FailHigh:
-				if ( item.score >= beta )
+				if (item.score >= beta)
 				{
 					result = beta;
 				}

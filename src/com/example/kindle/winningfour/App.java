@@ -13,6 +13,7 @@ import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.event.KindleKeyCodes;
 import com.amazon.kindle.kindlet.ui.KindleOrientation;
 import com.example.kindle.sm.KeyboardEvent;
+import com.example.kindle.utils.DialogHelper;
 import com.example.kindle.winningfour.boardgame.Board;
 import com.example.kindle.winningfour.boardgame.GameController;
 import com.example.kindle.winningfour.boardgame.GameView;
@@ -224,6 +225,17 @@ public class App extends AbstractKindlet
 	public static boolean isStopped()
 	{
 		return App.stopped;
+	}
+
+    /**
+     * Internal error handler. Will try to stop
+     * the current game and exit to main menu.
+     * 
+     * @param msg Error message.
+     */
+	public static void error(final String msg)
+	{
+		DialogHelper.ErrorMessageDialog("Internal error: " + msg);
 	}
 
     /** Indicates if the application has been stopped. */

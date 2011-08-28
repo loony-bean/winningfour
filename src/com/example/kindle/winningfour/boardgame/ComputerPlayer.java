@@ -35,7 +35,7 @@ public class ComputerPlayer extends Player
 				{
 					App.log("ComputerPlayer::worker started");
 
-					while (true)
+					while (!ComputerPlayer.this.worker.isInterrupted())
 					{
 						App.log("ComputerPlayer::worker entered");
 						ComputerPlayer.this.waitForTurn();
@@ -54,16 +54,6 @@ public class ComputerPlayer extends Player
 		this.worker.start();
 		
 		App.log("ComputerPlayer::create done");
-	}
-	
-	public void started()
-	{
-		synchronized (this.workerReady)
-		{
-			App.log("ComputerPlayer::workerReady notify");
-			this.ready = true;
-			this.workerReady.notifyAll();
-		}
 	}
 	
 	public void think(IGameContext context)
@@ -100,7 +90,17 @@ public class ComputerPlayer extends Player
 		App.log("ComputerPlayer::think done");
 	}
 
-	public void waitForTurn() throws InterruptedException
+	private void started()
+	{
+		synchronized (this.workerReady)
+		{
+			App.log("ComputerPlayer::workerReady notify");
+			this.ready = true;
+			this.workerReady.notifyAll();
+		}
+	}
+
+	private void waitForTurn() throws InterruptedException
 	{
 		synchronized (this.contextReady)
 		{
@@ -111,7 +111,7 @@ public class ComputerPlayer extends Player
 		}
 	}
 	
-	public void makeBestTurn()
+	private void makeBestTurn()
 	{
 		App.log("ComputerPlayer::makeBestTurn");
 
@@ -151,8 +151,7 @@ public class ComputerPlayer extends Player
 
         if(empty)
         {
-        	App.log("No available turns");
-        	// TODO: game error handler to stop the game and return to main menu
+        	App.error("No available turns");
         }
         else
         {
@@ -250,15 +249,18 @@ public class ComputerPlayer extends Player
 	public void destroy()
 	{
 		App.log("ComputerPlayer::destroy");
-		
+
 		super.destroy();
 
-		this.board.destroy();
-		this.board = null;
+		if (this.board != null)
+		{
+			this.board.destroy();
+			this.board = null;
+		}
 		
 		this.rules = null;
 		this.players = null;
-		
+
 		this.hash.destroy();
 		this.hash = null;
 		
@@ -270,6 +272,7 @@ public class ComputerPlayer extends Player
 		catch (InterruptedException e)
 		{
 			// doesn't matter, we are going to destroy the class
+			App.log("ComputerPlayer::destroy worker interrupt ecxeption");
 		}
 
 		App.log("ComputerPlayer::destroy done");
@@ -283,5 +286,5 @@ public class ComputerPlayer extends Player
 	private Thread worker;
 	private Object contextReady;
 	private Object workerReady;
-	boolean ready;
+	private boolean ready;
 }

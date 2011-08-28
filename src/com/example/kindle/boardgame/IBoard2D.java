@@ -14,5 +14,6 @@ public interface IBoard2D
 	public int getWidth();
 	public int getHeight();
 	public Object clone();
+	public int hashCode();
 	public void destroy();
 }
