@@ -2,7 +2,6 @@ package com.example.kindle.winningfour.options;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.Random;
 
 import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.winningfour.App;
@@ -82,7 +81,7 @@ public class OptionsFactory
 			players[0] = opp;
 			players[1] = you;
 		}
-		else if (firstTurn.equals(AppOptions.OP_V_RANDOM))
+/*		else if (firstTurn.equals(AppOptions.OP_V_RANDOM))
 		{
 			Random rand = new Random();
 			if (rand.nextBoolean())
@@ -96,7 +95,7 @@ public class OptionsFactory
 				players[1] = you;
 			}
 		}
-		
+*/		
 		return players; 
 	}
 

@@ -36,7 +36,7 @@ public class AppOptions
 	public final static String OP_T_FIRST_TURN		= "First turn";
 	public final static String OP_V_YOU 			= "you";
 	public final static String OP_V_OPPONENT		= "opponent";
-	public final static String OP_V_RANDOM 			= "random";
+	//public final static String OP_V_RANDOM 			= "random";
 	
 	public final static String OP_T_TIMER			= "Timer";
 	public final static String OP_V_OFF 			= "off";
@@ -107,7 +107,7 @@ public class AppOptions
 
 		this.model.put(OP_T_BOARD_SIZE, new OptionValues(new String[]{OP_V_7X6, OP_V_8X7, OP_V_9X7, OP_V_10X7}, 0));
 		this.model.put(OP_T_OPPONENT, new OptionValues(new String[]{OP_V_HUMAN, OP_V_COMPUTER}, 0));
-		this.model.put(OP_T_FIRST_TURN, new OptionValues(new String[]{OP_V_YOU, OP_V_OPPONENT, OP_V_RANDOM}, 0));
+		this.model.put(OP_T_FIRST_TURN, new OptionValues(new String[]{OP_V_YOU, OP_V_OPPONENT}, 0));
 		this.model.put(OP_T_TIMER, new OptionValues(new String[]{OP_V_OFF, OP_V_10SEC, OP_V_15SEC, OP_V_30SEC}, 0));
 		this.model.put(OP_T_SKIN, new OptionValues(new String[]{OP_V_CLASSIC, OP_V_MAGNETIC, OP_V_BALOONS, OP_V_PIRATES}, 0));
 

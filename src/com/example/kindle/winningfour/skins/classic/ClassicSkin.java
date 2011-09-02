@@ -32,7 +32,10 @@ public class ClassicSkin implements ISkin
 	private double selectorY = 580.0/760.0;
 	private double boardLeftTopX = 100.0/600.0;
 	private double boardLeftTopY = 220.0/760.0;
+
+	// pixels
 	private int pieceGapX = 4;
 	
+	// number or rows and columns
 	private Dimension boardSize;
 }
