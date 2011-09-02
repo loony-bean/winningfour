@@ -58,7 +58,10 @@ public class GameView extends Container
 				this.skin.pieceSizeX, this.skin.pieceSizeX);
 		this.gameSelector.setImage(AppResources.getImage("selector.png", this,
 				this.skin.pieceSizeX, this.skin.pieceSizeX));
-		this.gameSelector.setLocation(this.gameSelector.getLocation().x, this.skin.selectorY);
+		
+		this.gameSelector.setLocation(this.skin.boardLeftTopX +
+				this.selectedRow*(this.skin.pieceSizeX + this.skin.pieceGapX),
+				this.skin.selectorY);
 
 		Dimension sz = this.statusLabel.getPreferredSize();
 		this.statusLabel.setBounds(0, sz.height, size.width, sz.height);
@@ -74,6 +77,10 @@ public class GameView extends Container
 	public void paint(Graphics g)
 	{
 		App.log("GameView::paint in clipBounds " + g.getClipBounds());
+
+		this.gameSelector.setLocation(this.skin.boardLeftTopX +
+				this.selectedRow*(this.skin.pieceSizeX + this.skin.pieceGapX),
+				this.skin.selectorY);
 
 		super.paint(g);
 		this.paintItems(this.items, g);
@@ -127,13 +134,7 @@ public class GameView extends Container
 		}
 		else
 		{
-			if (this.skin != null)
-			{
-				this.gameSelector.setLocation(this.skin.boardLeftTopX +
-						row*(this.skin.pieceSizeX + this.skin.pieceGapX),
-						this.skin.selectorY);
-			}
-			
+			this.selectedRow = row;
 			this.gameSelector.setVisible(true);
 		}
 
@@ -169,6 +170,7 @@ public class GameView extends Container
 	private KLabel statusLabel;
 	private Dimension layoutSize;
 	private ArrayList items;
+	private int selectedRow;
 
 	private BoardLayout skin;
 }

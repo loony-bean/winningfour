@@ -66,7 +66,10 @@ public class GameController implements IGame
 			}
 		});
 
-		this.setSelectedRow(this.board.getWidth()/2);
+		int bw = this.board.getWidth();
+		int center = (bw % 2 == 1) ? bw/2 : bw/2 - 1;
+		this.setSelectedRow(center);
+
 		this.gameView.setItems(this.board.getItems());
 		this.gameView.reset();
 

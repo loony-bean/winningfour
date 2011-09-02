@@ -6,6 +6,7 @@ package com.example.kindle.winningfour.gui;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,31 +29,42 @@ public class MenuPage extends PageState
 	{
 		super(context, parent, name);
 		this.panel = new KPanel();
-		this.panel.setPreferredSize(new Dimension(300, 300));
+		this.panel.setPreferredSize(new Dimension(App.screenSize.width/2, App.screenSize.width/2));
 		this.panel.setBackground(new Color(0x000000FF, true));
 		this.panel.setLayout(new GridLayout(0, 1));
 		this.panel.add(createMainMenu());
-		
+
+		this.initMenu();
+
 		this.gameStateListener = new IGameStateListener()
 		{
 			public void onStart()
 			{
-				KButton resumeOption = (KButton) MenuPage.this.options.get(AppResources.KEY_MENU_RESUME_GAME);
-				resumeOption.setEnabled(true);
-				resumeOption.requestFocus();
+				EventQueue.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						KButton resumeOption = (KButton) MenuPage.this.getMenuItem(AppResources.KEY_MENU_RESUME_GAME);
+						resumeOption.setEnabled(true);
+
+						MenuPage.this.focusOwner = resumeOption;
+						MenuPage.this.focusOwner.requestFocus();
+						MenuPage.this.panel.repaint();
+					}
+				});
 			}
 
 			public void onStop()
 			{
-				KButton newOption = (KButton) MenuPage.this.options.get(AppResources.KEY_MENU_NEW_GAME);
-				KButton resumeOption = (KButton) MenuPage.this.options.get(AppResources.KEY_MENU_RESUME_GAME);
-				
-				if (resumeOption.isFocusOwner())
+				KButton newButton = (KButton) MenuPage.this.getMenuItem(AppResources.KEY_MENU_NEW_GAME);
+				KButton resumeButton = (KButton) MenuPage.this.getMenuItem(AppResources.KEY_MENU_RESUME_GAME);
+
+				if (MenuPage.this.focusOwner == resumeButton)
 				{
-					newOption.requestFocus();
+					MenuPage.this.focusOwner = newButton;
 				}
 
-				resumeOption.setEnabled(false);
+				resumeButton.setEnabled(false);
 			}
 		};
 
@@ -64,28 +76,16 @@ public class MenuPage extends PageState
 		super.enter();
 	}
 	
-	public void adjustMenu()
+	public void initMenu()
 	{
-		KButton newOption = (KButton) this.options.get(AppResources.KEY_MENU_NEW_GAME);
-		KButton resumeOption = (KButton) this.options.get(AppResources.KEY_MENU_RESUME_GAME);
-
-		if (App.gamer.isStopped())
+		if (!App.gamer.isSuspended())
         {
-			if (resumeOption.isFocusOwner())
-			{
-				newOption.requestFocus();
-			}
+			KButton newButton = (KButton) this.getMenuItem(AppResources.KEY_MENU_NEW_GAME);
+			KButton resumeButton = (KButton) this.getMenuItem(AppResources.KEY_MENU_RESUME_GAME);
 
-			resumeOption.setEnabled(false);
+			newButton.requestFocus();
+			resumeButton.setEnabled(false);
         }
-		else
-		{
-			if (resumeOption.isEnabled() == false)
-			{
-				resumeOption.setEnabled(true);
-				resumeOption.requestFocus();
-			}
-		}
 	}
     
 	public Container createMainMenu()
@@ -93,7 +93,7 @@ public class MenuPage extends PageState
     	final GridLayout layout = new GridLayout(0, 1, 8, 8);
         final KPanel panel = new KPanel(layout);
 		panel.setBackground(new Color(0x000000FF, true));
-		this.options = new WeakHashMap();
+		this.menuItems = new WeakHashMap();
         
         String[] menuItems = {AppResources.KEY_MENU_NEW_GAME,
         					  AppResources.KEY_MENU_RESUME_GAME,
@@ -103,7 +103,7 @@ public class MenuPage extends PageState
         for(int i = 0; i < menuItems.length; i++)
         {
         	final String key = menuItems[i];
-            Container option = addOption(App.bundle.getString(key), new Runnable()
+            Container menuItem = this.addMenuItem(App.bundle.getString(key), new Runnable()
             {
                 public void run()
                 {
@@ -111,9 +111,8 @@ public class MenuPage extends PageState
                 }
             });
 
-            this.focusOwner = panel;
-            this.options.put(key, option);
-            panel.add(option);
+            this.menuItems.put(key, menuItem);
+            panel.add(menuItem);
         }
 
         return panel;
@@ -125,7 +124,7 @@ public class MenuPage extends PageState
      * @param name the name of the button
      * @param action the action to take when the button is clicked
      */
-    protected Container addOption(final String name, final Runnable action)
+    protected Container addMenuItem(final String name, final Runnable action)
     {
         KButton button = new KButton(name);
 		button.setFont(AppResources.getFont(AppResources.ID_FONT_MENU));
@@ -140,7 +139,12 @@ public class MenuPage extends PageState
 
         return button;
     }
-    
+
+    protected Container getMenuItem(final String name)
+    {
+    	return (Container) this.menuItems.get(name);
+    }
+
     public void destroy()
     {
 		App.log("MenuPage::destroy");
@@ -148,12 +152,12 @@ public class MenuPage extends PageState
     	super.destroy();
     	
     	this.gameStateListener = null;
-    	this.options.clear();
-    	this.options = null;
+    	this.menuItems.clear();
+    	this.menuItems = null;
 
     	App.log("MenuPage::destroy done");
     }
     
-    IGameStateListener gameStateListener;
-    WeakHashMap options;
+    private IGameStateListener gameStateListener;
+    private WeakHashMap menuItems;
 }

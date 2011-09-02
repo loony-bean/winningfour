@@ -31,6 +31,7 @@ public class PageState extends State
 		super.enter();
 		if (this.panel != null)
 		{
+			this.focusOwner.requestFocus();
 			this.parent.setInner(this.panel);
 			this.panel.repaint();
 		}
