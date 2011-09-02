@@ -14,6 +14,7 @@ import com.example.kindle.sm.State;
 import com.example.kindle.utils.DialogHelper;
 import com.example.kindle.utils.KeyboardHelper;
 import com.example.kindle.winningfour.App;
+import com.example.kindle.winningfour.AppResources;
 
 /**
  *
@@ -62,22 +63,25 @@ public class OptionsPage extends State
 		super.leave();
 		this.focused.removeFocusListener(this.focusListener);
 		
-		if (!App.gamer.isStopped())
+		if (App.opts.isChanged())
 		{
-			DialogHelper.confirm("Pressing OK will apply new options and start a new game.",
-					new Runnable() {
-						public void run() {
-							App.gamer.stop();
-							App.opts.commit();
-						}},
-					new Runnable() {
-						public void run() {
-							App.opts.revert();
-						}});
-		}
-		else
-		{
-			App.opts.commit();
+			if (!App.gamer.isStopped())
+			{
+				DialogHelper.confirm(App.bundle.getString(AppResources.KEY_CONFIRM_OPTIONS),
+						new Runnable() {
+							public void run() {
+								App.gamer.stop();
+								App.opts.commit();
+							}},
+						new Runnable() {
+							public void run() {
+								App.opts.revert();
+							}});
+			}
+			else
+			{
+				App.opts.commit();
+			}
 		}
 
 		this.context.setTextOptionPane(null);

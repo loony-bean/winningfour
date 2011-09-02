@@ -264,7 +264,30 @@ public class AppOptions
 			this.syncTextOptionPane();
 		}
 	}
-	
+
+	public boolean isChanged()
+	{
+		boolean result = false;
+
+		Iterator i = this.pendingOptions.keySet().iterator();
+		while (i.hasNext())
+		{
+			String key = (String)i.next();
+			if (this.currentOptions.containsKey(key))
+			{
+				String lhs = (String) this.currentOptions.get(key);
+				String rhs = (String) this.pendingOptions.get(key);
+				if (!lhs.equals(rhs))
+				{
+					result = true;
+					break;
+				}
+			}
+		}
+
+		return result;
+	}
+
 	/**
 	 * Synchronizes options pane with stored option values.
 	 */

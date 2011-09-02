@@ -10,7 +10,6 @@ import com.example.kindle.winningfour.boardgame.HumanPlayer;
 import com.example.kindle.winningfour.skins.ISkin;
 import com.example.kindle.winningfour.skins.classic.ClassicSkin;
 
-
 /**
  * Creates different game objects using current options state.
  */
