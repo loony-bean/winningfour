@@ -20,11 +20,12 @@ public class GamePage extends PageState
 	GamePage(final KindletContext context, final ImagePanel parent, final String name)
 	{
 		super(context, parent, name);
-		this.panel = new ImagePanel("background2.png");
-		this.panel.setPreferredSize(new Dimension(App.screenSize.width, App.screenSize.height));
-		KPanel p = new KPanel();
 		
 		GameView gameView = App.gamer.getView();
+
+		this.panel = new ImagePanel("board.png");
+		this.panel.setPreferredSize(new Dimension(App.screenSize.width, App.screenSize.height));
+		KPanel p = new KPanel();
 		
 		p.setBackground(new Color(0x000000FF, true));
 		p.setLayout(new BorderLayout());

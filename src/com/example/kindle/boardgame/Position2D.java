@@ -6,7 +6,7 @@ package com.example.kindle.boardgame;
 public class Position2D implements IPosition2D
 {
 	/**
-	 * Position constructor given row and column numbers (starting from 0).
+	 * Position constructor given row and column numbers (starting from zero).
 	 * 
 	 * @param row Row number.
 	 * @param col Column number.
@@ -35,9 +35,9 @@ public class Position2D implements IPosition2D
 		return new Position2D(this.row, this.col);
 	}
 
-	/** Row number on board (from 0). */
+	/** Row number on board. */
 	private int row;
 
-	/** Column number on board (from 0). */
+	/** Column number on board. */
 	private int col;
 }

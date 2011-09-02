@@ -8,6 +8,8 @@ import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.ComputerPlayer;
 import com.example.kindle.winningfour.boardgame.HumanPlayer;
+import com.example.kindle.winningfour.skins.ISkin;
+import com.example.kindle.winningfour.skins.classic.ClassicSkin;
 
 
 /**
@@ -96,5 +98,24 @@ public class OptionsFactory
 		}
 		
 		return players; 
+	}
+
+	/**
+	 * Returns current skin as set in options.
+	 * 
+	 * @return Graphical skin definition object.
+	 */
+	public ISkin createSkin()
+	{
+		ISkin result = null;
+		String key = (String) App.opts.get(AppOptions.OP_T_SKIN);
+		
+		if (key.equals(AppOptions.OP_V_CLASSIC))
+		{
+			Dimension bs = this.createBoardSize();
+			result = (ISkin) new ClassicSkin(bs);
+		}
+
+		return result;
 	}
 }

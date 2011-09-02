@@ -55,10 +55,12 @@ public class GameController implements IGame
 			{
 				if (event == GameEvent.WIN)
 				{
+					GameController.this.setSelectedRow(-1);
 					GameController.this.pulse(new SignalEvent(GameStateMachine.WIN));
 				}
 				else if (event == GameEvent.DRAW)
 				{
+					GameController.this.setSelectedRow(-1);
 					GameController.this.pulse(new SignalEvent(GameStateMachine.DRAW));
 				}
 			}
@@ -66,6 +68,7 @@ public class GameController implements IGame
 
 		this.setSelectedRow(this.board.getWidth()/2);
 		this.gameView.setItems(this.board.getItems());
+		this.gameView.reset();
 
 		this.repaint();
 

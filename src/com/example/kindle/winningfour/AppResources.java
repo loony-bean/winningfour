@@ -1,6 +1,7 @@
 package com.example.kindle.winningfour;
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -9,8 +10,12 @@ import java.util.ListResourceBundle;
 import java.util.WeakHashMap;
 
 import com.amazon.kindle.kindlet.ui.KindletUIResources;
+import com.amazon.kindle.kindlet.ui.KindletUIResources.KFontFamilyName;
 import com.amazon.kindle.kindlet.ui.KindletUIResources.KFontStyle;
 import com.example.kindle.utils.ImageHelper;
+import com.example.kindle.winningfour.options.OptionsFactory;
+import com.example.kindle.winningfour.skins.BoardLayout;
+import com.example.kindle.winningfour.skins.ISkin;
 
 /**
  * Resources for the {@link App} application.
@@ -60,43 +65,49 @@ public class AppResources extends ListResourceBundle
         { KEY_CONFIRM_EXIT, "Exit game?" },
         { KEY_ERROR_NO_TURNS, "No available turns." }
     };
-    
-    public static Image getImage(String key, Container parent)
+
+    public static Image getImage(final String key, final Container parent, int width, int height)
     {
     	Image image = (Image)imagesMap.get(key);
-    	if (image == null)
+    	if (image == null || image != null && image.getWidth(null) != width)
     	{
     		Toolkit tk = Toolkit.getDefaultToolkit();
-    		image = tk.createImage(parent.getClass().getResource(key));
+    		ISkin skin = (new OptionsFactory()).createSkin();
+    		image = tk.createImage(skin.getClass().getResource(key));
 
-    		image = image.getScaledInstance(parent.getWidth(), parent.getHeight(), Image.SCALE_SMOOTH);
+    		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
     		ImageHelper.waitForImage(image, parent);
     		imagesMap.put(key, image);
     	}
-    	
+
     	return image;
     }
+
+    public static BoardLayout getLayout(Dimension size)
+    {
+    	return (new OptionsFactory()).createSkin().getLayout(size);
+    }
     
-    public static Font getFont(final int id)
+    public static Font getFont(int id)
     {
     	if (id == ID_FONT_GAME_STATUS)
     	{
-    		return KindletUIResources.getInstance().getFont(KindletUIResources.KFontFamilyName.MONOSPACE, 21, KFontStyle.PLAIN, false);
+    		return KindletUIResources.getInstance().getFont(KFontFamilyName.MONOSPACE, 21, KFontStyle.PLAIN, false);
     	}
     	else if (id == ID_FONT_MENU)
     	{
-    		return KindletUIResources.getInstance().getFont(KindletUIResources.KFontFamilyName.SANS_SERIF, 31, KFontStyle.PLAIN, false);
+    		return KindletUIResources.getInstance().getFont(KFontFamilyName.SANS_SERIF, 31, KFontStyle.PLAIN, false);
     	}
     	else if (id == ID_FONT_NORMAL)
     	{
-    		return KindletUIResources.getInstance().getFont(KindletUIResources.KFontFamilyName.SANS_SERIF, 25, KFontStyle.PLAIN, false);
+    		return KindletUIResources.getInstance().getFont(KFontFamilyName.SANS_SERIF, 25, KFontStyle.PLAIN, false);
     	}
     	else if (id == ID_FONT_PAGE_TITLE)
     	{
-    		return KindletUIResources.getInstance().getFont(KindletUIResources.KFontFamilyName.SANS_SERIF, 36, KFontStyle.PLAIN, false);
+    		return KindletUIResources.getInstance().getFont(KFontFamilyName.SANS_SERIF, 36, KFontStyle.PLAIN, false);
     	}
 		
-    	return KindletUIResources.getInstance().getFont(KindletUIResources.KFontFamilyName.MONOSPACE, 21, KFontStyle.PLAIN, false);
+    	return KindletUIResources.getInstance().getFont(KFontFamilyName.MONOSPACE, 21, KFontStyle.PLAIN, false);
     }
     
     static public void destroy()
@@ -114,7 +125,8 @@ public class AppResources extends ListResourceBundle
     	}
 
     	imagesMap.clear();
+    	imagesMap = null;
     }
     
-    static private final WeakHashMap imagesMap = new WeakHashMap();
+    static private WeakHashMap imagesMap = new WeakHashMap();
 }

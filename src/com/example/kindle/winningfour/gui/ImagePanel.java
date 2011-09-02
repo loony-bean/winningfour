@@ -31,7 +31,7 @@ public class ImagePanel extends KPanel
 		
 		this.layoutSize = size;
 		
-		Image image = AppResources.getImage(name, this);
+		Image image = AppResources.getImage(name, this, size.width, size.height);
 
 		this.backgroundPane.setBounds(0, 0, size.width, size.height);
 		this.backgroundPane.setImage(image);

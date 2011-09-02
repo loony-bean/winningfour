@@ -6,14 +6,14 @@ package com.example.kindle.boardgame;
 public interface IPosition2D
 {
 	/**
-	 * Returns row number starting from 0.
+	 * Returns row number starting from zero.
 	 * 
 	 * @return Row number.
 	 */
 	public int row();
 
 	/**
-	 * Returns column number starting from 0.
+	 * Returns column number starting from zero.
 	 * 
 	 * @return Column number.
 	 */
