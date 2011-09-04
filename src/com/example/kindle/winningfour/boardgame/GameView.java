@@ -1,16 +1,12 @@
 package com.example.kindle.winningfour.boardgame;
 
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.amazon.kindle.kindlet.ui.KLabel;
-import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
 import com.example.kindle.winningfour.boardgame.BoardItem;
@@ -52,20 +48,20 @@ public class GameView extends Container
 		}
 
 		this.layoutSize = size;
-		this.skin = AppResources.getLayout(size);
+		this.layout = AppResources.getSkin().getLayout(size);
 
-		this.gameSelector.setBounds(size.width/2 - this.skin.pieceSizeX/2, this.skin.selectorY,
-				this.skin.pieceSizeX, this.skin.pieceSizeX);
+		this.gameSelector.setBounds(size.width/2 - this.layout.pieceSizeX/2, this.layout.selectorY,
+				this.layout.pieceSizeX, this.layout.pieceSizeX);
 		this.gameSelector.setImage(AppResources.getImage("selector.png", this,
-				this.skin.pieceSizeX, this.skin.pieceSizeX));
+				this.layout.pieceSizeX, this.layout.pieceSizeX));
 		
-		this.gameSelector.setLocation(this.skin.boardLeftTopX +
-				this.selectedRow*(this.skin.pieceSizeX + this.skin.pieceGapX),
-				this.skin.selectorY);
+		this.gameSelector.setLocation(this.layout.boardLeftTopX +
+				this.selectedRow*(this.layout.pieceSizeX + this.layout.pieceGapX),
+				this.layout.selectorY);
 
 		Dimension sz = this.statusLabel.getPreferredSize();
 		this.statusLabel.setBounds(0, sz.height, size.width, sz.height);
-		
+
 		App.log("GameView::doLayout done");
 	}
 	
@@ -78,48 +74,24 @@ public class GameView extends Container
 	{
 		App.log("GameView::paint in clipBounds " + g.getClipBounds());
 
-		this.gameSelector.setLocation(this.skin.boardLeftTopX +
-				this.selectedRow*(this.skin.pieceSizeX + this.skin.pieceGapX),
-				this.skin.selectorY);
+		this.gameSelector.setLocation(this.layout.boardLeftTopX +
+				this.selectedRow*(this.layout.pieceSizeX + this.layout.pieceGapX),
+				this.layout.selectorY);
 
 		super.paint(g);
+		AppResources.getSkin().paintBoard(g, this);
 		this.paintItems(this.items, g);
 	}
 	
 	public void paintItems(ArrayList items, Graphics g)
 	{
-		Graphics2D g2d = (Graphics2D)g;
-
 		Iterator iter = items.iterator();
 		while(iter.hasNext())
 		{
-			BoardItem item = (BoardItem)iter.next();
-
-			Position2D pos = (Position2D)item.getPosition();
-
-			String id = "hole.png";
-
-			int hx = this.skin.boardLeftTopX;
-			int hy = this.skin.boardLeftTopY;
-			int s = this.skin.pieceSizeX;
-			int gap = this.skin.pieceGapX;
-			
-			int x = hx + pos.row()*(s+gap);
-			int y = hy + pos.col()*(s+gap);
-
-			if (item.getPiece() != null)
-			{
-				Color color = item.getPiece().getPlayer().getColor();
-				id = (color == Color.blue) ? "spider.png" : "mouse.png";
-			}
-			
-			Image image = AppResources.getImage(id, this,
-					this.skin.pieceSizeX, this.skin.pieceSizeX);
-			
-			g2d.drawImage(image, x, y, null);
+			AppResources.getSkin().paintBoardItem(g, this, (BoardItem)iter.next());
 		}
 	}
-	
+
 	public void setItems(ArrayList items)
 	{
 		this.items = items;
@@ -172,5 +144,5 @@ public class GameView extends Container
 	private ArrayList items;
 	private int selectedRow;
 
-	private BoardLayout skin;
+	private BoardLayout layout;
 }

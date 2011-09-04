@@ -9,6 +9,7 @@ import com.example.kindle.winningfour.boardgame.ComputerPlayer;
 import com.example.kindle.winningfour.boardgame.HumanPlayer;
 import com.example.kindle.winningfour.skins.ISkin;
 import com.example.kindle.winningfour.skins.classic.ClassicSkin;
+import com.example.kindle.winningfour.skins.wood.WoodSkin;
 
 /**
  * Creates different game objects using current options state.
@@ -58,16 +59,16 @@ public class OptionsFactory
 		String firstTurn = (String) App.opts.get(AppOptions.OP_T_FIRST_TURN);
 		String opponent = (String) App.opts.get(AppOptions.OP_T_OPPONENT);
 
-		IPlayer you = new HumanPlayer(Color.yellow, "Plato");
+		IPlayer you = new HumanPlayer(Color.white, "Plato");
 		IPlayer opp = null;
 
 		if (opponent.equals(AppOptions.OP_V_COMPUTER))
 		{
-			opp = new ComputerPlayer(Color.blue, "Socrates");
+			opp = new ComputerPlayer(Color.black, "Socrates");
 		}
 		else if (opponent.equals(AppOptions.OP_V_HUMAN))
 		{
-			opp = new HumanPlayer(Color.blue, "Socrates");
+			opp = new HumanPlayer(Color.black, "Socrates");
 		}
 
 		if (firstTurn.equals(AppOptions.OP_V_YOU))
@@ -107,10 +108,22 @@ public class OptionsFactory
 	{
 		ISkin result = null;
 		String key = (String) App.opts.get(AppOptions.OP_T_SKIN);
+		Dimension bs = this.createBoardSize();
 		
 		if (key.equals(AppOptions.OP_V_CLASSIC))
 		{
-			Dimension bs = this.createBoardSize();
+			result = (ISkin) new WoodSkin(bs);
+		}
+		else if (key.equals(AppOptions.OP_V_PAPER))
+		{
+			result = (ISkin) new ClassicSkin(bs);
+		}
+		else if (key.equals(AppOptions.OP_V_CHEESE))
+		{
+			result = (ISkin) new ClassicSkin(bs);
+		}
+		else if (key.equals(AppOptions.OP_V_URBAN))
+		{
 			result = (ISkin) new ClassicSkin(bs);
 		}
 

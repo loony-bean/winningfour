@@ -6,5 +6,7 @@ public class BoardLayout
 	public int boardLeftTopY;
 	public int selectorY;
 	public int pieceSizeX;
+	public int pieceSizeY;
 	public int pieceGapX;
+	public int pieceGapY;
 }

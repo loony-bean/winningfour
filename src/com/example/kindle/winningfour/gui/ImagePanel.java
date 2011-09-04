@@ -28,9 +28,9 @@ public class ImagePanel extends KPanel
 		{
 			return;
 		}
-		
+
 		this.layoutSize = size;
-		
+
 		Image image = AppResources.getImage(name, this, size.width, size.height);
 
 		this.backgroundPane.setBounds(0, 0, size.width, size.height);
@@ -72,6 +72,11 @@ public class ImagePanel extends KPanel
 			Dimension pz = new Dimension((this.layoutSize.width - sz.width)/2, (this.layoutSize.height - sz.height)/2); 
 			this.inner.setBounds(pz.width, pz.height, sz.width, sz.height);
 		}
+	}
+
+	public void reset()
+	{
+		this.layoutSize = null;
 	}
 
 	void destroy()

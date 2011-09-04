@@ -1,20 +1,18 @@
 package com.example.kindle.winningfour;
 
-import java.awt.Container;
-import java.awt.Dimension;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ListResourceBundle;
-import java.util.WeakHashMap;
 
 import com.amazon.kindle.kindlet.ui.KindletUIResources;
 import com.amazon.kindle.kindlet.ui.KindletUIResources.KFontFamilyName;
 import com.amazon.kindle.kindlet.ui.KindletUIResources.KFontStyle;
 import com.example.kindle.utils.ImageHelper;
 import com.example.kindle.winningfour.options.OptionsFactory;
-import com.example.kindle.winningfour.skins.BoardLayout;
 import com.example.kindle.winningfour.skins.ISkin;
 
 /**
@@ -68,28 +66,30 @@ public class AppResources extends ListResourceBundle
         { KEY_ERROR_NO_TURNS, "No available turns." }
     };
 
-    public static Image getImage(final String key, final Container parent, int width, int height)
+    public static Image getImage(final String key, final Component parent, int width, int height)
     {
-    	Image image = (Image)imagesMap.get(key);
+		ISkin skin = (new OptionsFactory()).createSkin();
+		String fullkey = skin.getName() + "-" + key;
+
+    	Image image = (Image)imagesMap.get(fullkey);
     	if (image == null || image != null && image.getWidth(null) != width)
     	{
     		Toolkit tk = Toolkit.getDefaultToolkit();
-    		ISkin skin = (new OptionsFactory()).createSkin();
     		image = tk.createImage(skin.getClass().getResource(key));
 
     		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
     		ImageHelper.waitForImage(image, parent);
-    		imagesMap.put(key, image);
+    		imagesMap.put(fullkey, image);
     	}
 
     	return image;
     }
 
-    public static BoardLayout getLayout(Dimension size)
+    public static ISkin getSkin()
     {
-    	return (new OptionsFactory()).createSkin().getLayout(size);
+    	return (new OptionsFactory()).createSkin();
     }
-    
+
     public static Font getFont(int id)
     {
     	if (id == ID_FONT_GAME_STATUS)
@@ -130,5 +130,5 @@ public class AppResources extends ListResourceBundle
     	imagesMap = null;
     }
     
-    static private WeakHashMap imagesMap = new WeakHashMap();
+    static private HashMap imagesMap = new HashMap();
 }

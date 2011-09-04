@@ -46,9 +46,9 @@ public class AppOptions
 
 	public final static String OP_T_SKIN			= "Skin";
 	public final static String OP_V_CLASSIC 		= "classic";
-	public final static String OP_V_MAGNETIC		= "magnetic";
-	public final static String OP_V_BALOONS 		= "baloons";
-	public final static String OP_V_PIRATES			= "pirates";
+	public final static String OP_V_PAPER			= "paper";
+	public final static String OP_V_CHEESE 			= "cheese";
+	public final static String OP_V_URBAN			= "urban";
 
     /** {@inheritDoc} */
 	private class OptionUpdater implements ItemListener
@@ -109,7 +109,7 @@ public class AppOptions
 		this.model.put(OP_T_OPPONENT, new OptionValues(new String[]{OP_V_HUMAN, OP_V_COMPUTER}, 0));
 		this.model.put(OP_T_FIRST_TURN, new OptionValues(new String[]{OP_V_YOU, OP_V_OPPONENT}, 0));
 		this.model.put(OP_T_TIMER, new OptionValues(new String[]{OP_V_OFF, OP_V_10SEC, OP_V_15SEC, OP_V_30SEC}, 0));
-		this.model.put(OP_T_SKIN, new OptionValues(new String[]{OP_V_CLASSIC, OP_V_MAGNETIC, OP_V_BALOONS, OP_V_PIRATES}, 0));
+		this.model.put(OP_T_SKIN, new OptionValues(new String[]{OP_V_CLASSIC, OP_V_PAPER, OP_V_CHEESE, OP_V_URBAN}, 0));
 
 		if (!this.load())
 		{

@@ -41,6 +41,7 @@ public class GamePage extends PageState
 	public void enter()
 	{
 		super.enter();
+		((ImagePanel) this.panel).reset();
 		App.gamer.start();
 	}
 

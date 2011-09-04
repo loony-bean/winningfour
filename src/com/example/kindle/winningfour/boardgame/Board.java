@@ -82,9 +82,9 @@ public class Board implements IBoard2D
 	public ArrayList getItems()
 	{
 		ArrayList result = new ArrayList();
-		for (int i = 0; i < this.board.length; i++)
+		for (int j = this.board[0].length - 1; j >= 0 ; j--)
 		{
-			for (int j = 0; j < this.board[i].length; j++)
+			for (int i = 0; i < this.board.length; i++)
 			{
 				IBoard2DItem item = new BoardItem(this.board[i][j], new Position2D(i, j));
 				result.add(item);
