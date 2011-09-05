@@ -20,20 +20,7 @@ public class BaseSkin implements ISkin
 
 	public BoardLayout getLayout(final Dimension size)
 	{
-		BoardLayout result = new BoardLayout();
-
-		result.boardLeftTopX = (int) (this.boardLeftTopX * size.width);
-		result.boardLeftTopY = (int) (this.boardLeftTopY * size.height);
-		result.selectorY = (int) (this.selectorY * size.height);
-
-		int cols = this.boardSize.width;
-		result.pieceSizeX = (int) ((size.width - 2*result.boardLeftTopX - this.pieceGapX*(cols-1)) / cols);
-		result.pieceSizeY = result.pieceSizeX;
-
-		result.pieceGapX = this.pieceGapX;
-		result.pieceGapY = this.pieceGapY;
-
-		return result;
+		return null;
 	}
 
 	public void paintBoard(final Graphics g, final Component parent)
@@ -62,9 +49,15 @@ public class BaseSkin implements ISkin
 		{
 			Color color = piece.getPlayer().getColor();
 			String id = (color == Color.black) ? "black.png" : "white.png";
-			Image image = AppResources.getImage(id, parent, rect.width, rect.height);
-			g.drawImage(image, rect.x, rect.y, null);
+			
+			this.paintImage(g, parent, id, rect);
 		}
+	}
+
+	protected void paintImage(final Graphics g, final Component parent, String id, final Rectangle rect)
+	{
+		Image image = AppResources.getImage(id, parent, rect.width, rect.height);
+		g.drawImage(image, rect.x, rect.y, null);
 	}
 
 	public void paintHoles(final Graphics g, final Component parent)
@@ -80,21 +73,11 @@ public class BaseSkin implements ISkin
 				int x = (int) (layout.boardLeftTopX + i*(s+gap));
 				int y = (int) (layout.boardLeftTopY + j*(s+gap));
 				
-				Image image = AppResources.getImage("hole.png", parent, s, s);
-				g.drawImage(image, x, y, null);
+				this.paintImage(g, parent, "hole.png", new Rectangle(x, y, s, s));
 			}
 		}
 	}
 
-	// percents calculated from 600 x 780 factor
-	private double selectorY = 580.0/760.0;
-	private double boardLeftTopX = 100.0/600.0;
-	private double boardLeftTopY = 220.0/760.0;
-	
-	// pixels
-	private int pieceGapX = 4;
-	private int pieceGapY = 4;
-	
 	// number or rows and columns
-	private Dimension boardSize;
+	protected Dimension boardSize;
 }

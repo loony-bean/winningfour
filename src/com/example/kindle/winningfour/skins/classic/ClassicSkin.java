@@ -1,21 +1,18 @@
 package com.example.kindle.winningfour.skins.classic;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 
-import com.example.kindle.winningfour.AppResources;
 import com.example.kindle.winningfour.boardgame.BoardItem;
+import com.example.kindle.winningfour.skins.BaseSkin;
 import com.example.kindle.winningfour.skins.BoardLayout;
-import com.example.kindle.winningfour.skins.ISkin;
 
-public class ClassicSkin implements ISkin
+public class ClassicSkin extends BaseSkin
 {
 	public ClassicSkin(Dimension boardSize)
 	{
-		this.boardSize = boardSize;
+		super(boardSize);
 	}
 
 	public BoardLayout getLayout(final Dimension size)
@@ -38,40 +35,12 @@ public class ClassicSkin implements ISkin
 
 	public void paintBoard(final Graphics g, final Component parent)
 	{
-		BoardLayout layout = this.getLayout(parent.getSize());
-
-		for (int i = 0; i < this.boardSize.width; i++)
-		{
-			for (int j = 0; j < this.boardSize.height; j++)
-			{
-				int s = layout.pieceSizeX;
-				int gap = layout.pieceGapX;
-				int x = (int) (layout.boardLeftTopX + i*(s+gap));
-				int y = (int) (layout.boardLeftTopY + j*(s+gap));
-				
-				Image image = AppResources.getImage("hole.png", parent, s, s);
-				g.drawImage(image, x, y, null);
-			}
-		}
+		super.paintBoard(g, parent);
 	}
 
 	public void paintBoardItem(final Graphics g, final Component parent, final BoardItem item)
 	{
-		BoardLayout l = this.getLayout(parent.getSize());
-		String id = null;
-
-		int x = l.boardLeftTopX + item.getPosition().row()*(l.pieceSizeX+l.pieceGapX);
-		int y = l.boardLeftTopY + item.getPosition().col()*(l.pieceSizeY+l.pieceGapX);
-
-		if (item.getPiece() != null)
-		{
-			Color color = item.getPiece().getPlayer().getColor();
-			id = (color == Color.black) ? "black.png" : "white.png";
-
-			Image image = AppResources.getImage(id, parent, l.pieceSizeX, l.pieceSizeX);
-			
-			g.drawImage(image, x, y, null);
-		}
+		super.paintBoardItem(g, parent, item);
 	}
 
 	public String getName()
@@ -86,7 +55,4 @@ public class ClassicSkin implements ISkin
 
 	// pixels
 	private int pieceGap = 4;
-
-	// number or rows and columns
-	private Dimension boardSize;
 }

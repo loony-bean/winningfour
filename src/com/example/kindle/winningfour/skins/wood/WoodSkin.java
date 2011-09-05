@@ -1,21 +1,19 @@
 package com.example.kindle.winningfour.skins.wood;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.Rectangle;
 
-import com.example.kindle.winningfour.AppResources;
 import com.example.kindle.winningfour.boardgame.BoardItem;
+import com.example.kindle.winningfour.skins.BaseSkin;
 import com.example.kindle.winningfour.skins.BoardLayout;
-import com.example.kindle.winningfour.skins.ISkin;
 
-public class WoodSkin implements ISkin
+public class WoodSkin extends BaseSkin
 {
 	public WoodSkin(Dimension boardSize)
 	{
-		this.boardSize = boardSize;
+		super(boardSize);
 	}
 	
 	public BoardLayout getLayout(Dimension size)
@@ -43,15 +41,14 @@ public class WoodSkin implements ISkin
 
 		for (int i = 0; i < this.boardSize.width + 1; i++)
 		{
-				int sx = l.pieceSizeX;
-				int gap = l.pieceGapX;
-				int x = (int) (l.boardLeftTopX + i*(sx+gap));
-				int ry = (this.boardSize.height) * l.pieceSizeY;
-				int y = (int) (this.boardPlaneY * size.height) - ry;
-				int rx = 2*sx/3;
+			int sx = l.pieceSizeX;
+			int gap = l.pieceGapX;
+			int x = (int) (l.boardLeftTopX + i*(sx+gap));
+			int ry = (this.boardSize.height) * l.pieceSizeY;
+			int y = (int) (this.boardPlaneY * size.height) - ry;
+			int rx = 2*sx/3;
 
-				Image image = AppResources.getImage("stick.png", parent, rx, ry);
-				g.drawImage(image, x-gap-rx+rx/2, y, null);
+			this.paintImage(g, parent, "stick.png", new Rectangle(x-gap-rx+rx/2, y, rx, ry));
 		}
 	}
 
@@ -59,7 +56,6 @@ public class WoodSkin implements ISkin
 	{
 		Dimension size = parent.getSize();
 		BoardLayout l = this.getLayout(size);
-		String id = null;
 
 		int overlap = l.pieceSizeY/8;
 		int oy = (overlap - 1) * this.boardSize.height;
@@ -67,16 +63,8 @@ public class WoodSkin implements ISkin
 		int y = (int) (this.boardPlaneY * size.height) - (this.boardSize.height) * l.pieceSizeY;
 		y += item.getPosition().col()*(l.pieceSizeY + l.pieceGapY - overlap) + oy;
 		int x = l.boardLeftTopX + item.getPosition().row()*(l.pieceSizeX + l.pieceGapX);
-
-		if (item.getPiece() != null)
-		{
-			Color color = item.getPiece().getPlayer().getColor();
-			id = (color == Color.black) ? "black.png" : "white.png";
-
-			Image image = AppResources.getImage(id, parent, l.pieceSizeX, l.pieceSizeY);
-
-			g.drawImage(image, x, y, null);
-		}
+		
+		this.paintPiece(g, parent, item.getPiece(), new Rectangle(x, y, l.pieceSizeX, l.pieceSizeY));
 	}
 
 	public String getName()
@@ -91,6 +79,4 @@ public class WoodSkin implements ISkin
 
 	private int pieceGapX = 4;
 	private int pieceGapY = 2;
-
-	private Dimension boardSize;
 }
