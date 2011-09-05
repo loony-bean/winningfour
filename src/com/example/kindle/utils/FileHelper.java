@@ -9,8 +9,18 @@ import java.util.ArrayList;
 
 import com.example.kindle.winningfour.App;
 
+/**
+ * Helper class for file operations.
+ */
 public class FileHelper
 {
+	/**
+	 * Writes string data into file.
+	 * 
+	 * @param filename Name of the file to be used.
+	 * @param text Test to be written into file.
+	 * @param append Indicates if the file should be cleared before the write. 
+	 */
 	public static void write(final String filename, final String text, boolean append)
 	{
 		FileWriter writer = null;
@@ -40,6 +50,13 @@ public class FileHelper
 		}
 	}
 
+	/**
+	 * Reads string array from file.
+	 * 
+	 * @param filename Name of the file to be read.
+	 * 
+	 * @return String array read from the file.
+	 */
 	public static String[] read(final String filename)
 	{
 		ArrayList list = new ArrayList();

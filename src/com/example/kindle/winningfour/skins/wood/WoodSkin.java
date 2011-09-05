@@ -15,7 +15,7 @@ public class WoodSkin extends BaseSkin
 	{
 		super(boardSize);
 	}
-	
+
 	public BoardLayout getLayout(Dimension size)
 	{
 		BoardLayout result = new BoardLayout();

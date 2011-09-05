@@ -235,7 +235,14 @@ public class App extends AbstractKindlet
      */
 	public static void error(final String msg)
 	{
-		DialogHelper.error("Internal error: " + msg);
+		DialogHelper.error("Internal error: " + msg, new Runnable()
+		{
+			public void run()
+			{
+				App.gamer.stop();
+				App.pager.home();
+			}
+		});
 	}
 
     /** Indicates if the application has been stopped. */

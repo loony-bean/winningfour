@@ -62,16 +62,16 @@ public class BaseSkin implements ISkin
 
 	public void paintHoles(final Graphics g, final Component parent)
 	{
-		BoardLayout layout = this.getLayout(parent.getSize());
+		BoardLayout l = this.getLayout(parent.getSize());
 	
 		for (int i = 0; i < this.boardSize.width; i++)
 		{
 			for (int j = 0; j < this.boardSize.height; j++)
 			{
-				int s = layout.pieceSizeX;
-				int gap = layout.pieceGapX;
-				int x = (int) (layout.boardLeftTopX + i*(s+gap));
-				int y = (int) (layout.boardLeftTopY + j*(s+gap));
+				int s = l.pieceSizeX;
+				int gap = l.pieceGapX;
+				int x = (int) (l.boardLeftTopX + i*(s+gap));
+				int y = (int) (l.boardLeftTopY + j*(s+gap));
 				
 				this.paintImage(g, parent, "hole.png", new Rectangle(x, y, s, s));
 			}
