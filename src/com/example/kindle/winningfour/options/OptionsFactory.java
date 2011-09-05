@@ -9,6 +9,7 @@ import com.example.kindle.winningfour.boardgame.ComputerPlayer;
 import com.example.kindle.winningfour.boardgame.HumanPlayer;
 import com.example.kindle.winningfour.skins.ISkin;
 import com.example.kindle.winningfour.skins.classic.ClassicSkin;
+import com.example.kindle.winningfour.skins.sketchy.SketchySkin;
 import com.example.kindle.winningfour.skins.wood.WoodSkin;
 
 /**
@@ -114,9 +115,9 @@ public class OptionsFactory
 		{
 			result = (ISkin) new WoodSkin(bs);
 		}
-		else if (key.equals(AppOptions.OP_V_PAPER))
+		else if (key.equals(AppOptions.OP_V_SKETCHY))
 		{
-			result = (ISkin) new ClassicSkin(bs);
+			result = (ISkin) new SketchySkin(bs);
 		}
 		else if (key.equals(AppOptions.OP_V_CHEESE))
 		{

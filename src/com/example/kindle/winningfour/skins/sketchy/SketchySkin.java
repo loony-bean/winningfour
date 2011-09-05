@@ -1,4 +1,4 @@
-package com.example.kindle.winningfour.skins.classic;
+package com.example.kindle.winningfour.skins.sketchy;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -11,14 +11,14 @@ import com.example.kindle.winningfour.boardgame.BoardItem;
 import com.example.kindle.winningfour.skins.BoardLayout;
 import com.example.kindle.winningfour.skins.ISkin;
 
-public class ClassicSkin implements ISkin
+public class SketchySkin implements ISkin
 {
-	public ClassicSkin(Dimension boardSize)
+	public SketchySkin(Dimension boardSize)
 	{
 		this.boardSize = boardSize;
 	}
 
-	public BoardLayout getLayout(final Dimension size)
+	public BoardLayout getLayout(Dimension size)
 	{
 		BoardLayout result = new BoardLayout();
 
@@ -27,16 +27,16 @@ public class ClassicSkin implements ISkin
 		result.selectorY = (int) (this.selectorY * size.height);
 
 		int cols = this.boardSize.width;
-		result.pieceSizeX = (int) ((size.width - 2*result.boardLeftTopX - this.pieceGap*(cols-1)) / cols);
+		result.pieceSizeX = (int) ((size.width - 2*result.boardLeftTopX - this.pieceGapX*(cols-1)) / cols);
 		result.pieceSizeY = result.pieceSizeX;
 
-		result.pieceGapX = this.pieceGap;
-		result.pieceGapY = this.pieceGap;
+		result.pieceGapX = this.pieceGapX;
+		result.pieceGapY = this.pieceGapY;
 
 		return result;
 	}
 
-	public void paintBoard(final Graphics g, final Component parent)
+	public void paintBoard(Graphics g, Component parent)
 	{
 		BoardLayout layout = this.getLayout(parent.getSize());
 
@@ -55,7 +55,7 @@ public class ClassicSkin implements ISkin
 		}
 	}
 
-	public void paintBoardItem(final Graphics g, final Component parent, final BoardItem item)
+	public void paintBoardItem(Graphics g, Component parent, BoardItem item)
 	{
 		BoardLayout l = this.getLayout(parent.getSize());
 		String id = null;
@@ -76,17 +76,15 @@ public class ClassicSkin implements ISkin
 
 	public String getName()
 	{
-		return "classic";
+		return "sketchy";
 	}
 
-	// percents calculated from 600 x 780 factor
 	private double selectorY = 580.0/760.0;
-	private double boardLeftTopX = 100.0/600.0;
-	private double boardLeftTopY = 220.0/760.0;
+	private double boardLeftTopX = 90.0/600.0;
+	private double boardLeftTopY = 130.0/760.0;
 
-	// pixels
-	private int pieceGap = 4;
+	private int pieceGapX = 8;
+	private int pieceGapY = 4;
 
-	// number or rows and columns
 	private Dimension boardSize;
 }
