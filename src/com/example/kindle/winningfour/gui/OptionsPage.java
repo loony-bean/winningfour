@@ -15,6 +15,7 @@ import com.example.kindle.utils.DialogHelper;
 import com.example.kindle.utils.KeyboardHelper;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
+import com.example.kindle.winningfour.options.AppOptions;
 
 /**
  *
@@ -62,8 +63,13 @@ public class OptionsPage extends State
 	{
 		super.leave();
 		this.focused.removeFocusListener(this.focusListener);
-		
-		if (App.opts.isChanged())
+
+		int opstat = App.opts.getStatus();
+		if (opstat == AppOptions.STATUS_DISPLAY_CHANGES)
+		{
+			App.opts.commit();
+		}
+		else if (opstat == AppOptions.STATUS_GAME_CHANGES)
 		{
 			if (!App.gamer.isStopped())
 			{

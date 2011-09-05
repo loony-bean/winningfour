@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.example.kindle.sm;
 
 import com.example.kindle.sm.SignalEvent;

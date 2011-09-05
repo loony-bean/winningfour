@@ -78,6 +78,17 @@ public class BaseSkin implements ISkin
 		}
 	}
 
+	/** {@inheritDoc} */
+	public boolean equals(Object other)
+	{
+		if (this == other) return true;
+		if (other == null) return false;
+		if (getClass() != other.getClass()) return false;
+
+		BaseSkin otherSkin = (BaseSkin) other;
+		return this.getName().equals(otherSkin.getName());
+	}
+
 	// number or rows and columns
 	protected Dimension boardSize;
 }

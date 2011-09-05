@@ -23,6 +23,10 @@ public class AppOptions
 	public final static String FILE_NAME_OPTIONS	= "options.json";
 	public final static String FILE_NAME_GAMELOG	= "gamelog.txt";
 	
+	public final static int STATUS_NO_CHANGES		= 0;
+	public final static int STATUS_DISPLAY_CHANGES	= 1;
+	public final static int STATUS_GAME_CHANGES		= 2;
+	
 	public final static String OP_T_BOARD_SIZE		= "Board Size";
 	public final static String OP_V_7X6 			= "7x6";
 	public final static String OP_V_8X7 			= "8x7";
@@ -270,9 +274,9 @@ public class AppOptions
 	 * 
 	 * @return True if there are pending changes, false otherwise.
 	 */
-	public boolean isChanged()
+	public int getStatus()
 	{
-		boolean result = false;
+		int result = STATUS_NO_CHANGES;
 
 		Iterator i = this.pendingOptions.keySet().iterator();
 		while (i.hasNext())
@@ -284,8 +288,15 @@ public class AppOptions
 				String rhs = (String) this.pendingOptions.get(key);
 				if (!lhs.equals(rhs))
 				{
-					result = true;
-					break;
+					if (key.equals(OP_T_SKIN))
+					{
+						result = STATUS_DISPLAY_CHANGES;
+					}
+					else
+					{
+						result = STATUS_GAME_CHANGES;
+						break;
+					}
 				}
 			}
 		}

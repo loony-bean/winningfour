@@ -9,6 +9,7 @@ import com.amazon.kindle.kindlet.ui.KImage;
 import com.amazon.kindle.kindlet.ui.KPanel;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
+import com.example.kindle.winningfour.skins.ISkin;
 
 public class ImagePanel extends KPanel
 {
@@ -30,6 +31,7 @@ public class ImagePanel extends KPanel
 		}
 
 		this.layoutSize = size;
+		this.skin = AppResources.getSkin();
 
 		Image image = AppResources.getImage(name, this, size.width, size.height);
 
@@ -74,9 +76,12 @@ public class ImagePanel extends KPanel
 		}
 	}
 
-	public void reset()
+	public void enter()
 	{
-		this.layoutSize = null;
+		if (this.skin != null && !this.skin.equals(AppResources.getSkin()))
+		{
+			this.layoutSize = null;
+		}
 	}
 
 	void destroy()
@@ -106,4 +111,5 @@ public class ImagePanel extends KPanel
 	private KImage backgroundPane;
 	private Dimension layoutSize;
 	private Container inner;
+	private ISkin skin;
 }
