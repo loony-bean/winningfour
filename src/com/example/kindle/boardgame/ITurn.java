@@ -19,4 +19,7 @@ public interface ITurn
 	 * @return Position of the placed piece on board.
 	 */
 	public IPosition2D getPosition();
+	
+	/** {@inheritDoc} */
+	public String toString();
 }

@@ -21,6 +21,11 @@ public class Turn implements ITurn
 	{
 		return this.position;
 	}
+	
+	public String toString()
+	{
+		return "" + this.position.row() + "-" + this.position.col() + "\n";
+	}
 
 	private IPosition2D position;
 	private IPiece piece;

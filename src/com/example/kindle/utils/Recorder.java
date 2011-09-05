@@ -1,23 +1,23 @@
-package com.example.kindle.winningfour.boardgame;
+package com.example.kindle.utils;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import com.example.kindle.boardgame.IPosition2D;
-import com.example.kindle.boardgame.ITurn;
-import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.utils.FileHelper;
-import com.example.kindle.utils.StringHelper;
 import com.example.kindle.winningfour.App;
 
 public class Recorder
 {
 	public Recorder(final String filename)
 	{
+		App.log("Recorder::create - " + filename);
+
+		this.filename = filename;
 		this.file = new File(System.getProperty("kindlet.home"), filename);
 		this.enabled = true;
+		
+		App.log("Recorder::create done");
 	}
 	
 	public void restart()
@@ -28,7 +28,7 @@ public class Recorder
 
 	public void start()
 	{
-		App.log("Recorder::destroy");
+		App.log("Recorder::start " + this.filename);
 
 		try
 		{
@@ -39,31 +39,32 @@ public class Recorder
 			App.log("Recorder::start exception for file " + this.file.getName()); 
 		}
 
-		App.log("Recorder::destroy done");
+		App.log("Recorder::start done");
 }
 
 	public void stop()
 	{
+		App.log("Recorder::stop - " + this.filename);
+
 		if (this.file != null && this.file.exists())
 		{
 			this.file.delete();
 		}
+		
+		App.log("Recorder::stop done");
 	}
 	
-	public ArrayList load()
+	public String[] load()
 	{
-		ArrayList result = new ArrayList();
+		App.log("Recorder::load - " + this.filename);
+		
 		if (this.hasData())
 		{
 			String[] gamelog = FileHelper.read(this.file.getName());
-			for (int i = 0; i < gamelog.length; i++)
-			{
-				String[] s = StringHelper.split(gamelog[i], "-");
-				result.add(new Position2D(Integer.parseInt(s[0]), Integer.parseInt(s[1])));
-			}
+			return gamelog;
 		}
 
-		return result;
+		return null;
 	}
 	
 	public boolean hasData()
@@ -71,15 +72,14 @@ public class Recorder
 		return (this.file != null && this.file.exists() && this.file.length() > 0);
 	}
 
-	// TODO: move to utils
-	public void record(final ITurn turn)
+	public void record(final String entry)
 	{
+		App.log("Recorder::record - " + this.filename + " = " + entry);
+
 		if (this.writer != null && this.enabled)
 		{
 			try
 			{
-				IPosition2D pos = turn.getPosition();
-				String entry = "" + pos.row() + "-" + pos.col() + "\n";
 				this.writer.write(entry);
 				this.writer.flush();
 			}
@@ -102,6 +102,8 @@ public class Recorder
 
 	public void destroy()
 	{
+		App.log("Recorder::destroy - " + this.filename);
+
 		if (writer != null)
 		{ 
 			try
@@ -113,9 +115,12 @@ public class Recorder
 				App.log("Recorder::destroy exception");
 			} 
 		} 
+
+		App.log("Recorder::destroy done");
 	}
 
 	private boolean enabled;
+	private String filename;
 	private File file;
 	private FileWriter writer;
 }

@@ -14,7 +14,10 @@ import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.boardgame.IRules;
 import com.example.kindle.boardgame.ITurn;
+import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.sm.SignalEvent;
+import com.example.kindle.utils.Recorder;
+import com.example.kindle.utils.StringHelper;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.rules.ClassicRules;
 import com.example.kindle.winningfour.options.AppOptions;
@@ -135,7 +138,14 @@ public class GameController implements IGame
 	{
 		App.log("GameController::restore");
 
-		ArrayList recording = this.recorder.load();
+		ArrayList recording = new ArrayList();
+		String[] gamelog = this.recorder.load();
+		for (int i = 0; i < gamelog.length; i++)
+		{
+			String[] s = StringHelper.split(gamelog[i], "-");
+			recording.add(new Position2D(Integer.parseInt(s[0]), Integer.parseInt(s[1])));
+		}
+		
 		if (recording != null)
 		{
 			this.setRestoring(true);
@@ -183,7 +193,7 @@ public class GameController implements IGame
 			this.rules.afterPlayerTurn(this.board);
 			this.gameView.setItems(this.board.getItems());
 
-			this.recorder.record(this.board.getLastTurn());
+			this.recorder.record(this.board.getLastTurn().toString());
 			
 			this.pulse(new SignalEvent(GameStateMachine.TURN));
 		}
