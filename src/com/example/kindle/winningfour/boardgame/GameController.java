@@ -9,6 +9,7 @@ import com.example.kindle.boardgame.GameEvent;
 import com.example.kindle.boardgame.IGame;
 import com.example.kindle.boardgame.IGameContext;
 import com.example.kindle.boardgame.IGameEventListener;
+import com.example.kindle.boardgame.IGameStateListener;
 import com.example.kindle.boardgame.IPiece;
 import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.boardgame.IPosition2D;

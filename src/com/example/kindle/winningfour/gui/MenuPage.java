@@ -15,10 +15,10 @@ import java.util.HashMap;
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.ui.KButton;
 import com.amazon.kindle.kindlet.ui.KPanel;
+import com.example.kindle.boardgame.IGameStateListener;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
-import com.example.kindle.winningfour.boardgame.IGameStateListener;
 
 /**
  *
