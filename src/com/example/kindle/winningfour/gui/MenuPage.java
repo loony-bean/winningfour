@@ -10,7 +10,7 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.WeakHashMap;
+import java.util.HashMap;
 
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.ui.KButton;
@@ -93,7 +93,7 @@ public class MenuPage extends PageState
     	final GridLayout layout = new GridLayout(0, 1, 8, 8);
         final KPanel panel = new KPanel(layout);
 		panel.setBackground(new Color(0x000000FF, true));
-		this.menuItems = new WeakHashMap();
+		this.menuItems = new HashMap();
         
         String[] menuItems = {AppResources.KEY_MENU_NEW_GAME,
         					  AppResources.KEY_MENU_RESUME_GAME,
@@ -159,5 +159,5 @@ public class MenuPage extends PageState
     }
     
     private IGameStateListener gameStateListener;
-    private WeakHashMap menuItems;
+    private HashMap menuItems;
 }

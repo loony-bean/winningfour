@@ -56,7 +56,7 @@ public class ImagePanel extends KPanel
 		return this.inner; 
 	}
 	
-	public void setInner(Container inner)
+	public void setInner(final Container inner)
 	{
 		if (this.inner != null)
 		{

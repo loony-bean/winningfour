@@ -3,11 +3,10 @@ package com.example.kindle.winningfour.boardgame;
 import com.example.kindle.boardgame.IBoard2DItem;
 import com.example.kindle.boardgame.IPiece;
 import com.example.kindle.boardgame.IPosition2D;
-import com.example.kindle.boardgame.Position2D;
 
 public class BoardItem implements IBoard2DItem
 {
-	public BoardItem(Piece piece, Position2D position)
+	public BoardItem(Piece piece, IPosition2D position)
 	{
 		this.piece = piece;
 		this.position = position;
@@ -24,5 +23,5 @@ public class BoardItem implements IBoard2DItem
 	}
 	
 	private final Piece piece;
-	private final Position2D position;
+	private final IPosition2D position;
 }

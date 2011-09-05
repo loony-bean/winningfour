@@ -21,7 +21,7 @@ import com.example.kindle.winningfour.AppResources;
  */
 public class InstructionsPage extends PageState
 {
-	InstructionsPage(KindletContext context, final ImagePanel parent, String name)
+	InstructionsPage(final KindletContext context, final ImagePanel parent, final String name)
 	{
 		super(context, parent, name);
 		this.panel = new KPanel();

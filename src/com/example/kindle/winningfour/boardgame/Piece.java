@@ -5,7 +5,7 @@ import com.example.kindle.boardgame.IPlayer;
 
 public class Piece implements IPiece
 {
-	public Piece(IPlayer player)
+	public Piece(final IPlayer player)
 	{
 		this.player = player;
 	}
@@ -15,5 +15,5 @@ public class Piece implements IPiece
 		return player;
 	}
 	
-	private IPlayer player;
+	private final IPlayer player;
 }

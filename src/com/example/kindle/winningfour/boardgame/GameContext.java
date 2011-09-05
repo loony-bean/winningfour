@@ -7,7 +7,7 @@ import com.example.kindle.boardgame.IRules;
 
 public class GameContext implements IGameContext
 {
-	public GameContext(IBoard2D board, IRules rules, IPlayer[] players)
+	public GameContext(final IBoard2D board, final IRules rules, final IPlayer[] players)
 	{
 		this.board = board;
 		this.rules = rules;

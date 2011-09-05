@@ -6,7 +6,7 @@ import com.example.kindle.boardgame.ITurn;
 
 public class Turn implements ITurn
 {
-	public Turn(IPiece piece, IPosition2D position)
+	public Turn(final IPiece piece, final IPosition2D position)
 	{
 		this.piece = piece;
 		this.position = position;

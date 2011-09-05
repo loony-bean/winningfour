@@ -10,7 +10,7 @@ import com.example.kindle.winningfour.boardgame.GameController;
 
 public class GameState extends State
 {
-	public GameState(GameController game, int player, final String name)
+	public GameState(final GameController game, int player, final String name)
 	{
 		super(name);
 		this.player = player;
@@ -41,7 +41,7 @@ public class GameState extends State
 		return this.game.getContext().getPlayers()[this.player];
 	}
 	
-	public void pulse(SignalEvent signal)
+	public void pulse(final SignalEvent signal)
 	{
 		this.game.pulse(signal);
 	}

@@ -16,7 +16,7 @@ public class GameStateMachine extends StateMachine
 	public static final String WIN = "win";
 	public static final String DRAW = "draw";
 
-	public GameStateMachine(GameController game, GameView gameView)
+	public GameStateMachine(final GameController game, final GameView gameView)
 	{
 		super();
 		
@@ -52,7 +52,7 @@ public class GameStateMachine extends StateMachine
 
 	private class NewGame extends State
 	{
-		public NewGame(GameController game)
+		public NewGame(final GameController game)
 		{
 			super("NewGame");
 			this.game = game;
@@ -80,7 +80,7 @@ public class GameStateMachine extends StateMachine
 
 	private class TurnState extends GameState
 	{
-		public TurnState(GameController game, int player, final String name)
+		public TurnState(final GameController game, int player, final String name)
 		{
 			super(game, player, name);
 		}
@@ -106,7 +106,7 @@ public class GameStateMachine extends StateMachine
 
 	private class Player1Turn extends TurnState
 	{
-		public Player1Turn(GameController game)
+		public Player1Turn(final GameController game)
 		{
 			super(game, 0, "Player1Turn");
 		}
@@ -114,7 +114,7 @@ public class GameStateMachine extends StateMachine
 
 	private class Player2Turn extends TurnState
 	{
-		public Player2Turn(GameController game)
+		public Player2Turn(final GameController game)
 		{
 			super(game, 1, "Player2Turn");
 		}
@@ -122,7 +122,7 @@ public class GameStateMachine extends StateMachine
 
 	private class WinState extends GameState
 	{
-		public WinState(GameController game, int player, final String name)
+		public WinState(final GameController game, int player, final String name)
 		{
 			super(game, player, name);
 			this.keyAdapter = new KeyAdapter()
@@ -141,6 +141,7 @@ public class GameStateMachine extends StateMachine
 		
 		public void enter()
 		{
+			// TODO: move strings to resources
 			this.status = "" + this.getPlayer().getName() + " wins. Press Select or N";
 			super.enter();
 			App.gamer.stop();
@@ -149,7 +150,7 @@ public class GameStateMachine extends StateMachine
 
 	private class Player1Win extends WinState
 	{
-		public Player1Win(GameController game)
+		public Player1Win(final GameController game)
 		{
 			super(game, 0, "Player1Win");
 		}
@@ -157,7 +158,7 @@ public class GameStateMachine extends StateMachine
 
 	private class Player2Win extends WinState
 	{
-		public Player2Win(GameController game)
+		public Player2Win(final GameController game)
 		{
 			super(game, 1, "Player2Win");
 		}
@@ -165,7 +166,7 @@ public class GameStateMachine extends StateMachine
 
 	private class DrawState extends GameState
 	{
-		public DrawState(GameController game)
+		public DrawState(final GameController game)
 		{
 			super(game, 0, "DrawState");
 			this.status = "Drawn game. Press Select or N";

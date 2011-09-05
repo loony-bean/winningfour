@@ -10,12 +10,12 @@ import com.example.kindle.winningfour.skins.BoardLayout;
 
 public class SketchySkin extends BaseSkin
 {
-	public SketchySkin(Dimension boardSize)
+	public SketchySkin(final Dimension boardSize)
 	{
 		super(boardSize);
 	}
 
-	public BoardLayout getLayout(Dimension size)
+	public BoardLayout getLayout(final Dimension size)
 	{
 		BoardLayout result = new BoardLayout();
 
@@ -33,12 +33,12 @@ public class SketchySkin extends BaseSkin
 		return result;
 	}
 
-	public void paintBoard(Graphics g, Component parent)
+	public void paintBoard(final Graphics g, final Component parent)
 	{
 		super.paintBoard(g, parent);
 	}
 
-	public void paintBoardItem(Graphics g, Component parent, BoardItem item)
+	public void paintBoardItem(final Graphics g, final Component parent, final BoardItem item)
 	{
 		super.paintBoardItem(g, parent, item);
 	}

@@ -37,7 +37,7 @@ public interface IGame
 	 * 
 	 * @param turn Turn to make.
 	 */
-	public void makeTurn(ITurn turn);
+	public void makeTurn(final ITurn turn);
 
 	/**
 	 * Game destruction.

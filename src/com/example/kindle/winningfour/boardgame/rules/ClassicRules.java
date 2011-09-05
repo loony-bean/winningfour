@@ -1,4 +1,4 @@
-package com.example.kindle.winningfour.boardgame.rules.classic;
+package com.example.kindle.winningfour.boardgame.rules;
 
 import java.util.ArrayList;
 
@@ -15,17 +15,17 @@ import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.Board;
 import com.example.kindle.winningfour.boardgame.ComputerPlayer;
 
-public class Rules implements IRules
+public class ClassicRules implements IRules
 {
 	public static final int PLAYERS_MAX = 2;
 	public static final int WIDTH_MAX = 10;
 	public static final int HEIGHT_MAX = 7;
 
-	public Rules()
+	public ClassicRules()
 	{
 	}
 	
-	public void afterPlayerTurn(IBoard2D board)
+	public void afterPlayerTurn(final IBoard2D board)
 	{
 		int gameEvent = this.checkGameEvent(board);
 		
@@ -35,7 +35,7 @@ public class Rules implements IRules
 		}
 	}
 	
-	public int checkGameEvent(IBoard2D board)
+	public int checkGameEvent(final IBoard2D board)
 	{
 		int result = GameEvent.CONTINUE;
 		
@@ -73,13 +73,13 @@ public class Rules implements IRules
 		return result;
 	}
 
-	private int countInRow(IBoard2D board, IPlayer player, IPosition2D pos, int incx, int incy)
+	private int countInRow(final IBoard2D board, final IPlayer player, final IPosition2D pos, int incx, int incy)
 	{
 		return this.walk(board, player, pos,  incx,  incy) +
 			   this.walk(board, player, pos, -incx, -incy) - 1;
 	}
 
-	private int walk(IBoard2D board, IPlayer player, IPosition2D pos, int incx, int incy)
+	private int walk(final IBoard2D board, final IPlayer player, final IPosition2D pos, int incx, int incy)
 	{
 		int local = 0;
 		int count = 0;
@@ -110,7 +110,7 @@ public class Rules implements IRules
 		return count;
 	}
 
-	public void beforePlayerTurn(IBoard2D board)
+	public void beforePlayerTurn(final IBoard2D board)
 	{
 	}
 
@@ -118,7 +118,7 @@ public class Rules implements IRules
 	{
 	}
 
-	public boolean isTurnAvailable(IBoard2D board, ITurn turn)
+	public boolean isTurnAvailable(final IBoard2D board, final ITurn turn)
 	{
 		if (turn != null)
 		{
@@ -135,7 +135,7 @@ public class Rules implements IRules
 		return false;
 	}
 	
-	public ArrayList getAvailableTurns(IBoard2D board, IPlayer player)
+	public ArrayList getAvailableTurns(final IBoard2D board, final IPlayer player)
 	{
 		ArrayList result = new ArrayList();
 
@@ -178,7 +178,7 @@ public class Rules implements IRules
 		return result;
 	}
 
-	public int evaluate(IBoard2D board, int depth)
+	public int evaluate(final IBoard2D board, int depth)
 	{
 		int event = checkGameEvent(board);
 		int distance = ComputerPlayer.DEPTH - depth;
@@ -196,12 +196,12 @@ public class Rules implements IRules
 		return result - distance;
 	}
 
-	public boolean isEndGame(IBoard2D board)
+	public boolean isEndGame(final IBoard2D board)
 	{
 		return (this.checkGameEvent(board) != GameEvent.CONTINUE);
 	}
 
-	public void setEventListener(IGameEventListener gameEventListener)
+	public void setEventListener(final IGameEventListener gameEventListener)
 	{
 		this.gameEventListener = gameEventListener;
 	}

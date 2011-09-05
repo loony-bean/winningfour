@@ -10,7 +10,7 @@ import com.example.kindle.winningfour.skins.BoardLayout;
 
 public class ClassicSkin extends BaseSkin
 {
-	public ClassicSkin(Dimension boardSize)
+	public ClassicSkin(final Dimension boardSize)
 	{
 		super(boardSize);
 	}

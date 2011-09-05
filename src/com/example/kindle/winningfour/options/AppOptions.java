@@ -82,7 +82,7 @@ public class AppOptions
 	 */
 	private class OptionValues
 	{
-		public OptionValues(String[] values, int selected)
+		public OptionValues(final String[] values, int selected)
 		{
 			this.values = values;
 			this.selected = selected;
@@ -172,7 +172,7 @@ public class AppOptions
 	 * 
 	 * @return KTextOptionListMenu object.
 	 */
-	private KTextOptionListMenu createOptionListMenu(final String title, final String[] values, int sel, OptionUpdater updater)
+	private KTextOptionListMenu createOptionListMenu(final String title, final String[] values, int sel, final OptionUpdater updater)
 	{
 		KTextOptionListMenu item = new KTextOptionListMenu(title, values);
 		item.setSelectedIndex(sel);

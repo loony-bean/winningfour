@@ -39,7 +39,7 @@ public class Player implements IPlayer
 		return this.keyAdapter;
 	}
 
-	protected void onKeyboard(KeyEvent event)
+	protected void onKeyboard(final KeyEvent event)
 	{
 	}
 
@@ -47,7 +47,7 @@ public class Player implements IPlayer
 	{
 	}
 
-	public void think(IGameContext context)
+	public void think(final IGameContext context)
 	{
 	}
 

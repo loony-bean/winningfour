@@ -1,6 +1,6 @@
 package com.example.kindle.winningfour.boardgame;
 
-import java.util.WeakHashMap;
+import java.util.HashMap;
 
 import com.example.kindle.winningfour.App;
 
@@ -8,7 +8,7 @@ public class TranspositionTable
 {
 	public TranspositionTable()
 	{
-		this.data = new WeakHashMap();
+		this.data = new HashMap();
 	}
 	
 	public int lookup(int key, int depth, int alpha, int beta)
@@ -74,5 +74,5 @@ public class TranspositionTable
 		App.log("TranspositionTable::destroy done");
 	}
 	
-	private WeakHashMap data;
+	private HashMap data;
 }

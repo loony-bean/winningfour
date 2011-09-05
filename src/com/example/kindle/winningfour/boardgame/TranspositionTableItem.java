@@ -17,8 +17,8 @@ public class TranspositionTableItem
 		return true;
 	}
 
-	int depth;
-	int best;
-	int score;
-	int range;
+	public int depth;
+	public int best;
+	public int score;
+	public int range;
 }

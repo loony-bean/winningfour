@@ -19,7 +19,7 @@ public interface IRules
 	 * 
 	 * @param board Current board.
 	 */
-	public void beforePlayerTurn(IBoard2D board);
+	public void beforePlayerTurn(final IBoard2D board);
 
 	/**
 	 * Action that is played after each turn made on board.
@@ -28,7 +28,7 @@ public interface IRules
 	 * 
 	 * @param board Current board.
 	 */
-	public void afterPlayerTurn(IBoard2D board);
+	public void afterPlayerTurn(final IBoard2D board);
 
 	/**
 	 * Checks if current board arrangement is an end of the game.
@@ -37,7 +37,7 @@ public interface IRules
 	 * 
 	 * @return True if the game on the board has ended, false otherwise.
 	 */
-	public boolean isEndGame(IBoard2D board);
+	public boolean isEndGame(final IBoard2D board);
 	
 	/**
 	 * Returns an numerical evaluation of the arrangement on board given.
@@ -52,7 +52,7 @@ public interface IRules
 	 * from the current player point of view. Bigger numbers mean better
 	 * game condition.
 	 */
-	public int evaluate(IBoard2D board, int depth);
+	public int evaluate(final IBoard2D board, int depth);
 
 	/**
 	 * Returns ordered list of available turns for given player.
@@ -63,7 +63,7 @@ public interface IRules
 	 * @return List of available turns for player. Turns should be
 	 * ordered from best to worst using internal heuristics.
 	 */
-	public ArrayList getAvailableTurns(IBoard2D board, IPlayer player);
+	public ArrayList getAvailableTurns(final IBoard2D board, final IPlayer player);
 	
 	/**
 	 * Checks if the turn is available.
@@ -73,7 +73,7 @@ public interface IRules
 	 * 
 	 * @return True if the turn is available, false otherwise.
 	 */
-	public boolean isTurnAvailable(IBoard2D board, ITurn turn);
+	public boolean isTurnAvailable(final IBoard2D board, final ITurn turn);
 
 	/**
 	 * Sets game event listener. This listener will be notified
@@ -82,7 +82,7 @@ public interface IRules
 	 * 
 	 * @param gameEventListener Game event listener to set.
 	 */
-	public void setEventListener(IGameEventListener gameEventListener);
+	public void setEventListener(final IGameEventListener gameEventListener);
 
 	/**
 	 * Rules destruction.

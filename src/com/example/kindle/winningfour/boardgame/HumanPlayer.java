@@ -16,7 +16,7 @@ public class HumanPlayer extends Player
 		super(color, name);
 	}
 	
-	protected void onKeyboard(KeyEvent event)
+	protected void onKeyboard(final KeyEvent event)
 	{
 		int key = event.getKeyCode();
 		App.log("HumanPlayer::onKeyboard" + event);

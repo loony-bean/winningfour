@@ -71,7 +71,8 @@ public class Recorder
 		return (this.file != null && this.file.exists() && this.file.length() > 0);
 	}
 
-	public void record(ITurn turn)
+	// TODO: move to utils
+	public void record(final ITurn turn)
 	{
 		if (this.writer != null && this.enabled)
 		{

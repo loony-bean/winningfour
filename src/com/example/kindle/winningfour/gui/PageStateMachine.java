@@ -20,7 +20,7 @@ import com.example.kindle.winningfour.AppResources;
  */
 public class PageStateMachine extends StateMachine
 {
-	public PageStateMachine(KindletContext context)
+	public PageStateMachine(final KindletContext context)
 	{
 		super();
 		
@@ -34,7 +34,7 @@ public class PageStateMachine extends StateMachine
 		MenuPage menuPage = new MenuPage(context, panel, "Menu");
 		OptionsPage optionsPage = new OptionsPage(context, panel, "Options");
 		InstructionsPage instructionsPage = new InstructionsPage(context, panel, "Instructions");
-		ConfirmExitState confirmExitState = new ConfirmExitState(context, panel, "ConfirmExit");
+		ConfirmExitState confirmExitState = new ConfirmExitState("ConfirmExit");
     	this.addState(menuPage);
     	this.addState(gamePage);
     	this.addState(optionsPage);
@@ -53,7 +53,7 @@ public class PageStateMachine extends StateMachine
 
 	private class ResetGame extends State
 	{
-		public ResetGame(String name)
+		public ResetGame(final String name)
 		{
 			super(name);
 		}

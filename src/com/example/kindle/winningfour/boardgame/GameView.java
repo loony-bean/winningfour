@@ -83,7 +83,7 @@ public class GameView extends Container
 		this.paintItems(this.items, g);
 	}
 	
-	public void paintItems(ArrayList items, Graphics g)
+	public void paintItems(final ArrayList items, Graphics g)
 	{
 		Iterator iter = items.iterator();
 		while(iter.hasNext())
@@ -92,7 +92,7 @@ public class GameView extends Container
 		}
 	}
 
-	public void setItems(ArrayList items)
+	public void setItems(final ArrayList items)
 	{
 		this.items = items;
 		this.repaint();
@@ -113,7 +113,7 @@ public class GameView extends Container
 		this.gameSelector.repaint();
 	}
 
-	public void setStatusText(String text)
+	public void setStatusText(final String text)
 	{
 		this.statusLabel.setText(text);
 	}

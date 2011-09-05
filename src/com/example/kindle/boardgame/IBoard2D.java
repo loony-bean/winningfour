@@ -13,7 +13,7 @@ public interface IBoard2D
 	 * 
 	 * @param turn Turn to make.
 	 */
-	public void turn(ITurn turn);
+	public void turn(final ITurn turn);
 
 	/**
 	 * Undoes last move.
@@ -57,7 +57,7 @@ public interface IBoard2D
 	 * 
 	 * @return True is the position is situated on the board, false otherwise.
 	 */
-	public boolean isPositionOnBoard(IPosition2D position);
+	public boolean isPositionOnBoard(final IPosition2D position);
 
 	/**
 	 * Sets a piece into position given.
@@ -65,7 +65,7 @@ public interface IBoard2D
 	 * @param piece Piece to set.
 	 * @param position Position for the piece.
 	 */
-	public void setPiece(IPiece piece, IPosition2D position);
+	public void setPiece(final IPiece piece, final IPosition2D position);
 	
 	/**
 	 * Returns a piece present on the position given.
@@ -74,7 +74,7 @@ public interface IBoard2D
 	 * 
 	 * @return Piece found on the position. This can be null.
 	 */
-	public IPiece getPiece(IPosition2D position);
+	public IPiece getPiece(final IPosition2D position);
 	
 	/**
 	 * Returns an unordered list of board items, each presenting

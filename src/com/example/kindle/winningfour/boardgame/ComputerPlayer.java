@@ -57,7 +57,7 @@ public class ComputerPlayer extends Player
 		App.log("ComputerPlayer::create done");
 	}
 	
-	public void think(IGameContext context)
+	public void think(final IGameContext context)
 	{
 		App.log("ComputerPlayer::think");
 
@@ -167,7 +167,7 @@ public class ComputerPlayer extends Player
 		return (pid == 0) ? 1 : 0;
 	}
 
-	private int negascout(IBoard2D board, int depth, int alpha, int beta, int pid)
+	private int negascout(final IBoard2D board, int depth, int alpha, int beta, int pid)
 	{
 		int score = -MAXVAL;
 		int range = TranspositionTableItem.FailLow;
@@ -242,7 +242,7 @@ public class ComputerPlayer extends Player
 		App.log("ComputerPlayer::done");
 	}
 
-	protected void onKeyboard(KeyEvent event)
+	protected void onKeyboard(final KeyEvent event)
 	{
 		App.log("ComputerPlayer::onKeyboard" + event);
 	}

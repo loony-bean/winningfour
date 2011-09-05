@@ -61,9 +61,9 @@ public class PageState extends State
 		App.log("PageState::destroy done");
 	}
 
-	boolean active;
-	KPanel panel;
-	ImagePanel parent;
-	KindletContext context;
-	Component focusOwner;
+	protected boolean active;
+	protected KPanel panel;
+	protected ImagePanel parent;
+	protected KindletContext context;
+	protected Component focusOwner;
 }

@@ -11,12 +11,12 @@ import com.example.kindle.winningfour.skins.BoardLayout;
 
 public class WoodSkin extends BaseSkin
 {
-	public WoodSkin(Dimension boardSize)
+	public WoodSkin(final Dimension boardSize)
 	{
 		super(boardSize);
 	}
 
-	public BoardLayout getLayout(Dimension size)
+	public BoardLayout getLayout(final Dimension size)
 	{
 		BoardLayout result = new BoardLayout();
 
@@ -34,7 +34,7 @@ public class WoodSkin extends BaseSkin
 		return result;
 	}
 
-	public void paintBoard(Graphics g, Component parent)
+	public void paintBoard(final Graphics g, final Component parent)
 	{
 		Dimension size = parent.getSize();
 		BoardLayout l = this.getLayout(size);

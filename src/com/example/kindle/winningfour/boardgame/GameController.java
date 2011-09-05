@@ -16,13 +16,13 @@ import com.example.kindle.boardgame.IRules;
 import com.example.kindle.boardgame.ITurn;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.winningfour.App;
-import com.example.kindle.winningfour.boardgame.rules.classic.Rules;
+import com.example.kindle.winningfour.boardgame.rules.ClassicRules;
 import com.example.kindle.winningfour.options.AppOptions;
 import com.example.kindle.winningfour.options.OptionsFactory;
 
 public class GameController implements IGame
 {
-	public GameController(GameView gameView)
+	public GameController(final GameView gameView)
 	{
 		App.log("GameController::create");
 		
@@ -48,7 +48,7 @@ public class GameController implements IGame
 		this.board = new Board(opfact.createBoardSize());
 		this.players = opfact.createPlayers();
 
-		this.rules = new Rules();
+		this.rules = new ClassicRules();
 		this.rules.setEventListener(new IGameEventListener()
 		{
 			public void onGameEvent(int event)
@@ -173,7 +173,7 @@ public class GameController implements IGame
 		App.log("GameController::restore done");
 	}
 
-	public void makeTurn(ITurn turn)
+	public void makeTurn(final ITurn turn)
 	{
 		App.log("GameController::makeTurn");
 
@@ -191,7 +191,7 @@ public class GameController implements IGame
 		App.log("GameController::makeTurn done");
 	}
 	
-	public void pulse(SignalEvent signal)
+	public void pulse(final SignalEvent signal)
 	{
 		this.stateMachine.pushEvent(signal);
 	}
@@ -233,7 +233,7 @@ public class GameController implements IGame
 		return this.gameView;
 	}
 
-	public void setStatusText(String status)
+	public void setStatusText(final String status)
 	{
 		this.gameView.setStatusText(status);
 	}
@@ -277,7 +277,7 @@ public class GameController implements IGame
 		return this.stopped;
 	}
 	
-	public void addStateListener(IGameStateListener listener)
+	public void addStateListener(final IGameStateListener listener)
 	{
 		App.log("GameController::addStateListener");
 

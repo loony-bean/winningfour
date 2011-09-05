@@ -111,8 +111,8 @@ public class OptionsPage extends State
 		App.log("OptionsPage::destroy done");
 	}
 
-	KindletContext context;
-	boolean active;
-	Component focused;
-	FocusListener focusListener;
+	private KindletContext context;
+	private boolean active;
+	private Component focused;
+	private FocusListener focusListener;
 }
