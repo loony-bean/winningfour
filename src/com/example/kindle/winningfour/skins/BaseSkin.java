@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 import com.example.kindle.boardgame.IPiece;
+import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.winningfour.AppResources;
 import com.example.kindle.winningfour.boardgame.BoardItem;
 
@@ -31,11 +32,16 @@ public class BaseSkin implements ISkin
 	public void paintBoardItem(final Graphics g, final Component parent, final BoardItem item)
 	{
 		BoardLayout l = this.getLayout(parent.getSize());
-	
-		int x = l.boardLeftTopX + item.getPosition().row()*(l.pieceSizeX+l.pieceGapX);
-		int y = l.boardLeftTopY + item.getPosition().col()*(l.pieceSizeY+l.pieceGapX);
-	
-		this.paintPiece(g, parent, item.getPiece(), new Rectangle(x, y, l.pieceSizeX, l.pieceSizeY));
+
+		IPiece piece = item.getPiece();
+		if (piece != null)
+		{
+			Color color = piece.getPlayer().getColor();
+			String id = (color == Color.black) ? "black.png" : "white.png";
+			IPosition2D pos = item.getPosition();
+
+			this.paintImageToGrid(g, parent, id, l, pos.row(), pos.col());
+		}
 	}
 
 	public String getName()
@@ -60,20 +66,24 @@ public class BaseSkin implements ISkin
 		g.drawImage(image, rect.x, rect.y, null);
 	}
 
+	protected void paintImageToGrid(final Graphics g, final Component parent, String id,
+			final BoardLayout l, int row, int col)
+	{
+		int x = (int) (l.boardLeftTopX + row*(l.pieceSizeX+l.pieceGapX));
+		int y = (int) (l.boardLeftTopY + col*(l.pieceSizeY+l.pieceGapY));
+		
+		this.paintImage(g, parent, id, new Rectangle(x, y, l.pieceSizeX, l.pieceSizeY));
+	}
+
 	public void paintHoles(final Graphics g, final Component parent)
 	{
 		BoardLayout l = this.getLayout(parent.getSize());
 	
-		for (int i = 0; i < this.boardSize.width; i++)
+		for (int row = 0; row < this.boardSize.width; row++)
 		{
-			for (int j = 0; j < this.boardSize.height; j++)
+			for (int col = 0; col < this.boardSize.height; col++)
 			{
-				int s = l.pieceSizeX;
-				int gap = l.pieceGapX;
-				int x = (int) (l.boardLeftTopX + i*(s+gap));
-				int y = (int) (l.boardLeftTopY + j*(s+gap));
-				
-				this.paintImage(g, parent, "hole.png", new Rectangle(x, y, s, s));
+				this.paintImageToGrid(g, parent, "hole.png", l, row, col);
 			}
 		}
 	}

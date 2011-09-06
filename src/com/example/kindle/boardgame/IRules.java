@@ -84,6 +84,10 @@ public interface IRules
 	 */
 	public void setEventListener(final IGameEventListener gameEventListener);
 
+	public int getMaxPlayers();
+	public int getMaxWidth();
+	public int getMaxHeight();
+	
 	/**
 	 * Rules destruction.
 	 */

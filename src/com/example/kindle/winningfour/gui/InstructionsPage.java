@@ -25,7 +25,7 @@ public class InstructionsPage extends PageState
 	{
 		super(context, parent, name);
 		this.panel = new KPanel();
-		this.panel.setPreferredSize(new Dimension(App.clientSize.width, App.clientSize.height));
+		this.panel.setPreferredSize((Dimension) App.screenSize.clone());
 		this.panel.setBackground(new Color(0x000000FF, true));
 		this.panel.setLayout(new FlowLayout());
 

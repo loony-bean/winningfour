@@ -17,9 +17,9 @@ import com.example.kindle.winningfour.boardgame.ComputerPlayer;
 
 public class ClassicRules implements IRules
 {
-	public static final int PLAYERS_MAX = 2;
-	public static final int WIDTH_MAX = 10;
-	public static final int HEIGHT_MAX = 7;
+	public static final int MAX_PLAYERS = 2;
+	public static final int MAX_WIDTH = 10;
+	public static final int MAX_HEIGHT = 7;
 
 	public ClassicRules()
 	{
@@ -46,10 +46,11 @@ public class ClassicRules implements IRules
 
 		int max = 0;
 		int counts[] = new int[4];
-		counts[0] = this.countInRow(board, p, pos, 1, 0);
-		counts[1] = this.countInRow(board, p, pos, 0, 1);
-		counts[2] = this.countInRow(board, p, pos, 1, 1);
-		counts[3] = this.countInRow(board, p, pos, 1, -1);
+		int incs[][] = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
+		for (int c = 0; c < incs.length; c++)
+		{
+			counts[c] = this.countInRow(board, p, pos, incs[c][0], incs[c][1]);
+		}
 
 		for(int i = 0; i < counts.length; i++)
 		{
@@ -204,6 +205,21 @@ public class ClassicRules implements IRules
 	public void setEventListener(final IGameEventListener gameEventListener)
 	{
 		this.gameEventListener = gameEventListener;
+	}
+
+	public int getMaxPlayers()
+	{
+		return MAX_PLAYERS;
+	}
+
+	public int getMaxWidth()
+	{
+		return MAX_WIDTH;
+	}
+
+	public int getMaxHeight()
+	{
+		return MAX_HEIGHT;
 	}
 
 	public void destroy()

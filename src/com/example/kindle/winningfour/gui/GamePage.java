@@ -24,15 +24,15 @@ public class GamePage extends PageState
 		GameView gameView = App.gamer.getView();
 
 		this.panel = new ImagePanel("board.png");
-		this.panel.setPreferredSize(new Dimension(App.screenSize.width, App.screenSize.height));
+		this.panel.setPreferredSize((Dimension) App.screenSize.clone());
 		KPanel p = new KPanel();
 
 		p.setBackground(new Color(0x000000FF, true));
 		p.setLayout(new BorderLayout());
 		gameView.setBackground(new Color(0x000000FF, true));
 		p.add(gameView, BorderLayout.CENTER);
-		p.setPreferredSize(new Dimension(App.screenSize.width, App.screenSize.height));
-		gameView.setPreferredSize(new Dimension(App.screenSize.width, App.screenSize.height));
+		p.setPreferredSize((Dimension) App.screenSize.clone());
+		gameView.setPreferredSize((Dimension) App.screenSize.clone());
 		this.focusOwner = gameView;
 
 		((ImagePanel) this.panel).setInner(p);
