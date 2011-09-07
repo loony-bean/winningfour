@@ -5,28 +5,48 @@ import com.amazon.kindle.kindlet.util.TimerTask;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.options.OptionsFactory;
 
-
+/**
+ * Game clock for timeout and periodical game events.
+ */
 public class GameClock
 {
 	public final static int RESOLUTION = 1000;
 	public final static int TICK       = 1000;
 
+	/**
+	 * Default constructor.
+	 */
 	public GameClock()
 	{
 		this.enabled = false;
 	}
 
+	/**
+	 * Enables timed actions. It is important to know that timer thread
+	 * is not stopped if the clock has been stopped, but no actions
+	 * are executed.
+	 */
 	public void start()
 	{
 		this.enabled = true;
 		this.startTime = System.currentTimeMillis();
 	}
 
+	/**
+	 * Disables timed actions.
+	 */
 	public void stop()
 	{
 		this.enabled = false;
 	}
 
+	/**
+	 * Resets the clock. Previous timer will be canceled and destroyed
+	 * and the new timer will be constructed according to game options.
+	 * Timer is not started automatically after reset.
+	 * 
+	 * @param task Game task to be executed periodically.
+	 */
 	public void reset(final Runnable task)
 	{
 		this.task = task;
@@ -70,31 +90,65 @@ public class GameClock
 		}
 	}
 
+	/**
+	 * Returns time delta between timer start time and current time.
+	 * 
+	 * @return Amount of milliseconds from the clock start.
+	 */
 	public long getDelta()
 	{
 		return System.currentTimeMillis() - this.startTime;
 	}
 
+	/**
+	 * Returns clock progress according to TICK and RESOLUTION parameters.
+	 * Generally increment is an amount of ticks that should take place
+	 * every TICK amount of milliseconds in order to reach the RESOLUTION
+	 * value on clock timeout. 
+	 * 
+	 * @return Clock increment value in ticks.
+	 */
 	public int getIncrement()
 	{
 		return this.increment;
 	}
 
+	/**
+	 * Returns clock timeout value. Usually in board games the amount 
+	 * of time to make a turn is limited and the player that was not
+	 * able to make a turn in time looses the game.
+	 * 
+	 * @return Clock timeout value in seconds. 
+	 */
 	public int getTimeout()
 	{
 		return this.timeout;
 	}
 
+	/**
+	 * Clock destruction.
+	 */
 	public void destroy()
 	{
 		this.timer = null;
 		this.task = null;
 	}
 
+	/** Application timer. */
 	private Timer timer;
+
+	/** Game periodical task. */
 	private Runnable task;
+	
+	/** Indicates if the timer is started. */
 	private boolean enabled;
+
+	/** Stores timer start time. */
 	private long startTime;
+
+	/** Stores timer increment in ticks. */
 	private int increment;
+
+	/** Stores timer timeout value in seconds. */
 	private int timeout;
 }

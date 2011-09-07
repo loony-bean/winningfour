@@ -204,7 +204,7 @@ public class App extends AbstractKindlet
 		synchronized (this)
 		{
 			App.opts.save();
-			App.log("App::stop syncrhonized");
+			App.log("App::stop synchronized");
 			// TODO: check is we need to cancel game timer
 		}
 		
@@ -249,6 +249,13 @@ public class App extends AbstractKindlet
 		});
 	}
 	
+	/**
+	 * Returns new Timer instance. Only one timer is present at any time.
+	 * After the first call any subsequent invocations cancel and then
+	 * destroy current timer and create a new one.
+	 * 
+	 * @return Freshly created timer.
+	 */
 	public static Timer getTimer()
 	{
 		if (App.timer != null)
@@ -300,17 +307,13 @@ public class App extends AbstractKindlet
     /** Application logger. */
     private static Logger logger = Logger.getLogger("App");
 	
-    /**
-     * Global keys dispatcher. Used for VK_BACK handling.
-     */
+    /** Global keys dispatcher. Used for VK_BACK handling. */
 	private KeyEventDispatcher keyEventDispatcher;
 
     /** Game clock timer. */
 	private static Timer timer;
 	
-    /**
-     * Puts log message into logging stream.
-     */
+    /** Puts log message into logging stream. */
 	public static void log(String msg)
 	{
 		double timestamp = (System.currentTimeMillis() - App.startTime)/1000.0;
