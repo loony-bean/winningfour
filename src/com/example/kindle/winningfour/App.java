@@ -12,6 +12,7 @@ import com.amazon.kindle.kindlet.AbstractKindlet;
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.event.KindleKeyCodes;
 import com.amazon.kindle.kindlet.ui.KindleOrientation;
+import com.amazon.kindle.kindlet.util.Timer;
 import com.example.kindle.sm.KeyboardEvent;
 import com.example.kindle.utils.DialogHelper;
 import com.example.kindle.winningfour.boardgame.Board;
@@ -74,9 +75,12 @@ public class App extends AbstractKindlet
         this.gameView = null;
 
         Board.clearHash();
-        
+
+		App.timer.cancel();
+		App.timer = null;
+
 		System.gc();
-		
+
 		App.log("App::destroy done.\n\nOver and out!");
 	}
 
@@ -200,8 +204,8 @@ public class App extends AbstractKindlet
 		synchronized (this)
 		{
 			App.opts.save();
-	    	App.log("App::stop syncrhonized");
-			/* TODO: ... tear down timers if you have any... */
+			App.log("App::stop syncrhonized");
+			// TODO: check is we need to cancel game timer
 		}
 		
 		App.log("App::stop done");
@@ -243,6 +247,18 @@ public class App extends AbstractKindlet
 				App.pager.home();
 			}
 		});
+	}
+	
+	public static Timer getTimer()
+	{
+		if (App.timer != null)
+		{
+			App.timer.cancel();
+		}
+		
+		App.timer = new Timer();
+
+		return App.timer;
 	}
 
     /** Indicates if the application has been stopped. */
@@ -288,6 +304,9 @@ public class App extends AbstractKindlet
      * Global keys dispatcher. Used for VK_BACK handling.
      */
 	private KeyEventDispatcher keyEventDispatcher;
+
+    /** Game clock timer. */
+	private static Timer timer;
 	
     /**
      * Puts log message into logging stream.

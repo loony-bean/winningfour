@@ -17,6 +17,7 @@ import com.example.kindle.boardgame.IRules;
 import com.example.kindle.boardgame.ITurn;
 import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.sm.SignalEvent;
+import com.example.kindle.utils.GameClock;
 import com.example.kindle.utils.Recorder;
 import com.example.kindle.utils.StringHelper;
 import com.example.kindle.winningfour.App;
@@ -29,12 +30,13 @@ public class GameController implements IGame
 	public GameController(final GameView gameView)
 	{
 		App.log("GameController::create");
-		
+
 		this.gameView = gameView;
 		this.stateMachine = new GameStateMachine(this, this.gameView);
 		this.recorder = new Recorder(AppOptions.FILE_NAME_GAMELOG);
 		this.listeners = new ArrayList();
-
+		this.clock = new GameClock();
+		
 		App.log("GameController::create done");
 	}
 
@@ -76,6 +78,24 @@ public class GameController implements IGame
 
 		this.gameView.setItems(this.board.getItems());
 		this.gameView.reset();
+
+		Runnable clockTask = new Runnable()
+		{
+			public void run()
+			{
+				int percents = GameController.this.gameView.getProgressPercents();
+				int increment = GameController.this.clock.getIncrement();
+				GameController.this.gameView.setProgressTicks(percents + increment);
+
+				long timeout = GameController.this.clock.getTimeout();
+				if (GameController.this.clock.getDelta() > timeout * GameClock.RESOLUTION)
+				{
+					App.gamer.pulse(new SignalEvent(GameStateMachine.TIMEOUT));
+				}
+			}
+		};
+
+		this.clock.reset(clockTask);
 
 		this.repaint();
 
@@ -282,12 +302,12 @@ public class GameController implements IGame
 			}
 		}
 	}
-	
+
 	public boolean isStopped()
 	{
 		return this.stopped;
 	}
-	
+
 	public void addStateListener(final IGameStateListener listener)
 	{
 		App.log("GameController::addStateListener");
@@ -297,12 +317,24 @@ public class GameController implements IGame
 		App.log("GameController::addStateListener done");
 	}
 
+	public void startTimer()
+	{
+		this.gameView.setProgressTicks(0);
+		this.clock.start();
+	}
+
+	public void stopTimer()
+	{
+		this.clock.stop();
+		this.gameView.setProgressTicks(GameClock.RESOLUTION);
+	}
+
 	public void destroy()
 	{
 		App.log("GameController::destroy");
 
 		this.gameView = null;
-		
+
 		this.stateMachine.destroy();
 		this.stateMachine = null;
 
@@ -325,6 +357,9 @@ public class GameController implements IGame
 		this.listeners.clear();
 		this.listeners = null;
 
+		this.clock.destroy();
+		this.clock = null;
+		
 		App.log("GameController::destroy done");
 	}
 
@@ -339,4 +374,5 @@ public class GameController implements IGame
 	private IPlayer[] players;
 	private Recorder recorder;
 	private ArrayList listeners;
+	private GameClock clock;
 }

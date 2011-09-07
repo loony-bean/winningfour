@@ -43,12 +43,14 @@ public class GamePage extends PageState
 		super.enter();
 		((ImagePanel) this.panel).enter();
 		App.gamer.start();
+		App.gamer.startTimer();
 	}
 
 	public void leave()
 	{
 		super.leave();
 		this.parent.repaint();
+		App.gamer.stopTimer();
 	}
 	
     public void destroy()

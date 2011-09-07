@@ -6,7 +6,10 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.kwt.ui.KWTProgressBar;
+
 import com.amazon.kindle.kindlet.ui.KLabel;
+import com.example.kindle.utils.GameClock;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
 import com.example.kindle.winningfour.boardgame.BoardItem;
@@ -23,10 +26,13 @@ public class GameView extends Container
 		this.gameSelector = new GameImage(null);
 		this.statusLabel = new KLabel("", KLabel.CENTER);
 		this.statusLabel.setFont(AppResources.getFont(AppResources.ID_FONT_GAME_STATUS));
+        this.progressBar = new KWTProgressBar(GameClock.RESOLUTION);
+        this.progressBar.setLabelStyle(KWTProgressBar.STYLE_NONE);
 
 		// Add items in z-order: top items first, to bottom items last
 		this.add(this.gameSelector);
 		this.add(this.statusLabel);
+		this.add(this.progressBar);
 
 		this.gameSelector.setFocusable(false);
 
@@ -61,6 +67,10 @@ public class GameView extends Container
 
 		Dimension sz = this.statusLabel.getPreferredSize();
 		this.statusLabel.setBounds(0, sz.height, size.width, sz.height);
+
+        this.progressBar.setWidth(size.width);
+        Dimension pz = this.progressBar.getPreferredSize();
+		this.progressBar.setBounds(10, size.height - pz.height, size.width - 20, pz.height);
 
 		App.log("GameView::doLayout done");
 	}
@@ -117,6 +127,17 @@ public class GameView extends Container
 	{
 		this.statusLabel.setText(text);
 	}
+	
+	public void setProgressTicks(int percents)
+	{
+		this.progressBar.setCurrentTick(percents);
+		this.progressBar.repaint();
+	}
+
+	public int getProgressPercents()
+	{
+		return this.progressBar.getCurrentTick();
+	}
 
 	public void destroy()
 	{
@@ -143,6 +164,7 @@ public class GameView extends Container
 	private Dimension layoutSize;
 	private ArrayList items;
 	private int selectedRow;
+	private KWTProgressBar progressBar;
 
 	private BoardLayout layout;
 }

@@ -15,6 +15,7 @@ public class GameStateMachine extends StateMachine
 	public static final String TURN = "turn";
 	public static final String WIN = "win";
 	public static final String DRAW = "draw";
+	public static final String TIMEOUT = "timeout";
 
 	public GameStateMachine(final GameController game, final GameView gameView)
 	{
@@ -38,11 +39,11 @@ public class GameStateMachine extends StateMachine
     	player1Turn.onSignal(WIN, player1Win);
     	player1Turn.onSignal(DRAW, drawState);
     	player1Turn.onSignal(TURN, player2Turn);
-    	//player1Turn.onTimeout(player2Win);
+    	player1Turn.onSignal(TIMEOUT, player2Win);
     	player2Turn.onSignal(WIN, player2Win);
     	player2Turn.onSignal(DRAW, drawState);
     	player2Turn.onSignal(TURN, player1Turn);
-    	//player2Turn.onTimeout(player1Win);
+    	player2Turn.onSignal(TIMEOUT, player1Win);
     	drawState.onSignal(NEW, newGame);
     	player1Win.onSignal(NEW, newGame);
     	player2Win.onSignal(NEW, newGame);
@@ -95,12 +96,14 @@ public class GameStateMachine extends StateMachine
 			if (!App.gamer.isRestoring())
 			{
 				this.getPlayer().think(App.gamer.getContext());
+				App.gamer.startTimer();
 			}
 		}
 
 		public void leave()
 		{
 			super.leave();
+			App.gamer.stopTimer();
 		}
 	}
 

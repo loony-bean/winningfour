@@ -130,4 +130,33 @@ public class OptionsFactory
 
 		return result;
 	}
+	
+	/**
+	 * Returns current game timer timeout as set in options.
+	 * 
+	 * @return Timeout value for the game clock.
+	 */
+	public int createGameClockTimeout()
+	{
+		int timeout = 0;
+		
+		String key = (String) App.opts.get(AppOptions.OP_T_TIMER);
+		if (key.equals(AppOptions.OP_V_OFF))
+		{
+		}
+		else if (key.equals(AppOptions.OP_V_10SEC))
+		{
+			timeout = 10;
+		}
+		else if (key.equals(AppOptions.OP_V_15SEC))
+		{
+			timeout = 15;
+		}
+		else if (key.equals(AppOptions.OP_V_30SEC))
+		{
+			timeout = 30;
+		}
+		
+		return timeout;
+	}
 }

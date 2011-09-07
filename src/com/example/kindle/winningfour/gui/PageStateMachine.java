@@ -23,7 +23,7 @@ public class PageStateMachine extends StateMachine
 	public PageStateMachine(final KindletContext context)
 	{
 		super();
-		
+
 		Container root = context.getRootContainer();
 		this.panel = new ImagePanel("background.gif");
 		panel.setPreferredSize(root.getPreferredSize());

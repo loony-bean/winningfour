@@ -10,7 +10,7 @@ public class TranspositionTable
 	{
 		this.data = new HashMap();
 	}
-	
+
 	public int lookup(int key, int depth, int alpha, int beta)
 	{
 		int result = TranspositionTableItem.Unknown;
