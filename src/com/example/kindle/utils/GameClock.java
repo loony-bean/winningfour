@@ -3,7 +3,6 @@ package com.example.kindle.utils;
 import com.amazon.kindle.kindlet.util.Timer;
 import com.amazon.kindle.kindlet.util.TimerTask;
 import com.example.kindle.winningfour.App;
-import com.example.kindle.winningfour.options.OptionsFactory;
 
 /**
  * Game clock for timeout and periodical game events.
@@ -42,12 +41,13 @@ public class GameClock
 
 	/**
 	 * Resets the clock. Previous timer will be canceled and destroyed
-	 * and the new timer will be constructed according to game options.
-	 * Timer is not started automatically after reset.
+	 * and the new timer will be constructed according to timeout and
+	 * TICK value. Timer is not started automatically after reset.
 	 * 
 	 * @param task Game task to be executed periodically.
+	 * @param timeout Task timeout, usually used as a turn limit.
 	 */
-	public void reset(final Runnable task)
+	public void reset(final Runnable task, int timeout)
 	{
 		this.task = task;
 
@@ -72,7 +72,7 @@ public class GameClock
 		};
 
 		this.timer = App.getTimer();
-		this.timeout = (new OptionsFactory()).createGameClockTimeout();
+		this.timeout = timeout;
 
 		if (this.timeout != 0)
 		{

@@ -95,7 +95,7 @@ public class GameController implements IGame
 			}
 		};
 
-		this.clock.reset(clockTask);
+		this.clock.reset(clockTask, (new OptionsFactory()).createGameClockTimeout());
 
 		this.repaint();
 
