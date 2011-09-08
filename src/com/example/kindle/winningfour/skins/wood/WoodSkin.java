@@ -52,8 +52,10 @@ public class WoodSkin extends BaseSkin
 
 		double hfactor = size.height / BaseSkin.DESIGN_HEIGHT;
 
-		int y = (int) (this.boardRect.height * hfactor - this.boardSize.height * l.pieceSizeY);
-		y += item.getPosition().col()*(l.pieceSizeY + l.pieceGapY - overlap) + oy;
+		int col = (int) (this.boardSize.getHeight() - item.getPosition().col() - 1);
+		int y = (int) ((this.boardRect.y + this.boardRect.height) * hfactor) - l.pieceSizeY/4;
+		y -= col * (l.pieceSizeY + l.pieceGapY - overlap) + oy;
+
 		int x = l.boardRect.x + item.getPosition().row()*(l.pieceSizeX + l.pieceGapX);
 
 		this.paintPiece(g, parent, item.getPiece(), new Rectangle(x, y, l.pieceSizeX, l.pieceSizeY));
