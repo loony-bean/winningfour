@@ -35,7 +35,7 @@ public class InstructionsPage extends PageState
 
         KTextArea textArea = new KTextArea();
         
-        String[] text = FileHelper.read("instructions.txt");
+        String[] text = FileHelper.read(System.getProperty("kindlet.home") + "/" + "instructions.txt");
         for (int i = 0; i < text.length; i++)
         {
         	textArea.append(text[i] + "\n");

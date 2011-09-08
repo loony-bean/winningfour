@@ -213,7 +213,7 @@ public class AppOptions
 
 		try
 		{
-			String[] text = FileHelper.read(FILE_NAME_OPTIONS);
+			String[] text = FileHelper.read(System.getProperty("kindlet.home") + "/" + FILE_NAME_OPTIONS);
 			if (text.length != 0)
 			{
 				this.currentOptions = (JSONObject) parser.parse(text[0]);
@@ -233,7 +233,8 @@ public class AppOptions
 	 */
 	public void save()
 	{
-		FileHelper.write(FILE_NAME_OPTIONS, this.currentOptions.toString(), false);
+		// TODO: refactor home filenames
+		FileHelper.write(System.getProperty("kindlet.home") + "/" + FILE_NAME_OPTIONS, this.currentOptions.toString(), false);
 	}
 
 	/**

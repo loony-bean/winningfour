@@ -5,7 +5,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.example.kindle.winningfour.App;
 
@@ -26,8 +32,8 @@ public class FileHelper
 		FileWriter writer = null;
 		try
 		{
-			File optfile = new File(System.getProperty("kindlet.home"), filename);
-			writer = new FileWriter(optfile, append);
+			File file = new File(filename);
+			writer = new FileWriter(file, append);
 			writer.write(text);
 		}
 		catch (IOException e)
@@ -63,7 +69,7 @@ public class FileHelper
 		BufferedReader reader = null;
 		try
 		{
-			File file = new File(System.getProperty("kindlet.home"), filename);
+			File file = new File(filename);
 			reader = new BufferedReader(new FileReader(file));
 
 			String next = null;
@@ -92,5 +98,48 @@ public class FileHelper
 		}
 		
 		return (String[]) list.toArray(new String[list.size()]);
+	}
+	
+	/**
+	 * Reads JSON object from file.
+	 * 
+	 * @return Constructed JSON object.
+	 */
+	public static JSONObject json(final InputStream inputStream)
+	{
+		// TODO: refactor me
+		JSONObject result = new JSONObject();
+		JSONParser parser = new JSONParser();
+		BufferedReader reader = null;
+
+		try
+		{
+			reader = new BufferedReader(new InputStreamReader(inputStream) );
+			result = (JSONObject) parser.parse(reader.readLine());
+		}
+		catch (IOException e)
+		{
+			App.log("FileHelper::json IO exception");
+		}
+		catch (ParseException e)
+		{
+			App.log("FileHelper::json parse exception");
+		}
+		finally
+		{
+			if (reader != null)
+			{ 
+				try
+				{
+					reader.close();
+				}
+				catch (IOException e)
+				{
+					App.log("FileHelper::json close exception");
+				} 
+			} 
+		}
+		
+		return result;
 	}
 }

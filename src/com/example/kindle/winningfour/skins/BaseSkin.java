@@ -7,8 +7,11 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 
+import org.json.simple.JSONObject;
+
 import com.example.kindle.boardgame.IPiece;
 import com.example.kindle.boardgame.IPosition2D;
+import com.example.kindle.utils.FileHelper;
 import com.example.kindle.winningfour.AppResources;
 import com.example.kindle.winningfour.boardgame.BoardItem;
 
@@ -17,22 +20,37 @@ public class BaseSkin implements ISkin
 	public static final double DESIGN_WIDTH  = 600.0;
 	public static final double DESIGN_HEIGHT = 760.0;
 
-	public BaseSkin(Dimension boardSize)
+	public BaseSkin(final String name, Dimension boardSize)
 	{
 		this.boardSize = boardSize;
+		this.boardLayout = FileHelper.json(this.getClass().getResourceAsStream("layout.json"));
+		this.name = name;
 	}
 
 	public BoardLayout getLayout(final Dimension size)
 	{
 		return null;
 	}
-	
-	protected BoardLayout createLayout(final Dimension size, final Rectangle rect, int sely, int gapx)
+
+	protected int asInt(final JSONObject json, final String key)
+	{
+		return Integer.parseInt((String) this.boardLayout.get(key));
+	}
+
+	protected BoardLayout createLayout(final Dimension size)
 	{
 		BoardLayout result = new BoardLayout();
 
 		double wfactor = size.width / BaseSkin.DESIGN_WIDTH;
 		double hfactor = size.height / BaseSkin.DESIGN_HEIGHT;
+		
+		Rectangle rect = new Rectangle();
+		rect.x = this.asInt(this.boardLayout, "x");
+		rect.y = this.asInt(this.boardLayout, "y");
+		rect.width = this.asInt(this.boardLayout, "width");
+		rect.height = this.asInt(this.boardLayout, "height");
+		int sely = this.asInt(this.boardLayout, "sely");
+		int gapx = this.asInt(this.boardLayout, "gapx");
 
 		result.boardRect.x = (int) (rect.x * wfactor);
 		result.boardRect.y = (int) (rect.y * hfactor);
@@ -76,11 +94,6 @@ public class BaseSkin implements ISkin
 		}
 	}
 
-	public String getName()
-	{
-		return "base";
-	}
-
 	protected void paintPiece(final Graphics g, final Component parent, final IPiece piece, final Rectangle rect)
 	{
 		if (piece != null)
@@ -120,6 +133,11 @@ public class BaseSkin implements ISkin
 		}
 	}
 
+	public String getName()
+	{
+		return this.name;
+	}
+
 	/** {@inheritDoc} */
 	public boolean equals(Object other)
 	{
@@ -133,4 +151,6 @@ public class BaseSkin implements ISkin
 
 	// number or rows and columns
 	protected Dimension boardSize;
+	protected JSONObject boardLayout;
+	private String name;
 }

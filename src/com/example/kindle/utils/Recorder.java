@@ -60,7 +60,7 @@ public class Recorder
 		
 		if (this.hasData())
 		{
-			String[] gamelog = FileHelper.read(this.file.getName());
+			String[] gamelog = FileHelper.read(System.getProperty("kindlet.home") + "/" + this.file.getName());
 			return gamelog;
 		}
 
