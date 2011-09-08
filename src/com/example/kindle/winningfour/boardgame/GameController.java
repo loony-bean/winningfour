@@ -96,6 +96,7 @@ public class GameController implements IGame
 		};
 
 		this.clock.reset(clockTask, (new OptionsFactory()).createGameClockTimeout());
+		this.gameView.setProgressTicks(0);
 
 		this.repaint();
 
@@ -319,14 +320,20 @@ public class GameController implements IGame
 
 	public void startTimer()
 	{
-		this.gameView.setProgressTicks(0);
-		this.clock.start();
+		if (this.clock.getTimeout() != 0)
+		{
+			this.gameView.setProgressTicks(0);
+			this.clock.start();
+		}
 	}
 
 	public void stopTimer()
 	{
-		this.clock.stop();
-		this.gameView.setProgressTicks(GameClock.RESOLUTION);
+		if (this.clock.getTimeout() != 0)
+		{
+			this.clock.stop();
+			this.gameView.setProgressTicks(GameClock.RESOLUTION);
+		}
 	}
 
 	public void destroy()

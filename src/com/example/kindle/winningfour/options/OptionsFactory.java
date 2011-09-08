@@ -61,6 +61,7 @@ public class OptionsFactory
 		String opponent = (String) App.opts.get(AppOptions.OP_T_OPPONENT);
 
 		IPlayer you = new HumanPlayer(Color.white, "Plato");
+		
 		IPlayer opp = null;
 
 		if (opponent.equals(AppOptions.OP_V_COMPUTER))

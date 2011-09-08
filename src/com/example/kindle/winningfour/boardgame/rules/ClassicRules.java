@@ -1,6 +1,7 @@
 package com.example.kindle.winningfour.boardgame.rules;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.example.kindle.boardgame.GameEvent;
 import com.example.kindle.boardgame.IBoard2D;
@@ -21,10 +22,22 @@ public class ClassicRules implements IRules
 	public static final int MAX_WIDTH = 10;
 	public static final int MAX_HEIGHT = 7;
 
+	public static final int W_MAX = 10000;
+	public static final int W_FALLOFF = 1;
+
+	public static final int W_DRAW         = 1;
+	public static final int W_THREAT_TWO   = 2;
+	public static final int W_THREAT_THREE = 5;
+	public static final int W_THREAT_ZUG   = 3;
+	public static final int W_WIN          = W_MAX;
+
+	public static final int B_MAJOR = 2;
+	public static final int B_FORK  = 2;
+
 	public ClassicRules()
 	{
 	}
-	
+
 	public void afterPlayerTurn(final IBoard2D board)
 	{
 		int gameEvent = this.checkGameEvent(board);
@@ -34,7 +47,7 @@ public class ClassicRules implements IRules
 			this.gameEventListener.onGameEvent(gameEvent);
 		}
 	}
-	
+
 	public int checkGameEvent(final IBoard2D board)
 	{
 		int result = GameEvent.CONTINUE;
@@ -45,18 +58,15 @@ public class ClassicRules implements IRules
 		IPosition2D pos = (IPosition2D) turn.getPosition().clone();
 
 		int max = 0;
-		int counts[] = new int[4];
-		int incs[][] = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
-		for (int c = 0; c < incs.length; c++)
-		{
-			counts[c] = this.countInRow(board, p, pos, incs[c][0], incs[c][1]);
-		}
+		ArrayList threats = this.walk(board, p, pos);
 
-		for(int i = 0; i < counts.length; i++)
+		Iterator iter = threats.iterator();
+		while(iter.hasNext())
 		{
-			if (counts[i] > max)
+			Threat threat = (Threat) iter.next();
+			if (threat.count > max)
 			{
-				max = counts[i];		
+				max = threat.count;
 			}
 		}
 
@@ -74,16 +84,40 @@ public class ClassicRules implements IRules
 		return result;
 	}
 
-	private int countInRow(final IBoard2D board, final IPlayer player, final IPosition2D pos, int incx, int incy)
+	private ArrayList walk(final IBoard2D board, final IPlayer player, final IPosition2D pos)
 	{
-		return this.walk(board, player, pos,  incx,  incy) +
-			   this.walk(board, player, pos, -incx, -incy) - 1;
+		ArrayList threats = new ArrayList();
+		
+		int incs[][] = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
+		for (int c = 0; c < incs.length; c++)
+		{
+			Threat threat = this.countInRow(board, player, pos, incs[c][0], incs[c][1]);
+			if (threat.count > 1)
+			{
+				threats.add(threat);
+			}
+		}
+
+		return threats;
 	}
 
-	private int walk(final IBoard2D board, final IPlayer player, final IPosition2D pos, int incx, int incy)
+	private Threat countInRow(final IBoard2D board, final IPlayer player, final IPosition2D pos, int incx, int incy)
+	{
+		Threat left  = this.countInRowOneDir(board, player, pos,  incx,  incy);
+		Threat right = this.countInRowOneDir(board, player, pos, -incx, -incy);
+
+		int count = left.count + right.count - 1;
+		int type = left.type + right.type;
+
+		return new Threat(count, type);
+	}
+
+	private Threat countInRowOneDir(final IBoard2D board, final IPlayer player, final IPosition2D pos, int incx, int incy)
 	{
 		int local = 0;
 		int count = 0;
+		int type = Threat.CLOSED;
+		
 		int x = pos.row();
 		int y = pos.col();
 
@@ -100,6 +134,11 @@ public class ClassicRules implements IRules
 			}
 			else
 			{
+				if (piece == null)
+				{
+					type = Threat.MINOR;
+				}
+
 				local = 0;
 				break;
 			}
@@ -107,8 +146,8 @@ public class ClassicRules implements IRules
 			x += incx;
 			y += incy;
 		}
-		
-		return count;
+
+		return new Threat(count, type);
 	}
 
 	public void beforePlayerTurn(final IBoard2D board)
@@ -132,10 +171,10 @@ public class ClassicRules implements IRules
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public ArrayList getAvailableTurns(final IBoard2D board, final IPlayer player)
 	{
 		ArrayList result = new ArrayList();
@@ -187,16 +226,68 @@ public class ClassicRules implements IRules
 		
 		if (event == GameEvent.WIN)
 		{
-			result = 10;
+			result = W_WIN;
 		}
 		else if (event == GameEvent.DRAW)
 		{
-			result = 5;
+			result = W_DRAW;
 		}
-		
-		return result - distance;
+		else
+		{
+			ITurn last = board.getLastTurn();
+			result = this.evaluateThreats(board, last.getPiece().getPlayer());
+		}
+
+		return result - distance * W_FALLOFF;
 	}
 
+	private int evaluateThreats(final IBoard2D board, final IPlayer player)
+	{
+		int eval = 0;
+		
+		for (int i = 0; i < board.getWidth(); i++)
+		{
+			for (int j = 0; j < board.getHeight(); j++)
+			{
+				ArrayList threats = this.walk(board, player, new Position2D(i, j));
+				Iterator iter = threats.iterator();
+				int threatsNumber = 0;
+				int increment = 0;
+				while (iter.hasNext())
+				{
+					Threat threat = (Threat) iter.next();
+					if (threat.count == 3 && threat.type != Threat.CLOSED)
+					{
+						increment += W_THREAT_THREE;
+						threatsNumber += 1;
+						if (threat.type == Threat.MAJOR)
+						{
+							increment *= B_MAJOR;
+						}
+					}
+					else if (threat.count == 2 && threat.type != Threat.CLOSED)
+					{
+						increment += W_THREAT_TWO;
+						threatsNumber += 1;
+						if (threat.type == Threat.MAJOR)
+						{
+							increment *= B_MAJOR;
+						}
+					}
+				}
+				
+				if (threatsNumber > 2)
+				{
+					increment *= B_FORK;
+				}
+				
+				eval += increment;
+			}
+		}
+
+		return eval;
+	}
+	
 	public boolean isEndGame(final IBoard2D board)
 	{
 		return (this.checkGameEvent(board) != GameEvent.CONTINUE);
@@ -232,4 +323,20 @@ public class ClassicRules implements IRules
 	}
 
 	private IGameEventListener gameEventListener;
+	
+	private class Threat
+	{
+		public static final int CLOSED = 0;
+		public static final int MINOR  = 1;
+		public static final int MAJOR  = 2;
+		
+		public Threat(int count, int type)
+		{
+			this.count = count;
+			this.type = type;
+		}
+		
+		int count;
+		int type;
+	}
 }
