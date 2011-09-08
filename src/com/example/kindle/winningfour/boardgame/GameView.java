@@ -46,7 +46,10 @@ public class GameView extends Container
 	{
 		App.log("GameView::doLayout for " + this.getSize());
 		final Dimension size = this.getSize();
-		
+
+		// TODO: layout reset
+		this.layout = AppResources.getSkin().getLayout(size);
+
 		if (this.layoutSize != null && this.layoutSize.equals(size))
 		{
 			App.log("GameView::doLayout early exit (same size)");
@@ -54,14 +57,13 @@ public class GameView extends Container
 		}
 
 		this.layoutSize = size;
-		this.layout = AppResources.getSkin().getLayout(size);
 
 		this.gameSelector.setBounds(size.width/2 - this.layout.pieceSizeX/2, this.layout.selectorY,
 				this.layout.pieceSizeX, this.layout.pieceSizeX);
 		this.gameSelector.setImage(AppResources.getImage("selector.png", this,
 				this.layout.pieceSizeX, this.layout.pieceSizeX));
 		
-		this.gameSelector.setLocation(this.layout.boardLeftTopX +
+		this.gameSelector.setLocation(this.layout.boardRect.x +
 				this.selectedRow*(this.layout.pieceSizeX + this.layout.pieceGapX),
 				this.layout.selectorY);
 
@@ -84,7 +86,7 @@ public class GameView extends Container
 	{
 		App.log("GameView::paint in clipBounds " + g.getClipBounds());
 
-		this.gameSelector.setLocation(this.layout.boardLeftTopX +
+		this.gameSelector.setLocation(this.layout.boardRect.x +
 				this.selectedRow*(this.layout.pieceSizeX + this.layout.pieceGapX),
 				this.layout.selectorY);
 

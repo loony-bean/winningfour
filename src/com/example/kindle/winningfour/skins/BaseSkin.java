@@ -14,6 +14,9 @@ import com.example.kindle.winningfour.boardgame.BoardItem;
 
 public class BaseSkin implements ISkin
 {
+	public static final double DESIGN_WIDTH  = 600.0;
+	public static final double DESIGN_HEIGHT = 760.0;
+
 	public BaseSkin(Dimension boardSize)
 	{
 		this.boardSize = boardSize;
@@ -23,10 +26,34 @@ public class BaseSkin implements ISkin
 	{
 		return null;
 	}
+	
+	protected BoardLayout createLayout(final Dimension size, final Rectangle rect, int sely, int gapx)
+	{
+		BoardLayout result = new BoardLayout();
+
+		double wfactor = size.width / BaseSkin.DESIGN_WIDTH;
+		double hfactor = size.height / BaseSkin.DESIGN_HEIGHT;
+
+		result.boardRect.x = (int) (rect.x * wfactor);
+		result.boardRect.y = (int) (rect.y * hfactor);
+		result.boardRect.width = (int) (rect.width * wfactor);
+		result.boardRect.height = (int) (rect.height * hfactor);
+
+		result.selectorY = (int) (sely * hfactor);
+
+		int cols = this.boardSize.width;
+		int rows = this.boardSize.height;
+		result.pieceSizeX = (int) ((result.boardRect.width - gapx*(cols - 1)) / cols);
+		result.pieceSizeY = result.pieceSizeX;
+
+		result.pieceGapX = gapx;
+		result.pieceGapY = (result.boardRect.height - (result.pieceSizeY * rows))/(rows - 1);
+
+		return result;
+	}
 
 	public void paintBoard(final Graphics g, final Component parent)
 	{
-		this.paintHoles(g, parent);
 	}
 
 	public void paintBoardItem(final Graphics g, final Component parent, final BoardItem item)
@@ -69,8 +96,8 @@ public class BaseSkin implements ISkin
 	protected void paintImageToGrid(final Graphics g, final Component parent, String id,
 			final BoardLayout l, int row, int col)
 	{
-		int x = (int) (l.boardLeftTopX + row*(l.pieceSizeX+l.pieceGapX));
-		int y = (int) (l.boardLeftTopY + col*(l.pieceSizeY+l.pieceGapY));
+		int x = (int) (l.boardRect.x + row*(l.pieceSizeX+l.pieceGapX));
+		int y = (int) (l.boardRect.y + col*(l.pieceSizeY+l.pieceGapY));
 		
 		this.paintImage(g, parent, id, new Rectangle(x, y, l.pieceSizeX, l.pieceSizeY));
 	}

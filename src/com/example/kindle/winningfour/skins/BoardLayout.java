@@ -1,9 +1,10 @@
 package com.example.kindle.winningfour.skins;
 
+import java.awt.Rectangle;
+
 public class BoardLayout
 {
-	public int boardLeftTopX;
-	public int boardLeftTopY;
+	public Rectangle boardRect = new Rectangle();
 	public int selectorY;
 	public int pieceSizeX;
 	public int pieceSizeY;

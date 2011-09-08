@@ -1,4 +1,4 @@
-package com.example.kindle.winningfour.skins.sketchy;
+package com.example.kindle.winningfour.skins.urban;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -9,12 +9,12 @@ import com.example.kindle.winningfour.boardgame.BoardItem;
 import com.example.kindle.winningfour.skins.BaseSkin;
 import com.example.kindle.winningfour.skins.BoardLayout;
 
-public class SketchySkin extends BaseSkin
+public class UrbanSkin extends BaseSkin
 {
-	public SketchySkin(final Dimension boardSize)
+	public UrbanSkin(final Dimension boardSize)
 	{
 		super(boardSize);
-		this.boardRect = new Rectangle(28, 117, 546, 418);
+		this.boardRect = new Rectangle(28, 117, 546, 518);
 	}
 
 	public BoardLayout getLayout(final Dimension size)
@@ -24,7 +24,7 @@ public class SketchySkin extends BaseSkin
 
 	public void paintBoard(final Graphics g, final Component parent)
 	{
-		this.paintHoles(g, parent);
+		super.paintBoard(g, parent);
 	}
 
 	public void paintBoardItem(final Graphics g, final Component parent, final BoardItem item)
@@ -34,10 +34,10 @@ public class SketchySkin extends BaseSkin
 
 	public String getName()
 	{
-		return "sketchy";
+		return "urban";
 	}
 
-	private int selectorY = 580;
+	private int selectorY = 660;
 	private Rectangle boardRect;
 
 	private int pieceGapX = 4;

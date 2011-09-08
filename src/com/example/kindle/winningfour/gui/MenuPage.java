@@ -56,15 +56,15 @@ public class MenuPage extends PageState
 
 			public void onStop()
 			{
-				KButton newButton = (KButton) MenuPage.this.getMenuItem(AppResources.KEY_MENU_NEW_GAME);
-				KButton resumeButton = (KButton) MenuPage.this.getMenuItem(AppResources.KEY_MENU_RESUME_GAME);
+				KButton newOption = (KButton) MenuPage.this.getMenuItem(AppResources.KEY_MENU_NEW_GAME);
+				KButton resumeOption = (KButton) MenuPage.this.getMenuItem(AppResources.KEY_MENU_RESUME_GAME);
 
-				if (MenuPage.this.focusOwner == resumeButton)
+				if (MenuPage.this.focusOwner == resumeOption)
 				{
-					MenuPage.this.focusOwner = newButton;
+					MenuPage.this.focusOwner = newOption;
 				}
 
-				resumeButton.setEnabled(false);
+				resumeOption.setEnabled(false);
 			}
 		};
 
@@ -80,11 +80,11 @@ public class MenuPage extends PageState
 	{
 		if (!App.gamer.isSuspended())
         {
-			KButton newButton = (KButton) this.getMenuItem(AppResources.KEY_MENU_NEW_GAME);
-			KButton resumeButton = (KButton) this.getMenuItem(AppResources.KEY_MENU_RESUME_GAME);
+			KButton newOption = (KButton) this.getMenuItem(AppResources.KEY_MENU_NEW_GAME);
+			KButton resumeOption = (KButton) this.getMenuItem(AppResources.KEY_MENU_RESUME_GAME);
 
-			newButton.requestFocus();
-			resumeButton.setEnabled(false);
+			newOption.requestFocus();
+			resumeOption.setEnabled(false);
         }
 	}
     
@@ -94,7 +94,7 @@ public class MenuPage extends PageState
         final KPanel panel = new KPanel(layout);
 		panel.setBackground(new Color(0x000000FF, true));
 		this.menuItems = new HashMap();
-        
+
         String[] menuItems = {AppResources.KEY_MENU_NEW_GAME,
         					  AppResources.KEY_MENU_RESUME_GAME,
         					  AppResources.KEY_MENU_OPTIONS,
@@ -126,10 +126,10 @@ public class MenuPage extends PageState
      */
     protected Container addMenuItem(final String name, final Runnable action)
     {
-        KButton button = new KButton(name);
-		button.setFont(AppResources.getFont(AppResources.ID_FONT_MENU));
+    	KButton item = new KButton(name);
+		item.setFont(AppResources.getFont(AppResources.ID_FONT_MENU));
 
-        button.addActionListener(new ActionListener()
+        item.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
@@ -137,7 +137,7 @@ public class MenuPage extends PageState
             }
         });
 
-        return button;
+        return item;
     }
 
     protected Container getMenuItem(final String name)

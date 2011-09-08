@@ -14,38 +14,28 @@ public class WoodSkin extends BaseSkin
 	public WoodSkin(final Dimension boardSize)
 	{
 		super(boardSize);
+		this.boardRect = new Rectangle(100, 210, 400, 300);
 	}
 
 	public BoardLayout getLayout(final Dimension size)
 	{
-		BoardLayout result = new BoardLayout();
-
-		result.boardLeftTopX = (int) (this.boardLeftTopX * size.width);
-		result.boardLeftTopY = (int) (this.boardLeftTopY * size.height);
-		result.selectorY = (int) (this.selectorY * size.height);
-
-		int rows = this.boardSize.width;
-		result.pieceSizeX = (int) ((size.width - 2*result.boardLeftTopX - this.pieceGapX*(rows-1)) / rows);
-		result.pieceSizeY = result.pieceSizeX;
-
-		result.pieceGapX = this.pieceGapX;
-		result.pieceGapY = this.pieceGapY;
-
-		return result;
+		return this.createLayout(size, this.boardRect, this.selectorY, this.pieceGapX);
 	}
 
 	public void paintBoard(final Graphics g, final Component parent)
 	{
 		Dimension size = parent.getSize();
 		BoardLayout l = this.getLayout(size);
+		
+		double hfactor = size.height / BaseSkin.DESIGN_HEIGHT;
 
 		for (int i = 0; i < this.boardSize.width + 1; i++)
 		{
 			int sx = l.pieceSizeX;
 			int gap = l.pieceGapX;
-			int x = (int) (l.boardLeftTopX + i*(sx+gap));
-			int ry = (this.boardSize.height) * l.pieceSizeY;
-			int y = (int) (this.boardPlaneY * size.height) - ry;
+			int x = (int) (l.boardRect.x + i*(sx+gap));
+			int ry = (int) (this.boardRect.height * hfactor);
+			int y = (int) (this.boardRect.y * hfactor);
 			int rx = 2*sx/3;
 
 			this.paintImage(g, parent, "stick.png", new Rectangle(x-gap-rx+rx/2, y, rx, ry));
@@ -60,9 +50,11 @@ public class WoodSkin extends BaseSkin
 		int overlap = l.pieceSizeY/8;
 		int oy = (overlap - 1) * this.boardSize.height;
 
-		int y = (int) (this.boardPlaneY * size.height) - (this.boardSize.height) * l.pieceSizeY;
+		double hfactor = size.height / BaseSkin.DESIGN_HEIGHT;
+
+		int y = (int) (this.boardRect.height * hfactor - this.boardSize.height * l.pieceSizeY);
 		y += item.getPosition().col()*(l.pieceSizeY + l.pieceGapY - overlap) + oy;
-		int x = l.boardLeftTopX + item.getPosition().row()*(l.pieceSizeX + l.pieceGapX);
+		int x = l.boardRect.x + item.getPosition().row()*(l.pieceSizeX + l.pieceGapX);
 
 		this.paintPiece(g, parent, item.getPiece(), new Rectangle(x, y, l.pieceSizeX, l.pieceSizeY));
 	}
@@ -72,11 +64,8 @@ public class WoodSkin extends BaseSkin
 		return "wood";
 	}
 
-	private double selectorY = 600.0/760.0;
-	private double boardLeftTopX = 100.0/600.0;
-	private double boardLeftTopY = 220.0/760.0;
-	private double boardPlaneY = 500.0/760.0;
+	private int selectorY = 600;
+	private Rectangle boardRect;
 
 	private int pieceGapX = 4;
-	private int pieceGapY = 2;
 }
