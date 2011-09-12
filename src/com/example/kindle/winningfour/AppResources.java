@@ -78,11 +78,10 @@ public class AppResources extends ListResourceBundle
     public static Image getImage(final String key, final Component parent, int width, int height)
     {
 		ISkin skin = (new OptionsFactory()).createSkin();
-		String fullkey = skin.getName() + "-" + key;
+		String fullkey = skin.getName() + "-" + key + "-" + width + "-" + height;
 
-		// TODO: use dims in key
     	Image image = (Image)imagesMap.get(fullkey);
-    	if (image == null || image != null && image.getWidth(null) != width)
+    	if (image == null)
     	{
     		Toolkit tk = Toolkit.getDefaultToolkit();
     		image = tk.createImage(skin.getClass().getResource(key));
