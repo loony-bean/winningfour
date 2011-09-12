@@ -11,9 +11,9 @@ import com.example.kindle.winningfour.App;
 
 public class HumanPlayer extends Player
 {
-	public HumanPlayer(final Color color, final String name)
+	public HumanPlayer(final Color color)
 	{
-		super(color, name);
+		super(color);
 	}
 	
 	protected void onKeyboard(final KeyEvent event)

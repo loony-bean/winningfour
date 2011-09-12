@@ -15,7 +15,7 @@ public class GameState extends State
 	public GameState(final GameController game, int player, final String name)
 	{
 		super(name);
-		this.player = player;
+		this.playerId = player;
 		this.game = game;
 		
 		this.endGameKeyAdapter = new KeyAdapter()
@@ -39,7 +39,7 @@ public class GameState extends State
 			this.game.getView().addKeyListener(this.keyAdapter);
 		}
 
-		this.game.setStatusText(this.status);
+		this.game.setStatus(this.playerId, this.status);
 		this.game.repaint();
 	}
 	
@@ -53,7 +53,7 @@ public class GameState extends State
 	
 	public IPlayer getPlayer()
 	{
-		return this.game.getContext().getPlayers()[this.player];
+		return this.game.getContext().getPlayers()[this.playerId];
 	}
 	
 	public void pulse(final SignalEvent signal)
@@ -74,10 +74,10 @@ public class GameState extends State
 		App.log("GameState::destroy done");
 	}
 
-	protected String status;
+	protected int status;
 	protected GameState state;
 	protected KeyAdapter keyAdapter;
 	protected KeyAdapter endGameKeyAdapter;
-	protected int player;
+	protected int playerId;
 	private GameController game;
 }

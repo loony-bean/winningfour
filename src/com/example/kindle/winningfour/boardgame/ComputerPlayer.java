@@ -17,9 +17,9 @@ public class ComputerPlayer extends Player
 	public final static int MAXVAL = 100;
     public final static int DEPTH = 6;
 
-	public ComputerPlayer(final Color color, final String name)
+	public ComputerPlayer(final Color color)
 	{
-		super(color, name);
+		super(color);
 
 		App.log("ComputerPlayer::create");
 

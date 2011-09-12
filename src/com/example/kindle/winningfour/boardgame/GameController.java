@@ -265,9 +265,9 @@ public class GameController implements IGame
 		return this.gameView;
 	}
 
-	public void setStatusText(final String status)
+	public void setStatus(int currentPlayerId, int status)
 	{
-		this.gameView.setStatusText(status);
+		this.gameView.setStatus(currentPlayerId, status);
 	}
 
 	public void repaint()

@@ -1,10 +1,10 @@
 package com.example.kindle.winningfour.boardgame;
 
+import com.example.kindle.boardgame.GameEvent;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.sm.State;
 import com.example.kindle.sm.StateMachine;
 import com.example.kindle.winningfour.App;
-import com.example.kindle.winningfour.AppResources;
 
 public class GameStateMachine extends StateMachine
 {
@@ -85,7 +85,7 @@ public class GameStateMachine extends StateMachine
 		
 		public void enter()
 		{
-			this.status = "" + this.getPlayer().getName() + App.bundle.getString(AppResources.KEY_GAME_TURN);
+			this.status = GameEvent.CONTINUE;
 			this.keyAdapter = this.getPlayer().getKeyAdapter();
 
 			super.enter();
@@ -130,7 +130,7 @@ public class GameStateMachine extends StateMachine
 		
 		public void enter()
 		{
-			this.status = "" + this.getPlayer().getName() + App.bundle.getString(AppResources.KEY_GAME_WIN);
+			this.status = GameEvent.WIN;
 			super.enter();
 			App.gamer.stop();
 		}
@@ -157,7 +157,8 @@ public class GameStateMachine extends StateMachine
 		public DrawState(final GameController game)
 		{
 			super(game, 0, "DrawState");
-			this.status = App.bundle.getString(AppResources.KEY_GAME_DRAW);
+			//this.status = App.bundle.getString(AppResources.KEY_GAME_DRAW);
+			this.status = GameEvent.DRAW;
 			this.keyAdapter = this.endGameKeyAdapter;
 		}
 		

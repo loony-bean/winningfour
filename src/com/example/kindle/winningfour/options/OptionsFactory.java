@@ -61,18 +61,16 @@ public class OptionsFactory
 		String firstTurn = (String) App.opts.get(AppOptions.OP_T_FIRST_TURN);
 		String opponent = (String) App.opts.get(AppOptions.OP_T_OPPONENT);
 
-		String[] playerNames = this.createSkin().getPlayerNames();
-
-		IPlayer you = new HumanPlayer(Color.white, playerNames[0]);
+		IPlayer you = new HumanPlayer(Color.white);
 		IPlayer opp = null;
 
 		if (opponent.equals(AppOptions.OP_V_COMPUTER))
 		{
-			opp = new ComputerPlayer(Color.black, playerNames[1]);
+			opp = new ComputerPlayer(Color.black);
 		}
 		else if (opponent.equals(AppOptions.OP_V_HUMAN))
 		{
-			opp = new HumanPlayer(Color.black, playerNames[1]);
+			opp = new HumanPlayer(Color.black);
 		}
 
 		if (firstTurn.equals(AppOptions.OP_V_YOU))

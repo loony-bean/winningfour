@@ -19,13 +19,6 @@ public interface IPlayer
 	public Color getColor();
 
 	/**
-	 * Returns name of the player.
-	 * 
-	 * @return Player name.
-	 */
-	public String getName();
-
-	/**
 	 * This method should be called when it is time for player
 	 * to think on game and make it's move. Player is provided
 	 * with game context, that encapsulates all the game information

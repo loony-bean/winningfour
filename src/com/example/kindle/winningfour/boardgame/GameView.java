@@ -9,11 +9,13 @@ import java.util.Iterator;
 import org.kwt.ui.KWTProgressBar;
 
 import com.amazon.kindle.kindlet.ui.KLabel;
+import com.example.kindle.boardgame.GameEvent;
 import com.example.kindle.utils.GameClock;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
 import com.example.kindle.winningfour.boardgame.BoardItem;
 import com.example.kindle.winningfour.gui.GameImage;
+import com.example.kindle.winningfour.options.OptionsFactory;
 import com.example.kindle.winningfour.skins.BoardLayout;
 
 public class GameView extends Container
@@ -90,6 +92,8 @@ public class GameView extends Container
 				this.selectedRow*(this.layout.pieceSizeX + this.layout.pieceGapX),
 				this.layout.selectorY);
 
+		this.statusLabel.setText(this.getStatusString());
+
 		super.paint(g);
 		AppResources.getSkin().paintBoard(g, this);
 		this.paintItems(this.items, g);
@@ -125,9 +129,30 @@ public class GameView extends Container
 		this.gameSelector.repaint();
 	}
 
-	public void setStatusText(final String text)
+	public void setStatus(final int currentPlayerId, int status)
 	{
-		this.statusLabel.setText(text);
+		this.status = status;
+		this.currentPlayerId = currentPlayerId;
+		this.statusLabel.repaint();
+	}
+	
+	private String getStatusString()
+	{
+		String result = "";
+		String actor = (new OptionsFactory()).createSkin().getPlayerNames()[this.currentPlayerId];
+		if (this.status == GameEvent.WIN)
+		{
+			result = actor + App.bundle.getString(AppResources.KEY_GAME_WIN);			
+		}
+		else if (this.status == GameEvent.DRAW)
+		{
+			result = App.bundle.getString(AppResources.KEY_GAME_DRAW);
+		}
+		else if (this.status == GameEvent.CONTINUE)
+		{
+			result = actor + App.bundle.getString(AppResources.KEY_GAME_TURN);
+		}
+		return result;
 	}
 	
 	public void setProgressTicks(int percents)
@@ -167,6 +192,9 @@ public class GameView extends Container
 	private ArrayList items;
 	private int selectedRow;
 	private KWTProgressBar progressBar;
+	
+	private int status;
+	private int currentPlayerId;
 
 	private BoardLayout layout;
 }

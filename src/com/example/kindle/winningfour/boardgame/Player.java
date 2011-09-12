@@ -10,10 +10,9 @@ import com.example.kindle.winningfour.App;
 
 public class Player implements IPlayer
 {
-	public Player(final Color color, final String name)
+	public Player(final Color color)
 	{
 		this.color = color;
-		this.name = name;
 		
 		this.keyAdapter = new KeyAdapter()
 		{
@@ -29,11 +28,6 @@ public class Player implements IPlayer
 		return this.color;
 	}
 
-	public String getName()
-	{
-		return this.name;
-	}
-	
 	public KeyAdapter getKeyAdapter()
 	{
 		return this.keyAdapter;
@@ -61,7 +55,7 @@ public class Player implements IPlayer
 		{
 			IPlayer lhs = (IPlayer) this;
 			IPlayer rhs = (IPlayer) other;
-			return rhs.getName().equals(lhs.getName());
+			return rhs.getColor().equals(lhs.getColor());
 		}
 
 		return false;
@@ -78,5 +72,4 @@ public class Player implements IPlayer
 
 	private KeyAdapter keyAdapter;
 	private final Color color;
-	private final String name;
 }
