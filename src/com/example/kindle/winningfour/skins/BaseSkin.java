@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 
 import org.json.simple.JSONObject;
 
+import com.example.kindle.boardgame.Board2DItemType;
 import com.example.kindle.boardgame.IPiece;
 import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.utils.FileHelper;
@@ -82,28 +83,37 @@ public class BaseSkin implements ISkin
 	public void paintBoard(final Graphics g, final Component parent)
 	{
 	}
+	
+	public String getImageId(final Color color, int type)
+	{
+		String id = (color == Color.black) ? "black" : "white";
+		if (type == Board2DItemType.LAST)
+		{
+			id += "_last";
+		}
+		
+		return id + ".png";
+	}
 
 	public void paintBoardItem(final Graphics g, final Component parent, final BoardItem item)
 	{
 		BoardLayout l = this.getLayout(parent.getSize());
-
 		IPiece piece = item.getPiece();
+
 		if (piece != null)
 		{
-			Color color = piece.getPlayer().getColor();
-			String id = (color == Color.black) ? "black.png" : "white.png";
+			String id = getImageId(piece.getPlayer().getColor(), item.getType());
 			IPosition2D pos = item.getPosition();
 
 			this.paintImageToGrid(g, parent, id, l, pos.row(), pos.col());
 		}
 	}
 
-	protected void paintPiece(final Graphics g, final Component parent, final IPiece piece, final Rectangle rect)
+	protected void paintPiece(final Graphics g, final Component parent, final IPiece piece, final Rectangle rect, int type)
 	{
 		if (piece != null)
 		{
-			Color color = piece.getPlayer().getColor();
-			String id = (color == Color.black) ? "black.png" : "white.png";
+			String id = getImageId(piece.getPlayer().getColor(), type);
 			
 			this.paintImage(g, parent, id, rect);
 		}

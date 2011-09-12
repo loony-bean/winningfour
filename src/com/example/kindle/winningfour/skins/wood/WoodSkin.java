@@ -62,6 +62,6 @@ public class WoodSkin extends BaseSkin
 
 		int x = l.boardRect.x + item.getPosition().row()*(l.pieceSizeX + l.pieceGapX);
 
-		this.paintPiece(g, parent, item.getPiece(), new Rectangle(x, y, l.pieceSizeX, l.pieceSizeY));
+		this.paintPiece(g, parent, item.getPiece(), new Rectangle(x, y, l.pieceSizeX, l.pieceSizeY), item.getType());
 	}
 }

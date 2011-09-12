@@ -18,4 +18,14 @@ public interface IBoard2DItem
 	 * @return Piece's position on game board.
 	 */
 	public IPosition2D getPosition();
+	
+	/**
+	 * Returns type of the piece on board. Piece type is 
+	 * a special value that is associated with each piece 
+	 * and can can tell if it is selected, put recently, 
+	 * is part of a winning set, etc.
+	 * 
+	 * @return Type of the board piece.
+	 */
+	public int getType();
 }

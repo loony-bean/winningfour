@@ -35,6 +35,17 @@ public class Position2D implements IPosition2D
 		return new Position2D(this.row, this.col);
 	}
 
+	/** {@inheritDoc} */
+	public boolean equals(Object other)
+	{
+		if (this == other) return true;
+		if (other == null) return false;
+		if (getClass() != other.getClass()) return false;
+
+		Position2D otherPosition = (Position2D) other;
+		return (this.row == otherPosition.row && this.col == otherPosition.col);
+	}
+
 	/** Row number on board. */
 	private int row;
 

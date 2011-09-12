@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.example.kindle.boardgame.Board2DItemType;
 import com.example.kindle.boardgame.IBoard2D;
 import com.example.kindle.boardgame.IBoard2DItem;
 import com.example.kindle.boardgame.IPiece;
@@ -87,7 +88,13 @@ public class Board implements IBoard2D
 		{
 			for (int i = 0; i < this.board.length; i++)
 			{
-				IBoard2DItem item = new BoardItem(this.board[i][j], new Position2D(i, j));
+				IPosition2D pos = new Position2D(i, j);
+				int type = Board2DItemType.NORMAL;
+				if (this.lastTurn != null && this.lastTurn.getPosition().equals(pos))
+				{
+					type = Board2DItemType.LAST;
+				}
+				IBoard2DItem item = new BoardItem(this.board[i][j], pos, type);
 				result.add(item);
 			}
 		}
