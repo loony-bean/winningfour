@@ -68,6 +68,7 @@ public class OptionsPage extends State
 		if (opstat == AppOptions.STATUS_DISPLAY_CHANGES)
 		{
 			App.opts.commit();
+			App.gamer.getView().reset();
 		}
 		else if (opstat == AppOptions.STATUS_GAME_CHANGES)
 		{

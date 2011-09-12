@@ -18,7 +18,9 @@ public class WoodSkin extends BaseSkin
 
 	public BoardLayout getLayout(final Dimension size)
 	{
-		return this.createLayout(size);
+		BoardLayout result = this.createLayout(size);
+		result.pieceGapY = 1;
+		return result;
 	}
 
 	public void paintBoard(final Graphics g, final Component parent)
