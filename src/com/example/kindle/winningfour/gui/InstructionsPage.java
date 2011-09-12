@@ -15,6 +15,7 @@ import com.amazon.kindle.kindlet.ui.KTextArea;
 import com.example.kindle.utils.FileHelper;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
+import com.example.kindle.winningfour.options.AppOptions;
 
 /**
  *
@@ -34,8 +35,8 @@ public class InstructionsPage extends PageState
         this.panel.add(title, BorderLayout.CENTER);
 
         KTextArea textArea = new KTextArea();
-        
-        String[] text = FileHelper.read(System.getProperty("kindlet.home") + "/" + "instructions.txt");
+
+        String[] text = FileHelper.read(App.getHomeFilePath(AppOptions.FILE_NAME_INSTRUCTIONS));
         for (int i = 0; i < text.length; i++)
         {
         	textArea.append(text[i] + "\n");

@@ -119,6 +119,7 @@ public class ComputerPlayer extends Player
 		this.pid = (this.players[0] == this) ? 0 : 1;
 
 		ITurn best = null;
+		// TODO: read from rules
         int maxscore = -MAXVAL;
         int score = 0;
         boolean empty = true;

@@ -68,7 +68,7 @@ public class GameView extends Container
 				this.layout.selectorY);
 
 		Dimension sz = this.statusLabel.getPreferredSize();
-		this.statusLabel.setBounds(0, sz.height, size.width, sz.height);
+		this.statusLabel.setBounds(0, this.layout.labelY, size.width, sz.height);
 
         this.progressBar.setWidth(size.width);
         Dimension pz = this.progressBar.getPreferredSize();

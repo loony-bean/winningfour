@@ -1,7 +1,9 @@
 package com.example.kindle.winningfour.boardgame;
 
 import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
+import com.amazon.kindle.kindlet.event.KindleKeyCodes;
 import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.sm.State;
@@ -15,6 +17,19 @@ public class GameState extends State
 		super(name);
 		this.player = player;
 		this.game = game;
+		
+		this.endGameKeyAdapter = new KeyAdapter()
+		{
+			public void keyPressed(KeyEvent event)
+			{
+				int key = event.getKeyCode();
+				if (key == KindleKeyCodes.VK_FIVE_WAY_SELECT || key == 'N')
+				{
+					GameState.this.pulse(new SignalEvent(GameStateMachine.NEW));
+					event.consume();
+				}
+			}
+		};
 	}
 
 	public void enter()
@@ -53,6 +68,7 @@ public class GameState extends State
 		super.destroy();
 		this.state = null;
 		this.keyAdapter = null;
+		this.endGameKeyAdapter = null;
 		this.game = null;
 
 		App.log("GameState::destroy done");
@@ -61,6 +77,7 @@ public class GameState extends State
 	protected String status;
 	protected GameState state;
 	protected KeyAdapter keyAdapter;
+	protected KeyAdapter endGameKeyAdapter;
 	protected int player;
 	private GameController game;
 }

@@ -14,7 +14,7 @@ public class Recorder
 		App.log("Recorder::create - " + filename);
 
 		this.filename = filename;
-		this.file = new File(System.getProperty("kindlet.home"), filename);
+		this.file = new File(App.getHomeDir(), filename);
 		this.enabled = true;
 		
 		App.log("Recorder::create done");
@@ -60,7 +60,7 @@ public class Recorder
 		
 		if (this.hasData())
 		{
-			String[] gamelog = FileHelper.read(System.getProperty("kindlet.home") + "/" + this.file.getName());
+			String[] gamelog = FileHelper.read(App.getHomeFilePath(this.file.getName()));
 			return gamelog;
 		}
 

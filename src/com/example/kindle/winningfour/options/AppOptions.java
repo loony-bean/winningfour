@@ -20,8 +20,9 @@ import com.example.kindle.winningfour.App;
  */
 public class AppOptions
 {
-	public final static String FILE_NAME_OPTIONS	= "options.json";
-	public final static String FILE_NAME_GAMELOG	= "gamelog.txt";
+	public final static String FILE_NAME_OPTIONS		= "options.json";
+	public final static String FILE_NAME_GAMELOG		= "gamelog.txt";
+	public final static String FILE_NAME_INSTRUCTIONS	= "instructions.txt";
 	
 	public final static int STATUS_NO_CHANGES		= 0;
 	public final static int STATUS_DISPLAY_CHANGES	= 1;
@@ -213,7 +214,7 @@ public class AppOptions
 
 		try
 		{
-			String[] text = FileHelper.read(System.getProperty("kindlet.home") + "/" + FILE_NAME_OPTIONS);
+			String[] text = FileHelper.read(App.getHomeFilePath(FILE_NAME_OPTIONS));
 			if (text.length != 0)
 			{
 				this.currentOptions = (JSONObject) parser.parse(text[0]);
@@ -233,8 +234,7 @@ public class AppOptions
 	 */
 	public void save()
 	{
-		// TODO: refactor home filenames
-		FileHelper.write(System.getProperty("kindlet.home") + "/" + FILE_NAME_OPTIONS, this.currentOptions.toString(), false);
+		FileHelper.write(App.getHomeFilePath(FILE_NAME_OPTIONS), this.currentOptions.toString(), false);
 	}
 
 	/**

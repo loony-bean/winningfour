@@ -50,9 +50,6 @@ public class App extends AbstractKindlet
     	KeyboardFocusManager fm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         fm.removeKeyEventDispatcher(this.keyEventDispatcher);
 
-        // TODO: destroy() everything
-		// TODO: null out pointers
-
         App.opts.destroy();
         App.opts = null;
         
@@ -266,6 +263,16 @@ public class App extends AbstractKindlet
 		App.timer = new Timer();
 
 		return App.timer;
+	}
+
+	public static String getHomeDir()
+	{
+		return System.getProperty("kindlet.home");
+	}
+
+	public static String getHomeFilePath(final String filename)
+	{
+		return System.getProperty("kindlet.home") + "/" + filename;
 	}
 
     /** Indicates if the application has been stopped. */

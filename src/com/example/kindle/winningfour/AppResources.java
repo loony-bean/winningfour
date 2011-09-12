@@ -36,6 +36,10 @@ public class AppResources extends ListResourceBundle
 	public static final String KEY_MENU_INSTRUCTIONS 	= "menu_instructions";
 	public static final String KEY_MENU_EXIT 			= "menu_exit";
 
+	public static final String KEY_GAME_TURN 			= "game_turn";
+	public static final String KEY_GAME_WIN 			= "game_win";
+	public static final String KEY_GAME_DRAW 			= "game_draw";
+
 	public static final String KEY_CONFIRM_NEW_GAME 	= "confirm_new_game";
 	public static final String KEY_CONFIRM_EXIT 		= "confirm_exit";
 	public static final String KEY_CONFIRM_OPTIONS 		= "confirm_options";
@@ -60,17 +64,23 @@ public class AppResources extends ListResourceBundle
         { KEY_MENU_OPTIONS, "Options" },
         { KEY_MENU_INSTRUCTIONS, "Instructions" },
         { KEY_MENU_EXIT, "Exit" },
+        { KEY_GAME_TURN, " turn" },
+        { KEY_GAME_WIN, " wins. Press Select or N" },
+        { KEY_GAME_DRAW, "Drawn game. Press Select or N" },
         { KEY_CONFIRM_NEW_GAME, "You have a game in progress. Do you want to start a new game?" },
         { KEY_CONFIRM_EXIT, "Exit game?" },
         { KEY_CONFIRM_OPTIONS, "Pressing OK will apply new options and start a new game."},
         { KEY_ERROR_NO_TURNS, "No available turns." }
     };
+    
+    // TODO: images preloading thread
 
     public static Image getImage(final String key, final Component parent, int width, int height)
     {
 		ISkin skin = (new OptionsFactory()).createSkin();
 		String fullkey = skin.getName() + "-" + key;
 
+		// TODO: use dims in key
     	Image image = (Image)imagesMap.get(fullkey);
     	if (image == null || image != null && image.getWidth(null) != width)
     	{

@@ -32,6 +32,12 @@ public class BaseSkin implements ISkin
 		return null;
 	}
 
+	public String[] getPlayerNames()
+	{
+		String[] result = {(String) this.boardLayout.get("n1"), (String) this.boardLayout.get("n2")}; 
+		return result;
+	}
+
 	protected int asInt(final JSONObject json, final String key)
 	{
 		return Integer.parseInt((String) this.boardLayout.get(key));
@@ -50,6 +56,7 @@ public class BaseSkin implements ISkin
 		rect.width = this.asInt(this.boardLayout, "width");
 		rect.height = this.asInt(this.boardLayout, "height");
 		int sely = this.asInt(this.boardLayout, "sely");
+		int laby = this.asInt(this.boardLayout, "laby");
 		int gapx = this.asInt(this.boardLayout, "gapx");
 
 		result.boardRect.x = (int) (rect.x * wfactor);
@@ -58,6 +65,7 @@ public class BaseSkin implements ISkin
 		result.boardRect.height = (int) (rect.height * hfactor);
 
 		result.selectorY = (int) (sely * hfactor);
+		result.labelY = (int) (laby * hfactor);
 
 		int cols = this.boardSize.width;
 		int rows = this.boardSize.height;
@@ -66,11 +74,7 @@ public class BaseSkin implements ISkin
 
 		result.pieceGapX = gapx;
 		result.pieceGapY = (result.boardRect.height - (result.pieceSizeY * rows))/(rows - 1);
-		
-		if (result.pieceGapY < 0)
-		{
-			result.pieceGapY = 0;
-		}
+		result.pieceGapY = Math.max(result.pieceGapY, 0);
 
 		return result;
 	}

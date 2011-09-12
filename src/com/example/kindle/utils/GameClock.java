@@ -9,8 +9,20 @@ import com.example.kindle.winningfour.App;
  */
 public class GameClock
 {
+	/**
+	 * Defines amount of logical ticks to pass before game
+	 * clock will ran out of time. Usually this should be
+	 * used as a hint for some fine grain progress bar.
+	 */
 	public final static int RESOLUTION = 1000;
-	public final static int TICK       = 1000;
+
+	/**
+	 * Amount of milliseconds between game clock update task
+	 * calls. Note that after the clock is started the first
+	 * call takes place after a TICK number of milliseconds
+	 * delay. 
+	 */
+	public final static int TICK = 1000;
 
 	/**
 	 * Default constructor.

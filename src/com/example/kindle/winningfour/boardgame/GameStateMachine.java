@@ -1,13 +1,10 @@
 package com.example.kindle.winningfour.boardgame;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
-import com.amazon.kindle.kindlet.event.KindleKeyCodes;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.sm.State;
 import com.example.kindle.sm.StateMachine;
 import com.example.kindle.winningfour.App;
+import com.example.kindle.winningfour.AppResources;
 
 public class GameStateMachine extends StateMachine
 {
@@ -88,7 +85,7 @@ public class GameStateMachine extends StateMachine
 		
 		public void enter()
 		{
-			this.status = "" + this.getPlayer().getName() + "'s turn";
+			this.status = "" + this.getPlayer().getName() + App.bundle.getString(AppResources.KEY_GAME_TURN);
 			this.keyAdapter = this.getPlayer().getKeyAdapter();
 
 			super.enter();
@@ -128,24 +125,12 @@ public class GameStateMachine extends StateMachine
 		public WinState(final GameController game, int player, final String name)
 		{
 			super(game, player, name);
-			this.keyAdapter = new KeyAdapter()
-			{
-				public void keyPressed(KeyEvent event)
-				{
-					int key = event.getKeyCode();
-					if (key == KindleKeyCodes.VK_FIVE_WAY_SELECT || key == 'N')
-					{
-						WinState.this.pulse(new SignalEvent(GameStateMachine.NEW));
-						event.consume();
-					}
-				}
-			};
+			this.keyAdapter = this.endGameKeyAdapter;
 		}
 		
 		public void enter()
 		{
-			// TODO: move strings to resources
-			this.status = "" + this.getPlayer().getName() + " wins. Press Select or N";
+			this.status = "" + this.getPlayer().getName() + App.bundle.getString(AppResources.KEY_GAME_WIN);
 			super.enter();
 			App.gamer.stop();
 		}
@@ -172,19 +157,8 @@ public class GameStateMachine extends StateMachine
 		public DrawState(final GameController game)
 		{
 			super(game, 0, "DrawState");
-			this.status = "Drawn game. Press Select or N";
-			this.keyAdapter = new KeyAdapter()
-			{
-				public void keyPressed(KeyEvent event)
-				{
-					int key = event.getKeyCode();
-					if (key == KindleKeyCodes.VK_FIVE_WAY_SELECT || key == 'N')
-					{
-						DrawState.this.pulse(new SignalEvent(GameStateMachine.NEW));
-						event.consume();
-					}
-				}
-			};
+			this.status = App.bundle.getString(AppResources.KEY_GAME_DRAW);
+			this.keyAdapter = this.endGameKeyAdapter;
 		}
 		
 		public void enter()

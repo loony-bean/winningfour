@@ -9,6 +9,7 @@ import com.example.kindle.winningfour.boardgame.BoardItem;
 public interface ISkin
 {
 	public BoardLayout getLayout(final Dimension boardSize);
+	public String[] getPlayerNames();
 	public void paintBoard(final Graphics g, final Component parent);
 	public void paintBoardItem(final Graphics g, final Component parent, final BoardItem item);
 	public String getName();
