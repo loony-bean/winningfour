@@ -34,7 +34,6 @@ public class PageStateMachine extends StateMachine
 		MenuPage menuPage = new MenuPage(context, panel, "Menu");
 		OptionsPage optionsPage = new OptionsPage(context, panel, "Options");
 		InstructionsPage instructionsPage = new InstructionsPage(context, panel, "Instructions");
-		ConfirmExitState confirmExitState = new ConfirmExitState("ConfirmExit");
     	this.addState(menuPage);
     	this.addState(gamePage);
     	this.addState(optionsPage);
@@ -44,7 +43,6 @@ public class PageStateMachine extends StateMachine
     	menuPage.onSignal(AppResources.KEY_MENU_RESUME_GAME, gamePage);
     	menuPage.onSignal(AppResources.KEY_MENU_OPTIONS, optionsPage);
     	menuPage.onSignal(AppResources.KEY_MENU_INSTRUCTIONS, instructionsPage);
-    	menuPage.onSignal(AppResources.KEY_MENU_EXIT, confirmExitState);
     	gamePage.onKey(KindleKeyCodes.VK_BACK, menuPage);
     	instructionsPage.onKey(KindleKeyCodes.VK_BACK, menuPage);
 

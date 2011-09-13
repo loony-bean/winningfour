@@ -98,8 +98,7 @@ public class MenuPage extends PageState
         String[] menuItems = {AppResources.KEY_MENU_NEW_GAME,
         					  AppResources.KEY_MENU_RESUME_GAME,
         					  AppResources.KEY_MENU_OPTIONS,
-        					  AppResources.KEY_MENU_INSTRUCTIONS,
-        					  AppResources.KEY_MENU_EXIT};
+        					  AppResources.KEY_MENU_INSTRUCTIONS};
         for(int i = 0; i < menuItems.length; i++)
         {
         	final String key = menuItems[i];

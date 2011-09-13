@@ -34,7 +34,6 @@ public class AppResources extends ListResourceBundle
 	public static final String KEY_MENU_RESUME_GAME		= "menu_resume_game";
 	public static final String KEY_MENU_OPTIONS 		= "menu_options";
 	public static final String KEY_MENU_INSTRUCTIONS 	= "menu_instructions";
-	public static final String KEY_MENU_EXIT 			= "menu_exit";
 
 	public static final String KEY_GAME_TURN 			= "game_turn";
 	public static final String KEY_GAME_WIN 			= "game_win";
@@ -63,7 +62,6 @@ public class AppResources extends ListResourceBundle
         { KEY_MENU_RESUME_GAME, "Resume Game" },
         { KEY_MENU_OPTIONS, "Options" },
         { KEY_MENU_INSTRUCTIONS, "Instructions" },
-        { KEY_MENU_EXIT, "Exit" },
         { KEY_GAME_TURN, " turn" },
         { KEY_GAME_WIN, " wins. Press Select or N" },
         { KEY_GAME_DRAW, "Drawn game. Press Select or N" },
