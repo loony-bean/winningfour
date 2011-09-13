@@ -23,7 +23,7 @@ public class ComputerPlayer extends Player
 
 		App.log("ComputerPlayer::create");
 
-		this.hash = new TranspositionTable();
+		//this.hash = new TranspositionTable();
 		
 		this.contextReady = new Object();
 		this.workerReady = new Object();
@@ -171,14 +171,14 @@ public class ComputerPlayer extends Player
 	private int negascout(final IBoard2D board, int depth, int alpha, int beta, int pid)
 	{
 		int score = -MAXVAL;
-		int range = TranspositionTableItem.FailLow;
+		//int range = TranspositionTableItem.FailLow;
 
-		score = this.hash.lookup(board.hashCode(), depth, alpha, beta);
+		//score = this.hash.lookup(board.hashCode(), depth, alpha, beta);
 		
-		if (score != TranspositionTableItem.Unknown)
-		{
-			return score;
-		}
+		//if (score != TranspositionTableItem.Unknown)
+		//{
+		//	return score;
+		//}
 
 		if (this.rules.isEndGame(board) || depth == 0)
 		{
@@ -213,14 +213,14 @@ public class ComputerPlayer extends Player
             
             if (score > alpha)
             {
-            	range = TranspositionTableItem.ExactValue;
+            	//range = TranspositionTableItem.ExactValue;
             	alpha = score;
             }
 
             if (alpha >= beta)
             {
                 // 'beta cut-off'
-            	range = TranspositionTableItem.FailHigh;
+            	//range = TranspositionTableItem.FailHigh;
             	break;
             }
         	// (* set new null window *)
@@ -229,7 +229,7 @@ public class ComputerPlayer extends Player
         
         cloned = null;
         
-		this.hash.add(board.hashCode(), depth, alpha, range);
+		//this.hash.add(board.hashCode(), depth, alpha, range);
         return alpha;
 	}
 

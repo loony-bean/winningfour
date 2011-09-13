@@ -32,7 +32,7 @@ public class GamePage extends PageState
 		gameView.setBackground(new Color(0x000000FF, true));
 		p.add(gameView, BorderLayout.CENTER);
 		p.setPreferredSize((Dimension) App.screenSize.clone());
-		gameView.setPreferredSize((Dimension) App.screenSize.clone());
+		//gameView.setPreferredSize((Dimension) App.screenSize.clone());
 		this.focusOwner = gameView;
 
 		((ImagePanel) this.panel).setInner(p);

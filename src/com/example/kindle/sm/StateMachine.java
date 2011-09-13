@@ -97,7 +97,7 @@ public class StateMachine
 	 */
 	public void pushEvent(Event event)
 	{
-		App.log("App::pushEvent " + event.getClass().getSimpleName());
+		App.log("App::pushEvent " + event.getClass().getName());
 
 		Iterator i = this.currentState.transitions().iterator();
 		while(i.hasNext())
@@ -127,7 +127,7 @@ public class StateMachine
 			return;
 		}
 		
-		App.log("App::jump " + state.getClass().getSimpleName());
+		App.log("App::jump " + state.getClass().getName());
 		
 		if (this.currentState != null)
 		{

@@ -14,7 +14,7 @@ public class TranspositionTable
 	public int lookup(int key, int depth, int alpha, int beta)
 	{
 		int result = TranspositionTableItem.Unknown;
-		TranspositionTableItem item = (TranspositionTableItem) this.data.get(Integer.valueOf(key));
+		TranspositionTableItem item = (TranspositionTableItem) this.data.get(new Integer(key));
 
 		if (item != null && (item.depth >= depth))
 		{
@@ -42,7 +42,7 @@ public class TranspositionTable
 	
 	public void add(int key, int depth, int score, int range)
 	{
-		TranspositionTableItem item = (TranspositionTableItem) this.data.get(Integer.valueOf(key));
+		TranspositionTableItem item = (TranspositionTableItem) this.data.get(new Integer(key));
 
 		if (item == null)
 		{
@@ -54,7 +54,7 @@ public class TranspositionTable
 			item.depth = depth;
 			item.range = range;
 
-			this.data.put(Integer.valueOf(key), item);
+			this.data.put(new Integer(key), item);
 		}  // entry does exist but with smaller distance
 		else if (item.depth < depth)
 		{
