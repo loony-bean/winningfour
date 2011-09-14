@@ -7,15 +7,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.ui.KLabel;
 import com.amazon.kindle.kindlet.ui.KPanel;
 import com.amazon.kindle.kindlet.ui.KTextArea;
-import com.example.kindle.utils.FileHelper;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
-import com.example.kindle.winningfour.options.AppOptions;
 
 /**
  *
@@ -36,10 +36,23 @@ public class InstructionsPage extends PageState
 
         KTextArea textArea = new KTextArea();
 
-        String[] text = FileHelper.read(App.getHomeFilePath(AppOptions.FILE_NAME_INSTRUCTIONS));
-        for (int i = 0; i < text.length; i++)
+        ArrayList text = new ArrayList();
+        text.add("You and your opponent take turns putting pieces into the " +
+        		"playing area using the 5-way selector. Press Left or Right " +
+        		"to move selector and Down, Up or Select to put a new piece. " +
+        		"To win you need to connect four pieces of your color vertically, " +
+        		"horizontally or diagonally.");
+        text.add("");
+        text.add("You can use game options to change the board size, choose " +
+        		"computer or human to be your opponent or select who will make " +
+        		"the first turn. Also you can adjust game timer and select " +
+        		"graphical skin you like.");
+        text.add("");
+        text.add("After the game is done press N or Select to start a new game.");
+        Iterator iter = text.iterator();
+        while (iter.hasNext())
         {
-        	textArea.append(text[i] + "\n");
+        	textArea.append("" + iter.next() + "\n");
         }
         
         textArea.setBackground(new Color(0x000000FF, true));

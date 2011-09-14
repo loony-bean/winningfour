@@ -22,12 +22,11 @@ public class AppOptions
 {
 	public final static String FILE_NAME_OPTIONS		= "options.json";
 	public final static String FILE_NAME_GAMELOG		= "gamelog.txt";
-	public final static String FILE_NAME_INSTRUCTIONS	= "instructions.txt";
-	
+
 	public final static int STATUS_NO_CHANGES		= 0;
 	public final static int STATUS_DISPLAY_CHANGES	= 1;
 	public final static int STATUS_GAME_CHANGES		= 2;
-	
+
 	public final static String OP_T_BOARD_SIZE		= "Board Size";
 	public final static String OP_V_7X6 			= "7x6";
 	public final static String OP_V_8X7 			= "8x7";
