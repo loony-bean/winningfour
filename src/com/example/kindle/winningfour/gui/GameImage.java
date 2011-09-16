@@ -37,9 +37,13 @@ public class GameImage extends Container
 		}
 		else
 		{
+			// TODO: setup drawing callback
 			Dimension d = this.getSize();
 			g.setColor(Color.black);
-			g.fillRect(0, 0, d.width - 1, d.height - 1);
+			g.setXORMode(Color.white);
+			g.fillRect(4, 0, d.width - 1 - 8, 2);
+			g.fillRect(2, 2, d.width - 1 - 4, 2);
+			g.fillRect(4, 4, d.width - 1 - 8, 2);
 		}
 	}
 

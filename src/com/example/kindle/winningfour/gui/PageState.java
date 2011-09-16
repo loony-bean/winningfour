@@ -37,13 +37,14 @@ public class PageState extends State
 		}
         
 		this.focusOwner.requestFocus();
+		this.focusOwner.repaint();
         this.active = true;
 	}
 
 	public void leave()
 	{
 		super.leave();
-		this.focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+		//this.focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
         this.active = false;
 	}
 	

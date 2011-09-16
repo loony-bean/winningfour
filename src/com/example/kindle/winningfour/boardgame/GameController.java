@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.example.kindle.boardgame.Board2DItemType;
 import com.example.kindle.boardgame.GameEvent;
 import com.example.kindle.boardgame.IGame;
 import com.example.kindle.boardgame.IGameContext;
@@ -213,7 +214,9 @@ public class GameController implements IGame
 		{
 			this.board.putPiece(turn.getPiece(), turn.getPosition().row());
 			this.rules.afterPlayerTurn(this.board);
-			this.gameView.setItems(this.board.getItems());
+			//this.gameView.setItems(this.board.getItems());
+			ITurn last = this.board.getLastTurn();
+			this.gameView.setItem(new BoardItem((Piece) last.getPiece(), last.getPosition(), Board2DItemType.NORMAL));
 
 			this.recorder.record(this.board.getLastTurn().toString());
 			
@@ -274,13 +277,7 @@ public class GameController implements IGame
 	{
 		App.log("GameController::repaint");
 
-		EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				GameController.this.gameView.repaint();
-			}
-		});
+		GameController.this.gameView.repaint();
 
 		App.log("GameController::repaint will post runnable");
 	}

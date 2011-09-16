@@ -3,6 +3,7 @@ package com.example.kindle.winningfour.boardgame;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -40,6 +41,8 @@ public class GameView extends Container
 
 		this.setFocusable(true);
 	    this.setFocusTraversalKeysEnabled(false);
+	    
+	    this.items = new ArrayList();
 		
 		App.log("GameView::GameView done");
 	}
@@ -60,8 +63,8 @@ public class GameView extends Container
 
 		this.gameSelector.setBounds(size.width/2 - this.layout.pieceSizeX/2, this.layout.selectorY,
 				this.layout.pieceSizeX, this.layout.pieceSizeX);
-		this.gameSelector.setImage(AppResources.getImage("selector.png", this,
-				this.layout.pieceSizeX, this.layout.pieceSizeX));
+		//this.gameSelector.setImage(AppResources.getImage("selector.png", this,
+		//		this.layout.pieceSizeX, this.layout.pieceSizeX));
 		
 		this.gameSelector.setLocation(this.layout.boardRect.x +
 				this.selectedRow*(this.layout.pieceSizeX + this.layout.pieceGapX),
@@ -93,23 +96,42 @@ public class GameView extends Container
 		this.statusLabel.setText(this.getStatusString());
 
 		super.paint(g);
-		AppResources.getSkin().paintBoard(g, this);
-		this.paintItems(this.items, g);
+
+		if (g.getClipBounds().width == this.getSize().width)
+		{
+			AppResources.getSkin().paintBoard(g, this);
+			this.paintItems(this.items, g);
+		}
 	}
-	
+
 	public void paintItems(final ArrayList items, Graphics g)
 	{
-		Iterator iter = items.iterator();
-		while(iter.hasNext())
+		synchronized (this.items)
 		{
-			AppResources.getSkin().paintBoardItem(g, this, (BoardItem)iter.next());
+			Iterator iter = items.iterator();
+			while(iter.hasNext())
+			{
+				AppResources.getSkin().paintBoardItem(g, this, (BoardItem)iter.next());
+			}
 		}
 	}
 
 	public void setItems(final ArrayList items)
 	{
-		this.items = items;
-		this.repaint();
+		synchronized (this.items)
+		{
+			this.items = items;
+			this.repaint();
+		}
+	}
+
+	public void setItem(final BoardItem item)
+	{
+		synchronized (this.items)
+		{
+			this.items.add(item);
+			this.repaint();
+		}
 	}
 
 	public void setSelectedRow(int row)

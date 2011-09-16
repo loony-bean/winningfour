@@ -62,6 +62,7 @@ public class MenuPage extends PageState
 				if (MenuPage.this.focusOwner == resumeOption)
 				{
 					MenuPage.this.focusOwner = newOption;
+					MenuPage.this.focusOwner.requestFocus();
 				}
 
 				resumeOption.setEnabled(false);
@@ -83,6 +84,7 @@ public class MenuPage extends PageState
 			KButton newOption = (KButton) this.getMenuItem(AppResources.KEY_MENU_NEW_GAME);
 			KButton resumeOption = (KButton) this.getMenuItem(AppResources.KEY_MENU_RESUME_GAME);
 
+			this.focusOwner = newOption;
 			newOption.requestFocus();
 			resumeOption.setEnabled(false);
         }

@@ -192,6 +192,11 @@ public class Board implements IBoard2D
 		return this.lastTurn;
 	}
 
+	public void setLastTurn(ITurn turn)
+	{
+		this.lastTurn = (Turn) turn;
+	}
+	
 	public int getTurnsCount()
 	{
 		return this.turnsCount;

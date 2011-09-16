@@ -1,5 +1,7 @@
 package com.example.kindle.winningfour.boardgame;
 
+import java.awt.EventQueue;
+
 import com.example.kindle.boardgame.GameEvent;
 import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.sm.State;
@@ -92,8 +94,15 @@ public class GameStateMachine extends StateMachine
 
 			if (!App.gamer.isRestoring())
 			{
-				this.getPlayer().think(App.gamer.getContext());
-				App.gamer.startTimer();
+				EventQueue.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						TurnState.this.getPlayer().think(App.gamer.getContext());
+						App.gamer.startTimer();
+						App.gamer.repaint();
+					}
+				});
 			}
 		}
 

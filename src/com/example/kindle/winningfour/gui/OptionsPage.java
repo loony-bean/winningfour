@@ -27,6 +27,7 @@ public class OptionsPage extends State
 		super(name);
 		this.context = context;
 		this.active = false;
+		this.parent = parent;
 		this.focusListener = new FocusListener()
 		{
 			public void focusLost(FocusEvent e)
@@ -92,6 +93,7 @@ public class OptionsPage extends State
 		}
 
 		this.context.setTextOptionPane(null);
+		this.parent.repaint();
 	}
 
 	public void destroy()
@@ -107,6 +109,7 @@ public class OptionsPage extends State
 			this.focused.removeFocusListener(this.focusListener);
 			this.focusListener = null;
 			this.focused = null;
+			this.parent = null;
 		}
 
 		App.log("OptionsPage::destroy done");
@@ -116,4 +119,5 @@ public class OptionsPage extends State
 	private boolean active;
 	private Component focused;
 	private FocusListener focusListener;
+	private ImagePanel parent;
 }

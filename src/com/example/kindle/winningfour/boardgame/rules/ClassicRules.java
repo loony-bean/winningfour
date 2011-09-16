@@ -15,6 +15,8 @@ import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.Board;
 import com.example.kindle.winningfour.boardgame.ComputerPlayer;
+import com.example.kindle.winningfour.boardgame.TranspositionTable;
+import com.example.kindle.winningfour.boardgame.TranspositionTableItem;
 
 public class ClassicRules implements IRules
 {
@@ -36,6 +38,7 @@ public class ClassicRules implements IRules
 
 	public ClassicRules()
 	{
+		this.hash = new TranspositionTable();
 	}
 
 	public void afterPlayerTurn(final IBoard2D board)
@@ -186,7 +189,7 @@ public class ClassicRules implements IRules
 		
 		if(this.isTurnAvailable(board, best))
 		{
-			result.add(best);			
+			result.add(best);
 		}
 
 		int inc = 1;
@@ -223,7 +226,7 @@ public class ClassicRules implements IRules
 		int event = checkGameEvent(board);
 		int distance = ComputerPlayer.DEPTH - depth;
 		int result = 0;
-		
+
 		if (event == GameEvent.WIN)
 		{
 			result = W_WIN;
@@ -234,9 +237,19 @@ public class ClassicRules implements IRules
 		}
 		else
 		{
-			ITurn last = board.getLastTurn();
-			result = this.evaluateThreats(board, last.getPiece().getPlayer());
+			TranspositionTableItem item = this.hash.lookup(board.hashCode(), depth, 0, 0);
+			if (item == null)
+			{
+				ITurn last = board.getLastTurn();
+				result = this.evaluateThreats(board, last.getPiece().getPlayer());
+			}
+			else
+			{
+				result = item.score;
+			}
 		}
+
+		this.hash.add(board.hashCode(), depth, result, 0);
 
 		return result - distance * W_FALLOFF;
 	}
@@ -244,10 +257,12 @@ public class ClassicRules implements IRules
 	private int evaluateThreats(final IBoard2D board, final IPlayer player)
 	{
 		int eval = 0;
+		int width = board.getWidth();
+		int height = board.getHeight();
 		
-		for (int i = 0; i < board.getWidth(); i++)
+		for (int i = 0; i < width; i++)
 		{
-			for (int j = 0; j < board.getHeight(); j++)
+			for (int j = 0; j < height; j++)
 			{
 				ArrayList threats = this.walk(board, player, new Position2D(i, j));
 				Iterator iter = threats.iterator();
@@ -323,7 +338,8 @@ public class ClassicRules implements IRules
 	}
 
 	private IGameEventListener gameEventListener;
-	
+	private TranspositionTable hash;
+
 	private class Threat
 	{
 		public static final int CLOSED = 0;

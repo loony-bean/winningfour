@@ -14,8 +14,8 @@ import com.example.kindle.winningfour.AppResources;
 
 public class ComputerPlayer extends Player
 {
-	public final static int MAXVAL = 100;
-    public final static int DEPTH = 6;
+	public final static int MAXVAL = 10000;
+    public final static int DEPTH = 5;
 
 	public ComputerPlayer(final Color color)
 	{
@@ -71,7 +71,7 @@ public class ComputerPlayer extends Player
 			{
 				while(!this.ready)
 				{
-					this.workerReady.wait(100);
+					this.workerReady.wait(50);
 				}
 				
 				App.log("ComputerPlayer::worker wait ended");
@@ -124,16 +124,20 @@ public class ComputerPlayer extends Player
         int score = 0;
         boolean empty = true;
         
-        IBoard2D cloned = (IBoard2D) this.board.clone();
-        Iterator i = this.rules.getAvailableTurns(cloned, this).iterator();
+        //IBoard2D cloned = (IBoard2D) this.board.clone();
+        Iterator i = this.rules.getAvailableTurns(this.board, this).iterator();
         while (i.hasNext())
         {
         	ITurn turn = (ITurn) i.next();
 
-            cloned.turn(turn);
-            score = -this.negascout(cloned, DEPTH-1, -MAXVAL, MAXVAL, this.nextPlayer(this.pid));
-            cloned.undo();
+        	ITurn last = board.getLastTurn();
+        	this.board.turn(turn);
             
+        	score = -this.negascout(this.board, DEPTH-1, -MAXVAL, MAXVAL, this.nextPlayer(this.pid));
+            
+        	this.board.undo();
+        	((Board) this.board).setLastTurn(last);
+
             App.log("S: " + score);
 
             if (empty)
@@ -147,9 +151,14 @@ public class ComputerPlayer extends Player
                 best = turn;
                 maxscore = score;
             }
+            
+            if (score == MAXVAL - 1)
+            {
+            	break;
+            }
         }
 
-        cloned = null;
+        //cloned = null;
 
         if(empty)
         {
@@ -180,7 +189,7 @@ public class ComputerPlayer extends Player
 		//	return score;
 		//}
 
-		if (this.rules.isEndGame(board) || depth == 0)
+		if (depth == 0 || this.rules.isEndGame(board))
 		{
 			return -this.rules.evaluate(board, depth);
 		}
@@ -189,27 +198,29 @@ public class ComputerPlayer extends Player
 		int b = beta;
 		boolean first = true;
 
-		IBoard2D cloned = (IBoard2D) board.clone();
+		//IBoard2D cloned = (IBoard2D) board.clone();
 		
-        Iterator i = this.rules.getAvailableTurns(cloned, this.players[pid]).iterator();
+        Iterator i = this.rules.getAvailableTurns(board, this.players[pid]).iterator();
         while (i.hasNext())
         {
         	ITurn turn = (ITurn) i.next();
-        	cloned.turn(turn);
+        	ITurn last = board.getLastTurn();
+        	board.turn(turn);
 
-            score = -this.negascout(cloned, depth - 1, -b, -alpha, this.nextPlayer(pid));
+            score = -this.negascout(board, depth - 1, -b, -alpha, this.nextPlayer(pid));
 
             // (* check if null-window failed high *)
             if (alpha < score && score < beta && !first)
             {
             	// 'full re-search'
-            	score = -this.negascout(cloned, depth - 1, -beta, -alpha, this.nextPlayer(pid));
+            	score = -this.negascout(board, depth - 1, -beta, -alpha, this.nextPlayer(pid));
             }
             
             //App.log("D: " + depth + " P: " + turn.getPosition().x() + " S: " + score);
             
             first = false;
-            cloned.undo();
+            board.undo();
+            ((Board) board).setLastTurn(last);
             
             if (score > alpha)
             {
@@ -227,7 +238,7 @@ public class ComputerPlayer extends Player
             b = alpha + 1;
         }
         
-        cloned = null;
+        //cloned = null;
         
 		//this.hash.add(board.hashCode(), depth, alpha, range);
         return alpha;
@@ -263,8 +274,8 @@ public class ComputerPlayer extends Player
 		this.rules = null;
 		this.players = null;
 
-		this.hash.destroy();
-		this.hash = null;
+		//this.hash.destroy();
+		//this.hash = null;
 		
 		this.worker.interrupt();
 		try
@@ -288,7 +299,7 @@ public class ComputerPlayer extends Player
 	private IRules rules;
 	private IPlayer[] players;
 	private int pid;
-	private TranspositionTable hash;
+	//private TranspositionTable hash;
 	private Thread worker;
 	private Object contextReady;
 	private Object workerReady;
