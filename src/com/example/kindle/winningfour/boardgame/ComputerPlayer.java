@@ -248,6 +248,7 @@ public class ComputerPlayer extends Player
 	{
 		App.log("ComputerPlayer::interrupt");
 		
+		// TODO: AI thread stop
 		//this.worker.interrupt();
 		//this.worker.join();
 		

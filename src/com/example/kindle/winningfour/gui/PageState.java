@@ -4,6 +4,7 @@
 package com.example.kindle.winningfour.gui;
 
 import java.awt.Component;
+import java.awt.EventQueue;
 import java.awt.KeyboardFocusManager;
 
 import com.amazon.kindle.kindlet.KindletContext;
@@ -29,23 +30,31 @@ public class PageState extends State
 	public void enter()
 	{
 		super.enter();
+		
 		if (this.panel != null)
 		{
-			this.focusOwner.requestFocus();
 			this.parent.setInner(this.panel);
-			this.panel.repaint();
 		}
         
-		this.focusOwner.requestFocus();
-		this.focusOwner.repaint();
         this.active = true;
+        
+		EventQueue.invokeLater(new Runnable() 
+		{
+		    public void run()
+		    {
+				PageState.this.focusOwner.requestFocus();
+				PageState.this.focusOwner.repaint();
+				PageState.this.panel.repaint();
+		    }
+		});
 	}
 
 	public void leave()
 	{
-		super.leave();
-		//this.focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+		this.focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
         this.active = false;
+
+		super.leave();
 	}
 	
 	public void destroy()

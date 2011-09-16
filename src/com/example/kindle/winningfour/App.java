@@ -73,8 +73,11 @@ public class App extends AbstractKindlet
 
         Board.clearHash();
 
-		App.timer.cancel();
-		App.timer = null;
+        if (App.timer != null)
+        {
+        	App.timer.cancel();
+        	App.timer = null;
+        }
 
 		System.gc();
 
@@ -98,7 +101,7 @@ public class App extends AbstractKindlet
 				if (!App.isStopped())
 				{
 					Runnable runnable = 
-						new Runnable() 
+						new Runnable()
 						{
 						    public void run() 
 						    {

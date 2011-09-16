@@ -1,7 +1,6 @@
 package com.example.kindle.winningfour.boardgame;
 
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -342,18 +341,27 @@ public class GameController implements IGame
 		this.stateMachine.destroy();
 		this.stateMachine = null;
 
-		this.board.destroy();
-		this.board = null;
-
-		this.rules.destroy();
-		this.rules = null;
-
-		for (int i = 0; i < this.players.length; i++)
+		if (this.board != null)
 		{
-			this.players[i].destroy();
-			this.players[i] = null;
+			this.board.destroy();
+			this.board = null;
 		}
-		this.players = null;
+
+		if (this.rules != null)
+		{
+			this.rules.destroy();
+			this.rules = null;
+		}
+
+		if (this.players != null)
+		{
+			for (int i = 0; i < this.players.length; i++)
+			{
+				this.players[i].destroy();
+				this.players[i] = null;
+			}
+			this.players = null;
+		}
 
 		this.recorder.destroy();
 		this.recorder = null;
