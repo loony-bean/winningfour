@@ -135,13 +135,13 @@ public class App extends AbstractKindlet
 			return; 
 		}
 
+		// Options
+		this.context.getOrientationController().lockOrientation(KindleOrientation.PORTRAIT);
+
 		// Setting up globals
 		App.screenSize = this.root.getSize();
 		App.clientSize = new Dimension(App.screenSize.width - 20, App.screenSize.height - 20);
 
-		// Options
-		this.context.getOrientationController().lockOrientation(KindleOrientation.PORTRAIT);
-		
 		// Global Events
 		this.keyEventDispatcher = new KeyEventDispatcher()
 		{
