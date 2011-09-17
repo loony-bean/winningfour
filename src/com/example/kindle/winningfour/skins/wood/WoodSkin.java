@@ -18,9 +18,12 @@ public class WoodSkin extends BaseSkin
 
 	public BoardLayout getLayout(final Dimension size)
 	{
-		BoardLayout result = this.createLayout(size);
-		result.pieceGapY = 1;
-		return result;
+		BoardLayout l = this.createLayout(size);
+
+		l.pieceGapY = -2;
+		l.boardRect.y += l.boardRect.height - (l.pieceSizeY + l.pieceGapY) * boardSize.height;;
+
+		return l;
 	}
 
 	public void paintBoard(final Graphics g, final Component parent)
@@ -48,22 +51,6 @@ public class WoodSkin extends BaseSkin
 
 	public void paintBoardItem(final Graphics g, final Component parent, final BoardItem item)
 	{
-		Dimension size = parent.getSize();
-		BoardLayout l = this.getLayout(size);
-
-		int overlap = l.pieceSizeY/8;
-		int oy = (overlap - 1) * this.boardSize.height;
-
-		double hfactor = size.height / BaseSkin.DESIGN_HEIGHT;
-		int recty = this.asInt(this.boardLayout, "y");
-		int recth = this.asInt(this.boardLayout, "height");
-
-		int col = (int) (this.boardSize.getHeight() - item.getPosition().col() - 1);
-		int y = (int) ((recty + recth) * hfactor) - l.pieceSizeY/4;
-		y -= col * (l.pieceSizeY + l.pieceGapY - overlap) + oy;
-
-		int x = l.boardRect.x + item.getPosition().row()*(l.pieceSizeX + l.pieceGapX);
-
-		this.paintPiece(g, parent, item.getPiece(), new Rectangle(x, y, l.pieceSizeX, l.pieceSizeY), item.getType());
+		super.paintBoardItem(g, parent, item);
 	}
 }

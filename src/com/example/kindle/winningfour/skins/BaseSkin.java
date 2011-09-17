@@ -75,8 +75,7 @@ public class BaseSkin implements ISkin
 
 		result.pieceGapX = gapx;
 		result.pieceGapY = (result.boardRect.height - (result.pieceSizeY * rows))/(rows - 1);
-		result.pieceGapY = Math.max(result.pieceGapY, 0);
-
+		
 		return result;
 	}
 
