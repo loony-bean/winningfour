@@ -41,6 +41,7 @@ public class PageStateMachine extends StateMachine
     	gamePage.onKey('N', resetGame);
     	gamePage.onKey(KindleKeyCodes.VK_TEXT, optionsPage);
     	instructionsPage.onKey(KindleKeyCodes.VK_BACK, gamePage);
+    	instructionsPage.onKey('I', gamePage);
 
     	this.setInitialState(gamePage);
 	}

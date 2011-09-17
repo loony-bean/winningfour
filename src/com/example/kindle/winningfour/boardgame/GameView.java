@@ -28,10 +28,13 @@ public class GameView extends Container
 		this.gameSelector = new GameImage(null);
 		this.statusLabel = new KLabel("", KLabel.CENTER);
 		this.statusLabel.setFont(AppResources.getFont(AppResources.ID_FONT_GAME_STATUS));
+		this.legendLabel = new KLabel(App.bundle.getString(AppResources.KEY_GAME_LEGEND), KLabel.CENTER);
+		this.legendLabel.setFont(AppResources.getFont(AppResources.ID_FONT_GAME_STATUS));
         this.progressBar = new KWTProgressBar(GameClock.RESOLUTION);
         this.progressBar.setLabelStyle(KWTProgressBar.STYLE_NONE);
 
 		// Add items in z-order: top items first, to bottom items last
+        this.add(this.legendLabel);
 		this.add(this.gameSelector);
 		this.add(this.statusLabel);
 		this.add(this.progressBar);
@@ -60,6 +63,9 @@ public class GameView extends Container
 		this.layoutSize = size;
 		this.layout = AppResources.getSkin().getLayout(size);
 
+		Dimension sz = this.legendLabel.getPreferredSize();
+		this.legendLabel.setBounds(0, 30, size.width, sz.height);
+
 		this.gameSelector.setBounds(size.width/2 - this.layout.pieceSizeX/2, this.layout.selectorY,
 				this.layout.pieceSizeX, this.layout.pieceSizeX);
 		//this.gameSelector.setImage(AppResources.getImage("selector.png", this,
@@ -69,12 +75,12 @@ public class GameView extends Container
 				this.selectedRow*(this.layout.pieceSizeX + this.layout.pieceGapX),
 				this.layout.selectorY);
 
-		Dimension sz = this.statusLabel.getPreferredSize();
+		sz = this.statusLabel.getPreferredSize();
 		this.statusLabel.setBounds(0, this.layout.labelY, size.width, sz.height);
 
         this.progressBar.setWidth(size.width);
-        Dimension pz = this.progressBar.getPreferredSize();
-		this.progressBar.setBounds(10, size.height - pz.height, size.width - 20, pz.height);
+        sz = this.progressBar.getPreferredSize();
+		this.progressBar.setBounds(10, size.height - sz.height, size.width - 20, sz.height);
 
 		App.log("GameView::doLayout done");
 	}
@@ -207,6 +213,7 @@ public class GameView extends Container
 
 	private static final long serialVersionUID = 1;
 	private GameImage gameSelector;
+	private KLabel legendLabel;
 	private KLabel statusLabel;
 	private Dimension layoutSize;
 	private ArrayList items;

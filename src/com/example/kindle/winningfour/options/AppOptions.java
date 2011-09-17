@@ -20,8 +20,8 @@ import com.example.kindle.winningfour.App;
  */
 public class AppOptions
 {
-	public final static String FILE_NAME_OPTIONS		= "options.json";
-	public final static String FILE_NAME_GAMELOG		= "gamelog.txt";
+	public final static String FILE_NAME_OPTIONS	= "options.json";
+	public final static String FILE_NAME_GAMELOG	= "gamelog.txt";
 
 	public final static int STATUS_NO_CHANGES		= 0;
 	public final static int STATUS_DISPLAY_CHANGES	= 1;

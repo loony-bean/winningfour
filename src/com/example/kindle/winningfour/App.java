@@ -134,7 +134,7 @@ public class App extends AbstractKindlet
 		if (App.isStopped())
 		{
 			App.log("App::initalStart early exit (stopped)");
-			return; 
+			return;
 		}
 
 		// Options
@@ -148,21 +148,15 @@ public class App extends AbstractKindlet
 		{
             public boolean dispatchKeyEvent(final KeyEvent key)
             {
-            	boolean consumed = false;
             	int code = key.getKeyCode();
-                
+
             	if (code == KindleKeyCodes.VK_BACK ||
             		code == KindleKeyCodes.VK_TEXT ||
             		code == 'I' || code == 'N')
                 {
-                	consumed = true;
-                	App.pager.pushEvent(new KeyboardEvent(code));
-                }
-
-                if (consumed)
-                {
-                	App.log("Key pressed: " + code);
                     key.consume();
+                	App.log("Key pressed: " + code);
+                	App.pager.pushEvent(new KeyboardEvent(code));
                     return true;
                 }
 
