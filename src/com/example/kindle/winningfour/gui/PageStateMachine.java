@@ -28,7 +28,7 @@ public class PageStateMachine extends StateMachine
 		this.panel = new GamePanel();
 		panel.setPreferredSize(root.getPreferredSize());
 		root.add(panel, BorderLayout.CENTER);
-		
+
 		ResetGame resetGame = new ResetGame("ResetGame");
 		GamePage gamePage = new GamePage(context, panel, "Game");
 		OptionsPage optionsPage = new OptionsPage(context, panel, "Options");

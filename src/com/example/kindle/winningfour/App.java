@@ -146,15 +146,20 @@ public class App extends AbstractKindlet
 		// Global Events
 		this.keyEventDispatcher = new KeyEventDispatcher()
 		{
-            public boolean dispatchKeyEvent(final KeyEvent key)
+            public boolean dispatchKeyEvent(final KeyEvent e)
             {
-            	int code = key.getKeyCode();
+            	if (e.getID() == KeyEvent.KEY_RELEASED)
+            	{
+            		return false;
+            	}
+            	
+            	int code = e.getKeyCode();
 
             	if (code == KindleKeyCodes.VK_BACK ||
             		code == KindleKeyCodes.VK_TEXT ||
             		code == 'I' || code == 'N')
                 {
-                    key.consume();
+                    e.consume();
                 	App.log("Key pressed: " + code);
                 	App.pager.pushEvent(new KeyboardEvent(code));
                     return true;

@@ -134,7 +134,6 @@ public class GameStateMachine extends StateMachine
 		public WinState(final GameController game, int player, final String name)
 		{
 			super(game, player, name);
-			this.keyAdapter = this.endGameKeyAdapter;
 		}
 		
 		public void enter()
@@ -166,9 +165,7 @@ public class GameStateMachine extends StateMachine
 		public DrawState(final GameController game)
 		{
 			super(game, 0, "DrawState");
-			//this.status = App.bundle.getString(AppResources.KEY_GAME_DRAW);
 			this.status = GameEvent.DRAW;
-			this.keyAdapter = this.endGameKeyAdapter;
 		}
 		
 		public void enter()

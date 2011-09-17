@@ -48,7 +48,7 @@ public class InstructionsPage extends PageState
         		"the first turn. Also you can adjust game timer and select " +
         		"graphical skin you like.");
         text.add("");
-        text.add("After the game is done press N or Select to start a new game.");
+        text.add("After the game is done press N to start a new game.");
         text.add("");
         text.add("Press Back or I to return to the game.");
         Iterator iter = text.iterator();
