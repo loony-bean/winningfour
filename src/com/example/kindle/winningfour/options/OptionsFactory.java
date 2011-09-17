@@ -61,43 +61,25 @@ public class OptionsFactory
 		String firstTurn = (String) App.opts.get(AppOptions.OP_T_FIRST_TURN);
 		String opponent = (String) App.opts.get(AppOptions.OP_T_OPPONENT);
 
-		IPlayer you = new HumanPlayer(Color.white);
-		IPlayer opp = null;
-
 		if (opponent.equals(AppOptions.OP_V_COMPUTER))
 		{
-			opp = new ComputerPlayer(Color.black);
-		}
-		else if (opponent.equals(AppOptions.OP_V_HUMAN))
-		{
-			opp = new HumanPlayer(Color.black);
-		}
-
-		if (firstTurn.equals(AppOptions.OP_V_YOU))
-		{
-			players[0] = you;
-			players[1] = opp;
-		}
-		else if (firstTurn.equals(AppOptions.OP_V_OPPONENT))
-		{
-			players[0] = opp;
-			players[1] = you;
-		}
-/*		else if (firstTurn.equals(AppOptions.OP_V_RANDOM))
-		{
-			Random rand = new Random();
-			if (rand.nextBoolean())
+			if (firstTurn.equals(AppOptions.OP_V_YOU))
 			{
-				players[0] = you;
-				players[1] = opp;
+				players[0] = new HumanPlayer(Color.white);
+				players[1] = new ComputerPlayer(Color.black);;
 			}
 			else
 			{
-				players[0] = opp;
-				players[1] = you;
+				players[0] = new ComputerPlayer(Color.white);;
+				players[1] = new HumanPlayer(Color.black);
 			}
 		}
-*/		
+		else if (opponent.equals(AppOptions.OP_V_HUMAN))
+		{
+			players[0] = new HumanPlayer(Color.white);;
+			players[1] = new HumanPlayer(Color.black);
+		}
+
 		return players; 
 	}
 
