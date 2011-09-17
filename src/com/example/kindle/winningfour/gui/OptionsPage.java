@@ -22,7 +22,7 @@ import com.example.kindle.winningfour.options.AppOptions;
  */
 public class OptionsPage extends State
 {
-	OptionsPage(final KindletContext context, final ImagePanel parent, final String name)
+	OptionsPage(final KindletContext context, final GamePanel parent, final String name)
 	{
 		super(name);
 		this.context = context;
@@ -80,6 +80,8 @@ public class OptionsPage extends State
 							public void run() {
 								App.gamer.stop();
 								App.opts.commit();
+								// TODO: change to signal
+								KeyboardHelper.simulateKey(OptionsPage.this.focused, 'N');
 							}},
 						new Runnable() {
 							public void run() {
@@ -119,5 +121,5 @@ public class OptionsPage extends State
 	private boolean active;
 	private Component focused;
 	private FocusListener focusListener;
-	private ImagePanel parent;
+	private GamePanel parent;
 }

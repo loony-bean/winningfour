@@ -25,28 +25,24 @@ public class PageStateMachine extends StateMachine
 		super();
 
 		Container root = context.getRootContainer();
-		this.panel = new ImagePanel("background.gif");
+		this.panel = new GamePanel();
 		panel.setPreferredSize(root.getPreferredSize());
 		root.add(panel, BorderLayout.CENTER);
 		
 		ResetGame resetGame = new ResetGame("ResetGame");
 		GamePage gamePage = new GamePage(context, panel, "Game");
-		MenuPage menuPage = new MenuPage(context, panel, "Menu");
 		OptionsPage optionsPage = new OptionsPage(context, panel, "Options");
 		InstructionsPage instructionsPage = new InstructionsPage(context, panel, "Instructions");
-    	this.addState(menuPage);
     	this.addState(gamePage);
     	this.addState(optionsPage);
     	this.addState(instructionsPage);
     	resetGame.onSignal(AppResources.KEY_MENU_NEW_GAME, gamePage);
-    	menuPage.onSignal(AppResources.KEY_MENU_NEW_GAME, resetGame);
-    	menuPage.onSignal(AppResources.KEY_MENU_RESUME_GAME, gamePage);
-    	menuPage.onSignal(AppResources.KEY_MENU_OPTIONS, optionsPage);
-    	menuPage.onSignal(AppResources.KEY_MENU_INSTRUCTIONS, instructionsPage);
-    	gamePage.onKey(KindleKeyCodes.VK_BACK, menuPage);
-    	instructionsPage.onKey(KindleKeyCodes.VK_BACK, menuPage);
+    	gamePage.onKey('I', instructionsPage);
+    	gamePage.onKey('N', resetGame);
+    	gamePage.onKey(KindleKeyCodes.VK_TEXT, optionsPage);
+    	instructionsPage.onKey(KindleKeyCodes.VK_BACK, gamePage);
 
-    	this.setInitialState(menuPage);
+    	this.setInitialState(gamePage);
 	}
 
 	private class ResetGame extends State
@@ -77,7 +73,7 @@ public class PageStateMachine extends StateMachine
 			}
 		}
 	}
-	
+
 	public void destroy()
 	{
 		App.log("PageStateMachine::destroy");
@@ -89,6 +85,6 @@ public class PageStateMachine extends StateMachine
 
 		App.log("PageStateMachine::destroy done");
 	}
-	
-	private ImagePanel panel;
+
+	private GamePanel panel;
 }

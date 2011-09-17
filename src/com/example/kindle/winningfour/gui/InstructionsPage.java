@@ -22,11 +22,11 @@ import com.example.kindle.winningfour.AppResources;
  */
 public class InstructionsPage extends PageState
 {
-	InstructionsPage(final KindletContext context, final ImagePanel parent, final String name)
+	InstructionsPage(final KindletContext context, final GamePanel parent, final String name)
 	{
 		super(context, parent, name);
-		this.panel = new KPanel();
-		this.panel.setPreferredSize((Dimension) App.screenSize.clone());
+		this.panel = new KPanel();	
+		this.panel.setPreferredSize(new Dimension(App.screenSize.width, App.screenSize.height - 20));
 		this.panel.setBackground(new Color(0x000000FF, true));
 		this.panel.setLayout(new FlowLayout());
 

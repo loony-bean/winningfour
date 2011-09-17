@@ -18,7 +18,7 @@ import com.example.kindle.winningfour.App;
  */
 public class PageState extends State
 {
-	PageState(final KindletContext context, final ImagePanel parent, final String name)
+	PageState(final KindletContext context, final GamePanel parent, final String name)
 	{
 		super(name);
 		this.context = context;
@@ -73,7 +73,7 @@ public class PageState extends State
 
 	protected boolean active;
 	protected KPanel panel;
-	protected ImagePanel parent;
+	protected GamePanel parent;
 	protected KindletContext context;
 	protected Component focusOwner;
 }

@@ -82,6 +82,7 @@ public class GameView extends Container
 	public void reset()
 	{
 		this.layoutSize = null;
+		this.doLayout();
 	}
 
 	public void paint(Graphics g)

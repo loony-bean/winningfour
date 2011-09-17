@@ -60,7 +60,6 @@ public class App extends AbstractKindlet
         App.pager = null;
 
         App.screenSize = null;
-        App.clientSize = null;
         
         App.gamer.destroy();
         App.gamer = null;
@@ -143,7 +142,6 @@ public class App extends AbstractKindlet
 
 		// Setting up globals
 		App.screenSize = this.root.getSize();
-		App.clientSize = new Dimension(App.screenSize.width - 20, App.screenSize.height - 20);
 
 		// Global Events
 		this.keyEventDispatcher = new KeyEventDispatcher()
@@ -153,7 +151,9 @@ public class App extends AbstractKindlet
             	boolean consumed = false;
             	int code = key.getKeyCode();
                 
-            	if (code == KindleKeyCodes.VK_BACK)
+            	if (code == KindleKeyCodes.VK_BACK ||
+            		code == KindleKeyCodes.VK_TEXT ||
+            		code == 'I' || code == 'N')
                 {
                 	consumed = true;
                 	App.pager.pushEvent(new KeyboardEvent(code));
@@ -289,9 +289,6 @@ public class App extends AbstractKindlet
     
     /** Current screen dimensions. */
     public static Dimension screenSize;
-    
-    /** Screen client area dimensions. */
-    public static Dimension clientSize;
     
     /** Game state machine. */
     public static GameController gamer;

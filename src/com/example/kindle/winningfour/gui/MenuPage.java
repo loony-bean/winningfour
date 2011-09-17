@@ -20,12 +20,13 @@ import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
 
+// TODO: delete this
 /**
  *
  */
 public class MenuPage extends PageState
 {
-	MenuPage(final KindletContext context, final ImagePanel parent, final String name)
+	MenuPage(final KindletContext context, final GamePanel parent, final String name)
 	{
 		super(context, parent, name);
 		this.panel = new KPanel();

@@ -17,7 +17,7 @@ import com.example.kindle.winningfour.boardgame.GameView;
  */
 public class GamePage extends PageState
 {
-	GamePage(final KindletContext context, final ImagePanel parent, final String name)
+	GamePage(final KindletContext context, final GamePanel parent, final String name)
 	{
 		super(context, parent, name);
 
