@@ -36,10 +36,11 @@ public class PageStateMachine extends StateMachine
     	this.addState(gamePage);
     	this.addState(optionsPage);
     	this.addState(instructionsPage);
-    	resetGame.onSignal(AppResources.KEY_MENU_NEW_GAME, gamePage);
+    	resetGame.onSignal(AppResources.SIG_NEW_GAME, gamePage);
     	gamePage.onKey('I', instructionsPage);
     	gamePage.onKey('N', resetGame);
     	gamePage.onKey(KindleKeyCodes.VK_TEXT, optionsPage);
+    	gamePage.onSignal(AppResources.SIG_NEW_GAME, resetGame);
     	instructionsPage.onKey(KindleKeyCodes.VK_BACK, gamePage);
     	instructionsPage.onKey('I', gamePage);
 
@@ -61,7 +62,7 @@ public class PageStateMachine extends StateMachine
 					new Runnable() {
 						public void run() {
 							App.gamer.stop();
-							App.pager.pushEvent(new SignalEvent(AppResources.KEY_MENU_NEW_GAME));
+							App.pager.pushEvent(new SignalEvent(AppResources.SIG_NEW_GAME));
 						}},
 					new Runnable() {
 						public void run() {
@@ -70,7 +71,7 @@ public class PageStateMachine extends StateMachine
 			}
 			else
 			{
-    			App.pager.pushEvent(new SignalEvent(AppResources.KEY_MENU_NEW_GAME));
+    			App.pager.pushEvent(new SignalEvent(AppResources.SIG_NEW_GAME));
 			}
 		}
 	}

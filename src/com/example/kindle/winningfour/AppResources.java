@@ -30,10 +30,7 @@ public class AppResources extends ListResourceBundle
 	public static final int ID_FONT_GAME_STATUS 		= 3;
 	public static final int ID_FONT_PAGE_TITLE			= 4;
 	
-	public static final String KEY_MENU_NEW_GAME 		= "menu_new_game";
-	public static final String KEY_MENU_RESUME_GAME		= "menu_resume_game";
-	public static final String KEY_MENU_OPTIONS 		= "menu_options";
-	public static final String KEY_MENU_INSTRUCTIONS 	= "menu_instructions";
+	public static final String SIG_NEW_GAME 			= "signal_new_game";
 
 	public static final String KEY_GAME_LEGEND 			= "game_legend";
 	public static final String KEY_GAME_TURN 			= "game_turn";
@@ -59,10 +56,6 @@ public class AppResources extends ListResourceBundle
      */
     static final Object[][] contents =
     {
-        { KEY_MENU_NEW_GAME, "New Game" },
-        { KEY_MENU_RESUME_GAME, "Resume Game" },
-        { KEY_MENU_OPTIONS, "Options" },
-        { KEY_MENU_INSTRUCTIONS, "Instructions" },
         { KEY_GAME_LEGEND, "Press N to restart game, I for instructions" },
         { KEY_GAME_TURN, " turn" },
         { KEY_GAME_WIN, " wins!" },

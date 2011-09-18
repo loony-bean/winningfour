@@ -10,6 +10,7 @@ import java.awt.event.FocusListener;
 
 import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.event.KindleKeyCodes;
+import com.example.kindle.sm.SignalEvent;
 import com.example.kindle.sm.State;
 import com.example.kindle.utils.DialogHelper;
 import com.example.kindle.utils.KeyboardHelper;
@@ -80,8 +81,7 @@ public class OptionsPage extends State
 							public void run() {
 								App.gamer.stop();
 								App.opts.commit();
-								// TODO: change to signal
-								KeyboardHelper.simulateKey(OptionsPage.this.focused, 'N');
+								App.pager.pushEvent(new SignalEvent(AppResources.SIG_NEW_GAME));
 							}},
 						new Runnable() {
 							public void run() {
