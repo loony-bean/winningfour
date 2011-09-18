@@ -2,21 +2,17 @@ package com.example.kindle.winningfour.gui;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Image;
 
 import com.amazon.kindle.kindlet.ui.KImage;
-import com.amazon.kindle.kindlet.ui.KPanel;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
-import com.example.kindle.winningfour.skins.ISkin;
 
-// TODO: extend from GamePanel
-public class ImagePanel extends KPanel
+public class ImagePanel extends GamePanel
 {
 	public ImagePanel(final String name)
 	{
-		this.setLayout(null);
+		super();
 		this.backgroundPane = new KImage(null);
 		this.add(this.backgroundPane);
 		this.name = name;
@@ -31,30 +27,12 @@ public class ImagePanel extends KPanel
 			return;
 		}
 
-		this.layoutSize = size;
-		this.skin = AppResources.getSkin();
+		super.doLayout();
 
-		Image image = AppResources.getImage(name, this, size.width, size.height);
+		Image image = AppResources.getImage(name, this, this.layoutSize.width, this.layoutSize.height);
 
-		this.backgroundPane.setBounds(0, 0, size.width, size.height);
+		this.backgroundPane.setBounds(0, 0, this.layoutSize.width, this.layoutSize.height);
 		this.backgroundPane.setImage(image);
-		
-		if (this.inner != null)
-		{
-			Dimension sz = this.inner.getPreferredSize();
-			Dimension pz = new Dimension((this.layoutSize.width - sz.width)/2, (this.layoutSize.height - sz.height)/2); 
-			this.inner.setBounds(pz.width, pz.height, sz.width, sz.height);
-		}
-	}
-	
-	public void paint(Graphics g)
-	{
-		super.paint(g);
-	}
-	
-	public Container getInner()
-	{
-		return this.inner; 
 	}
 	
 	public void setInner(final Container inner)
@@ -77,20 +55,12 @@ public class ImagePanel extends KPanel
 		}
 	}
 
-	public void enter()
-	{
-		if (this.skin != null && !this.skin.equals(AppResources.getSkin()))
-		{
-			this.layoutSize = null;
-		}
-	}
-
 	void destroy()
 	{
 		App.log("ImagePanel::destroy");
 
-		this.removeAll();
-
+		super.destroy();
+		
 		this.backgroundPane.setImage(null);
 		this.backgroundPane = null;
 		
@@ -100,9 +70,6 @@ public class ImagePanel extends KPanel
 			this.backgroundImage = null;
 		}
 		
-		this.layoutSize = null;
-		this.inner = null;
-
 		App.log("ImagePanel::destroy done");
 	}
 
@@ -110,7 +77,4 @@ public class ImagePanel extends KPanel
 	private String name;
 	private Image backgroundImage;
 	private KImage backgroundPane;
-	private Dimension layoutSize;
-	private Container inner;
-	private ISkin skin;
 }

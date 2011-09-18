@@ -1,5 +1,6 @@
 package com.example.kindle.winningfour.boardgame;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -15,6 +16,7 @@ import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.AppResources;
 import com.example.kindle.winningfour.boardgame.BoardItem;
 import com.example.kindle.winningfour.gui.GameImage;
+import com.example.kindle.winningfour.gui.Paintable;
 import com.example.kindle.winningfour.options.OptionsFactory;
 import com.example.kindle.winningfour.skins.BoardLayout;
 
@@ -68,8 +70,19 @@ public class GameView extends Container
 
 		this.gameSelector.setBounds(size.width/2 - this.layout.pieceSizeX/2, this.layout.selectorY,
 				this.layout.pieceSizeX, this.layout.pieceSizeX);
-		//this.gameSelector.setImage(AppResources.getImage("selector.png", this,
-		//		this.layout.pieceSizeX, this.layout.pieceSizeX));
+		
+		this.gameSelector.setDrawer(new Paintable()
+		{
+			public void paint(Graphics g)
+			{
+				int width = GameView.this.layout.pieceSizeX;
+				g.setColor(Color.black);
+				g.setXORMode(Color.white);
+				g.fillRect(4, 0, width - 1 - 8, 2);
+				g.fillRect(2, 2, width - 1 - 4, 2);
+				g.fillRect(4, 4, width - 1 - 8, 2);
+			}
+		});
 		
 		this.gameSelector.setLocation(this.layout.boardRect.x +
 				this.selectedRow*(this.layout.pieceSizeX + this.layout.pieceGapX),

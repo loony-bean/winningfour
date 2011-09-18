@@ -2,7 +2,6 @@ package com.example.kindle.winningfour.gui;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics;
 
 import com.amazon.kindle.kindlet.ui.KPanel;
 import com.example.kindle.winningfour.App;
@@ -34,11 +33,6 @@ public class GamePanel extends KPanel
 			Dimension pz = new Dimension((this.layoutSize.width - sz.width)/2, (this.layoutSize.height - sz.height)/2); 
 			this.inner.setBounds(pz.width, pz.height, sz.width, sz.height);
 		}
-	}
-	
-	public void paint(Graphics g)
-	{
-		super.paint(g);
 	}
 	
 	public Container getInner()
@@ -85,7 +79,7 @@ public class GamePanel extends KPanel
 	}
 
 	private static final long serialVersionUID = 1L;
-	private Dimension layoutSize;
-	private Container inner;
-	private ISkin skin;
+	protected Dimension layoutSize;
+	protected Container inner;
+	protected ISkin skin;
 }

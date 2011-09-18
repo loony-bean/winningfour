@@ -1,8 +1,6 @@
 package com.example.kindle.winningfour.gui;
 
-import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -25,6 +23,11 @@ public class GameImage extends Container
 		
 		this.image = image;
 	}
+	
+	public void setDrawer(final Paintable drawer)
+	{
+		this.drawer = drawer;
+	}
 
 	public void paint(Graphics g)
 	{
@@ -37,13 +40,10 @@ public class GameImage extends Container
 		}
 		else
 		{
-			// TODO: setup drawing callback
-			Dimension d = this.getSize();
-			g.setColor(Color.black);
-			g.setXORMode(Color.white);
-			g.fillRect(4, 0, d.width - 1 - 8, 2);
-			g.fillRect(2, 2, d.width - 1 - 4, 2);
-			g.fillRect(4, 4, d.width - 1 - 8, 2);
+			if (this.drawer != null)
+			{
+				this.drawer.paint(g);
+			}
 		}
 	}
 
@@ -56,10 +56,13 @@ public class GameImage extends Container
 			this.image.flush();
 			this.image = null;
 		}
+		
+		this.drawer = null;
 
 		App.log("GameImage::destroy done");
 	}
 
 	private static final long serialVersionUID = 1L;
 	private Image image;
+	private Paintable drawer;
 }
