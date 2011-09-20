@@ -11,6 +11,7 @@ import com.amazon.kindle.kindlet.KindletContext;
 import com.amazon.kindle.kindlet.ui.KPanel;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.GameView;
+import com.example.kindle.winningfour.options.AppOptions;
 
 /**
  *
@@ -23,7 +24,7 @@ public class GamePage extends PageState
 
 		GameView gameView = App.gamer.getView();
 
-		this.panel = new ImagePanel("board.png");
+		this.panel = new ImagePanel(AppOptions.FILE_NAME_BOARD);
 		this.panel.setPreferredSize((Dimension) App.screenSize.clone());
 		KPanel p = new KPanel();
 

@@ -90,8 +90,13 @@ public class OptionsFactory
 	 */
 	public ISkin createSkin()
 	{
-		ISkin result = null;
 		String key = (String) App.opts.get(AppOptions.OP_T_SKIN);
+		return this.getSkin(key);
+	}
+	
+	public ISkin getSkin(final String key)
+	{
+		ISkin result = null;
 		Dimension bs = this.createBoardSize();
 		
 		if (key.equals(AppOptions.OP_V_CLASSIC))

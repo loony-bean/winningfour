@@ -120,7 +120,7 @@ public class BaseSkin implements ISkin
 
 	protected void paintImage(final Graphics g, final Component parent, String id, final Rectangle rect)
 	{
-		Image image = AppResources.getImage(id, parent, rect.width, rect.height);
+		Image image = AppResources.getImage(null, id, parent, rect.width, rect.height);
 		g.drawImage(image, rect.x, rect.y, null);
 	}
 

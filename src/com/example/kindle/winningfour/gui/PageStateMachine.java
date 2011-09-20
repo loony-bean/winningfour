@@ -29,13 +29,17 @@ public class PageStateMachine extends StateMachine
 		panel.setPreferredSize(root.getPreferredSize());
 		root.add(panel, BorderLayout.CENTER);
 
+		InitGame initGame = new InitGame("InitGame");
 		ResetGame resetGame = new ResetGame("ResetGame");
 		GamePage gamePage = new GamePage(context, panel, "Game");
 		OptionsPage optionsPage = new OptionsPage(context, panel, "Options");
 		InstructionsPage instructionsPage = new InstructionsPage(context, panel, "Instructions");
+    	this.addState(initGame);
+    	this.addState(resetGame);
     	this.addState(gamePage);
     	this.addState(optionsPage);
     	this.addState(instructionsPage);
+    	initGame.onSignal(AppResources.SIG_NEW_GAME, gamePage);
     	resetGame.onSignal(AppResources.SIG_NEW_GAME, gamePage);
     	gamePage.onKey('I', instructionsPage);
     	gamePage.onKey('N', resetGame);
@@ -44,7 +48,21 @@ public class PageStateMachine extends StateMachine
     	instructionsPage.onKey(KindleKeyCodes.VK_BACK, gamePage);
     	instructionsPage.onKey('I', gamePage);
 
-    	this.setInitialState(gamePage);
+    	this.setInitialState(initGame);
+	}
+
+	private class InitGame extends State
+	{
+		public InitGame(final String name)
+		{
+			super(name);
+		}
+		
+		public void enter()
+		{
+			//AppResources.preload(App.gamer.getView());
+			App.pager.pushEvent(new SignalEvent(AppResources.SIG_NEW_GAME));
+		}
 	}
 
 	private class ResetGame extends State

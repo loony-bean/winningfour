@@ -29,7 +29,7 @@ public class ImagePanel extends GamePanel
 
 		super.doLayout();
 
-		Image image = AppResources.getImage(name, this, this.layoutSize.width, this.layoutSize.height);
+		Image image = AppResources.getImage(null, name, this, this.layoutSize.width, this.layoutSize.height);
 
 		this.backgroundPane.setBounds(0, 0, this.layoutSize.width, this.layoutSize.height);
 		this.backgroundPane.setImage(image);

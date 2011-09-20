@@ -12,6 +12,7 @@ import com.amazon.kindle.kindlet.ui.KindletUIResources;
 import com.amazon.kindle.kindlet.ui.KindletUIResources.KFontFamilyName;
 import com.amazon.kindle.kindlet.ui.KindletUIResources.KFontStyle;
 import com.example.kindle.utils.ImageHelper;
+import com.example.kindle.winningfour.options.AppOptions;
 import com.example.kindle.winningfour.options.OptionsFactory;
 import com.example.kindle.winningfour.skins.ISkin;
 
@@ -66,11 +67,36 @@ public class AppResources extends ListResourceBundle
         { KEY_ERROR_NO_TURNS, "No available turns." }
     };
 
-    // TODO: images preloading thread
-
-    public static Image getImage(final String key, final Component parent, int width, int height)
+    public static void preload(final Component parent)
     {
-		ISkin skin = (new OptionsFactory()).createSkin();
+		AppResources.preloader = new Thread(new Runnable()
+		{
+			public void run()
+			{
+				App.log("AppResources::preloader thread started");
+		    	String[] skins =  App.opts.getSkinNamesList();
+		    	for (int i = 0; i < skins.length; i++ )
+		    	{
+		    		int width = App.screenSize.width;
+		    		int height = App.screenSize.height;
+		    		ISkin skin = (new OptionsFactory()).getSkin(skins[i]);
+		    		AppResources.getImage(skin, AppOptions.FILE_NAME_BOARD, parent, width, height);
+					App.log("AppResources::preloader - " + skin.getName() + " loaded");
+		    	}
+				App.log("AppResources::preloader thread done");
+			}
+		}, "ImagePreloader");
+		
+		AppResources.preloader.start();
+    }
+
+    public static Image getImage(ISkin skin, final String key, final Component parent, int width, int height)
+    {
+    	if (skin == null)
+    	{
+    		skin = (new OptionsFactory()).createSkin();
+    	}
+
 		String fullkey = skin.getName() + "-" + key + "-" + width + "-" + height;
 
     	Image image = (Image)imagesMap.get(fullkey);
@@ -133,7 +159,10 @@ public class AppResources extends ListResourceBundle
 
     	imagesMap.clear();
     	imagesMap = null;
+    	
+    	preloader = null;
     }
     
     static private HashMap imagesMap = new HashMap();
+	static private Thread preloader;
 }

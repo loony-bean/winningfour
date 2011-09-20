@@ -22,6 +22,8 @@ public class AppOptions
 {
 	public final static String FILE_NAME_OPTIONS	= "options.json";
 	public final static String FILE_NAME_GAMELOG	= "gamelog.txt";
+	
+	public final static String FILE_NAME_BOARD		= "board.png";
 
 	public final static int STATUS_NO_CHANGES		= 0;
 	public final static int STATUS_DISPLAY_CHANGES	= 1;
@@ -223,6 +225,7 @@ public class AppOptions
 		}
 		catch (ParseException e)
 		{
+			// defaults would be okay
 			e.printStackTrace();
 		};
 		
@@ -303,6 +306,17 @@ public class AppOptions
 		}
 
 		return result;
+	}
+
+	/**
+	 * Returns list of supported skin names.
+	 * 
+	 * @return List of available skins name strings.
+	 */
+	public String[] getSkinNamesList()
+	{
+		OptionValues skins = (OptionValues)this.model.get(OP_T_SKIN);
+		return skins.values;
 	}
 
 	/**
