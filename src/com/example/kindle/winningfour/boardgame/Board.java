@@ -1,5 +1,6 @@
 package com.example.kindle.winningfour.boardgame;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Random;
@@ -116,7 +117,7 @@ public class Board implements IBoard2D
 			Turn turn = new Turn(piece, (IPosition2D) position.clone());
 			this.lastTurn = turn;
 			
-			this.hashCode ^= turn.hashCode();
+			this.hashCode ^= this.getTurnHash(turn);
 			this.hashCode ^= Board.zobristMove;
 		}
 		
@@ -136,11 +137,22 @@ public class Board implements IBoard2D
 		}
 	}
 
+	public int getTurnHash(ITurn turn)
+	{
+		int p = turn.getPiece().getPlayer().getColor() == Color.black ? 1 : 0;
+		// TODO: silly twist, but x is not row, y is not col actually
+		int x = turn.getPosition().row();
+		int y = turn.getPosition().col();
+
+		return Board.zobrist[p][x][y];
+	}
+	
 	public void undo()
 	{
 		if (this.lastTurn != null)
 		{
-			this.hashCode ^= lastTurn.hashCode();
+			//this.hashCode ^= lastTurn.hashCode();
+			this.hashCode ^= this.getTurnHash(lastTurn);
 			this.hashCode ^= Board.zobristMove;
 
 			IPosition2D pos = this.lastTurn.getPosition();
