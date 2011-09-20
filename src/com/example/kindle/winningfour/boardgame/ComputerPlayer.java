@@ -16,6 +16,7 @@ public class ComputerPlayer extends Player
 {
 	public final static int MAXVAL = 10000;
     public final static int DEPTH = 5;
+    public final static int MINTIME = 500;
 
 	public ComputerPlayer(final Color color)
 	{
@@ -35,7 +36,7 @@ public class ComputerPlayer extends Player
 				try
 				{
 					App.log("ComputerPlayer::worker started");
-
+					
 					while (!ComputerPlayer.this.worker.isInterrupted())
 					{
 						App.log("ComputerPlayer::worker entered");
@@ -116,6 +117,8 @@ public class ComputerPlayer extends Player
 	{
 		App.log("ComputerPlayer::makeBestTurn");
 
+		turnTime = System.currentTimeMillis();
+
 		this.pid = (this.players[0] == this) ? 0 : 1;
 
 		ITurn best = null;
@@ -166,7 +169,20 @@ public class ComputerPlayer extends Player
         }
         else
         {
-            App.gamer.makeTurn(best);
+			long delta = System.currentTimeMillis() - turnTime;
+			if (delta < MINTIME)
+			{
+				try
+				{
+					Thread.sleep(MINTIME - delta, 0);
+				} catch (InterruptedException e)
+				{
+					// no danger
+				}
+			}
+			turnTime = System.currentTimeMillis();
+
+			App.gamer.makeTurn(best);
         }
 
 		App.log("ComputerPlayer::makeBestTurn done");
@@ -305,4 +321,5 @@ public class ComputerPlayer extends Player
 	private Object contextReady;
 	private Object workerReady;
 	private boolean ready;
+	private long turnTime;
 }

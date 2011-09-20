@@ -52,6 +52,8 @@ public class GameController implements IGame
 		OptionsFactory opfact = new OptionsFactory();
 
 		this.board = new Board(opfact.createBoardSize());
+		
+		this.destroyPlayers();
 		this.players = opfact.createPlayers();
 
 		this.rules = new ClassicRules();
@@ -332,6 +334,19 @@ public class GameController implements IGame
 		}
 	}
 
+	public void destroyPlayers()
+	{
+		if (this.players != null)
+		{
+			for (int i = 0; i < this.players.length; i++)
+			{
+				this.players[i].destroy();
+				this.players[i] = null;
+			}
+			this.players = null;
+		}
+	}
+
 	public void destroy()
 	{
 		App.log("GameController::destroy");
@@ -353,15 +368,7 @@ public class GameController implements IGame
 			this.rules = null;
 		}
 
-		if (this.players != null)
-		{
-			for (int i = 0; i < this.players.length; i++)
-			{
-				this.players[i].destroy();
-				this.players[i] = null;
-			}
-			this.players = null;
-		}
+		this.destroyPlayers();
 
 		this.recorder.destroy();
 		this.recorder = null;
