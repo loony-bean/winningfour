@@ -105,7 +105,7 @@ public class Board implements IBoard2D
 
 	public IPiece getPiece(final IPosition2D position)
 	{
-		return this.getPiece(position.row(), position.col());
+		return this.getPiece(position.x(), position.y());
 	}
 
 	public IPiece getPiece(int x, int y)
@@ -115,7 +115,7 @@ public class Board implements IBoard2D
 
 	public void setPiece(final IPiece piece, final IPosition2D position)
 	{
-		this.board[position.row()][position.col()] = (Piece)piece;
+		this.board[position.x()][position.y()] = (Piece)piece;
 
 		if (piece != null)
 		{
@@ -129,9 +129,9 @@ public class Board implements IBoard2D
 		this.turnsCount += 1;
 	}
 
-	public void putPiece(final IPiece piece, int row)
+	public void putPiece(final IPiece piece, int x)
 	{
-		this.turn(this.createTurn(piece.getPlayer(), row));
+		this.turn(this.createTurn(piece.getPlayer(), x));
 	}
 
 	public void turn(ITurn turn)
@@ -145,9 +145,8 @@ public class Board implements IBoard2D
 	public int getTurnHash(ITurn turn)
 	{
 		int p = turn.getPiece().getPlayer().getColor() == Color.black ? 1 : 0;
-		// TODO: silly twist, but x is not row, y is not col actually
-		int x = turn.getPosition().row();
-		int y = turn.getPosition().col();
+		int x = turn.getPosition().x();
+		int y = turn.getPosition().y();
 
 		return Board.zobrist[p][x][y];
 	}
@@ -161,7 +160,7 @@ public class Board implements IBoard2D
 			this.hashCode ^= Board.zobristMove;
 
 			IPosition2D pos = this.lastTurn.getPosition();
-			this.board[pos.row()][pos.col()] = null;
+			this.board[pos.x()][pos.y()] = null;
 			this.lastTurn = null;
 			this.turnsCount -= 1;
 		}
@@ -184,7 +183,7 @@ public class Board implements IBoard2D
 
 	public boolean isPositionOnBoard(final IPosition2D pos)
 	{
-		return this.isPositionOnBoard(pos.row(), pos.col());
+		return this.isPositionOnBoard(pos.x(), pos.y());
 	}
 
 	public boolean isPositionOnBoard(int x, int y)
@@ -193,15 +192,15 @@ public class Board implements IBoard2D
 				y >= 0 && y < this.getHeight());
 	}
 
-	public ITurn createTurn(IPlayer player, int row)
+	public ITurn createTurn(IPlayer player, int x)
 	{
 		ITurn result = null;
 		
-		for (int col = this.board[row].length - 1; col >= 0; col--)
+		for (int y = this.board[x].length - 1; y >= 0; y--)
 		{
-			if (this.board[row][col] == null)
+			if (this.board[x][y] == null)
 			{
-				result = new Turn(new Piece(player), new Position2D(row, col));
+				result = new Turn(new Piece(player), new Position2D(x, y));
 				break;
 			}
 		}

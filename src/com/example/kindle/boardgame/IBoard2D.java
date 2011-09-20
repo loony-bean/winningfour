@@ -21,16 +21,16 @@ public interface IBoard2D
 	public void undo();
 
 	/**
-	 * Returns board width as number of rows.
+	 * Returns board width as number of columns.
 	 * 
-	 * @return Number of rows.
+	 * @return Number of columns.
 	 */
 	public int getWidth();
 
 	/**
-	 * Returns board height as number of columns.
+	 * Returns board height as number of rows.
 	 * 
-	 * @return Number of columns.
+	 * @return Number of rows.
 	 */
 	public int getHeight();
 

@@ -8,31 +8,31 @@ public class Position2D implements IPosition2D
 	/**
 	 * Position constructor given row and column numbers (starting from zero).
 	 * 
-	 * @param row Row number.
-	 * @param col Column number.
+	 * @param x Column number.
+	 * @param y Row number.
 	 */
-	public Position2D(int row, int col)
+	public Position2D(int x, int y)
 	{
-		this.row = row;
-		this.col = col;
+		this.x = x;
+		this.y = y;
 	}
 
 	/** {@inheritDoc} */
-	public int row()
+	public int x()
 	{
-		return this.row;
+		return this.x;
 	}
 
 	/** {@inheritDoc} */
-	public int col()
+	public int y()
 	{
-		return this.col;
+		return this.y;
 	}
 
 	/** {@inheritDoc} */
 	public Object clone()
 	{
-		return new Position2D(this.row, this.col);
+		return new Position2D(this.x, this.y);
 	}
 
 	/** {@inheritDoc} */
@@ -43,12 +43,12 @@ public class Position2D implements IPosition2D
 		if (getClass() != other.getClass()) return false;
 
 		Position2D otherPosition = (Position2D) other;
-		return (this.row == otherPosition.row && this.col == otherPosition.col);
+		return (this.x == otherPosition.x && this.y == otherPosition.y);
 	}
 
-	/** Row number on board. */
-	private int row;
-
 	/** Column number on board. */
-	private int col;
+	private int x;
+
+	/** Row number on board. */
+	private int y;
 }

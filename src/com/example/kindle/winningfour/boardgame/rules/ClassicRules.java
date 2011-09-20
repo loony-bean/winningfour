@@ -57,8 +57,8 @@ public class ClassicRules implements IRules
 		// win
 		ITurn turn = board.getLastTurn();
 		IPlayer p = turn.getPiece().getPlayer();
-		int x = turn.getPosition().row();
-		int y = turn.getPosition().col();
+		int x = turn.getPosition().x();
+		int y = turn.getPosition().y();
 
 		int max = 0;
 		ArrayList threats = this.walk(board, p, x, y);
@@ -169,7 +169,7 @@ public class ClassicRules implements IRules
 			IPosition2D pos = turn.getPosition();
 			if (board.isPositionOnBoard(pos))
 			{
-				if(board.getPiece(pos.row(), 0) == null)
+				if(board.getPiece(pos.x(), 0) == null)
 				{
 					return true;
 				}
@@ -185,7 +185,7 @@ public class ClassicRules implements IRules
 
 		ITurn best = null;
 		ITurn last = board.getLastTurn();
-		int lastx = (last != null) ? last.getPosition().row() : (board.getWidth() - 1)/2;
+		int lastx = (last != null) ? last.getPosition().x() : (board.getWidth() - 1)/2;
 		best = ((Board) board).createTurn(player, lastx);
 		
 		if(this.isTurnAvailable(board, best))

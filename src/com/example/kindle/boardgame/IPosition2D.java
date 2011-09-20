@@ -6,18 +6,18 @@ package com.example.kindle.boardgame;
 public interface IPosition2D
 {
 	/**
-	 * Returns row number starting from zero.
-	 * 
-	 * @return Row number.
-	 */
-	public int row();
-
-	/**
 	 * Returns column number starting from zero.
 	 * 
 	 * @return Column number.
 	 */
-	public int col();
+	public int x();
+
+	/**
+	 * Returns row number starting from zero.
+	 * 
+	 * @return Row number.
+	 */
+	public int y();
 
 	/**
 	 * Makes a clone of the position.

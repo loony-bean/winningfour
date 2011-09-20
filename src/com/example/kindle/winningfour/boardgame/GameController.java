@@ -211,7 +211,7 @@ public class GameController implements IGame
 
 		if(this.rules.isTurnAvailable(this.board, turn))
 		{
-			this.board.putPiece(turn.getPiece(), turn.getPosition().row());
+			this.board.putPiece(turn.getPiece(), turn.getPosition().x());
 			this.rules.afterPlayerTurn(this.board);
 			//this.gameView.setItems(this.board.getItems());
 			ITurn last = this.board.getLastTurn();

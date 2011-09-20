@@ -104,7 +104,7 @@ public class BaseSkin implements ISkin
 			String id = getImageId(piece.getPlayer().getColor(), item.getType());
 			IPosition2D pos = item.getPosition();
 
-			this.paintImageToGrid(g, parent, id, l, pos.row(), pos.col());
+			this.paintImageToGrid(g, parent, id, l, pos.x(), pos.y());
 		}
 	}
 
