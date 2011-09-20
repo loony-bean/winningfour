@@ -11,7 +11,6 @@ import com.example.kindle.boardgame.IPlayer;
 import com.example.kindle.boardgame.IPosition2D;
 import com.example.kindle.boardgame.IRules;
 import com.example.kindle.boardgame.ITurn;
-import com.example.kindle.boardgame.Position2D;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.Board;
 import com.example.kindle.winningfour.boardgame.ComputerPlayer;
@@ -58,10 +57,11 @@ public class ClassicRules implements IRules
 		// win
 		ITurn turn = board.getLastTurn();
 		IPlayer p = turn.getPiece().getPlayer();
-		IPosition2D pos = (IPosition2D) turn.getPosition().clone();
+		int x = turn.getPosition().row();
+		int y = turn.getPosition().col();
 
 		int max = 0;
-		ArrayList threats = this.walk(board, p, pos);
+		ArrayList threats = this.walk(board, p, x, y);
 
 		Iterator iter = threats.iterator();
 		while(iter.hasNext())
@@ -87,27 +87,30 @@ public class ClassicRules implements IRules
 		return result;
 	}
 
-	private ArrayList walk(final IBoard2D board, final IPlayer player, final IPosition2D pos)
+	private ArrayList walk(final IBoard2D board, final IPlayer player, int x, int y)
 	{
 		ArrayList threats = new ArrayList();
-		
-		int incs[][] = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
-		for (int c = 0; c < incs.length; c++)
+
+		if (board.getPiece(x, y) != null)
 		{
-			Threat threat = this.countInRow(board, player, pos, incs[c][0], incs[c][1]);
-			if (threat.count > 1)
+			int incs[][] = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
+			for (int c = 0; c < incs.length; c++)
 			{
-				threats.add(threat);
+				Threat threat = this.countInRow(board, player, x, y, incs[c][0], incs[c][1]);
+				if (threat.count > 1)
+				{
+					threats.add(threat);
+				}
 			}
 		}
 
 		return threats;
 	}
 
-	private Threat countInRow(final IBoard2D board, final IPlayer player, final IPosition2D pos, int incx, int incy)
+	private Threat countInRow(final IBoard2D board, final IPlayer player, int x, int y, int incx, int incy)
 	{
-		Threat left  = this.countInRowOneDir(board, player, pos,  incx,  incy);
-		Threat right = this.countInRowOneDir(board, player, pos, -incx, -incy);
+		Threat left  = this.countInRowOneDir(board, player, x, y,  incx,  incy);
+		Threat right = this.countInRowOneDir(board, player, x, y, -incx, -incy);
 
 		int count = left.count + right.count - 1;
 		int type = left.type + right.type;
@@ -115,25 +118,23 @@ public class ClassicRules implements IRules
 		return new Threat(count, type);
 	}
 
-	private Threat countInRowOneDir(final IBoard2D board, final IPlayer player, final IPosition2D pos, int incx, int incy)
+	private Threat countInRowOneDir(final IBoard2D board, final IPlayer player, int x, int y, int incx, int incy)
 	{
 		int local = 0;
 		int count = 0;
 		int type = Threat.CLOSED;
-		
-		int x = pos.row();
-		int y = pos.col();
 
-		while (((Board) board).isPositionOnBoard(new Position2D(x, y)))
+		int w = board.getWidth();
+		int h = board.getHeight();
+		
+		while (x >= 0 && x < w &&
+			   y >= 0 && y < h)
 		{
-			IPiece piece = board.getPiece(new Position2D(x, y));
+			IPiece piece = board.getPiece(x, y);
 			if (piece != null && piece.getPlayer().equals(player))
 			{
 				local += 1;
-				if (local > count)
-				{
-					count = local;
-				}
+				count = Math.max(count, local);
 			}
 			else
 			{
@@ -145,7 +146,7 @@ public class ClassicRules implements IRules
 				local = 0;
 				break;
 			}
-			
+
 			x += incx;
 			y += incy;
 		}
@@ -168,7 +169,7 @@ public class ClassicRules implements IRules
 			IPosition2D pos = turn.getPosition();
 			if (board.isPositionOnBoard(pos))
 			{
-				if(board.getPiece(new Position2D(pos.row(), 0)) == null)
+				if(board.getPiece(pos.row(), 0) == null)
 				{
 					return true;
 				}
@@ -202,7 +203,7 @@ public class ClassicRules implements IRules
 
 			for (int i = 0; i < candidates.length; i++)
 			{
-				if (board.isPositionOnBoard(new Position2D(candidates[i], 0)))
+				if (board.isPositionOnBoard(candidates[i], 0))
 				{
 					ITurn t = ((Board) board).createTurn(player, candidates[i]);
 
@@ -262,9 +263,21 @@ public class ClassicRules implements IRules
 		
 		for (int i = 0; i < width; i++)
 		{
-			for (int j = 0; j < height; j++)
+			// check if column is empty
+			if (board.getPiece(i, 0) == null)
 			{
-				ArrayList threats = this.walk(board, player, new Position2D(i, j));
+				continue;
+			}
+			
+			for (int j = height - 1; j >=0; j--)
+			{
+				// check if we've reached the top of column
+				if (board.getPiece(i, j) == null)
+				{
+					break;
+				}
+
+				ArrayList threats = this.walk(board, player, i, j);
 				Iterator iter = threats.iterator();
 				int threatsNumber = 0;
 				int increment = 0;

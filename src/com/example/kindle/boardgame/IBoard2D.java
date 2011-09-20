@@ -49,7 +49,6 @@ public interface IBoard2D
 	 */
 	public int getTurnsCount();
 
-
 	/**
 	 * Checks if the position given is valid for the current size board.
 	 * 
@@ -60,13 +59,23 @@ public interface IBoard2D
 	public boolean isPositionOnBoard(final IPosition2D position);
 
 	/**
+	 * Checks if the position given is valid for the current size board.
+	 * 
+	 * @param x Position x coordinate.
+	 * @param y Position y coordinate.
+	 * 
+	 * @return True is the position is situated on the board, false otherwise.
+	 */
+	public boolean isPositionOnBoard(int x, int y);
+
+	/**
 	 * Sets a piece into position given.
 	 * 
 	 * @param piece Piece to set.
 	 * @param position Position for the piece.
 	 */
 	public void setPiece(final IPiece piece, final IPosition2D position);
-	
+
 	/**
 	 * Returns a piece present on the position given.
 	 * 
@@ -75,7 +84,17 @@ public interface IBoard2D
 	 * @return Piece found on the position. This can be null.
 	 */
 	public IPiece getPiece(final IPosition2D position);
-	
+
+	/**
+	 * Returns a piece present on the position given.
+	 * 
+	 * @param x Position x coordinate.
+	 * @param y Position y coordinate.
+	 * 
+	 * @return Piece found on the position. This can be null.
+	 */
+	public IPiece getPiece(int x, int y);
+
 	/**
 	 * Returns an unordered list of board items, each presenting
 	 * a piece and its position, which can be found on current board.

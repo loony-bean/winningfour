@@ -105,7 +105,12 @@ public class Board implements IBoard2D
 
 	public IPiece getPiece(final IPosition2D position)
 	{
-		return this.board[position.row()][position.col()];
+		return this.getPiece(position.row(), position.col());
+	}
+
+	public IPiece getPiece(int x, int y)
+	{
+		return this.board[x][y];
 	}
 
 	public void setPiece(final IPiece piece, final IPosition2D position)
@@ -177,10 +182,15 @@ public class Board implements IBoard2D
 		return new Dimension(this.getWidth(), this.getHeight());
 	}
 
-	public boolean isPositionOnBoard(final IPosition2D position)
+	public boolean isPositionOnBoard(final IPosition2D pos)
 	{
-		return (position.row() >= 0 && position.row() < this.getWidth() &&
-				position.col() >= 0 && position.col() < this.getHeight());
+		return this.isPositionOnBoard(pos.row(), pos.col());
+	}
+
+	public boolean isPositionOnBoard(int x, int y)
+	{
+		return (x >= 0 && x < this.getWidth() &&
+				y >= 0 && y < this.getHeight());
 	}
 
 	public ITurn createTurn(IPlayer player, int row)
