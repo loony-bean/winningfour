@@ -117,8 +117,6 @@ public class App extends AbstractKindlet
 				// usually nothing much to do here, unless you did something 
 				// in stop() that needs to be rebuilt.
 			}
-			
-			/* TODO: build timers and possibly background threads (if any) ... */
 		}
 
 		App.log("App::start done");
@@ -204,7 +202,6 @@ public class App extends AbstractKindlet
 		{
 			App.opts.save();
 			App.log("App::stop synchronized");
-			// TODO: check is we need to cancel game timer
 		}
 		
 		App.log("App::stop done");

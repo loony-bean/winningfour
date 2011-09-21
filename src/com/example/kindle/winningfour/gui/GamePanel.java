@@ -58,7 +58,7 @@ public class GamePanel extends KPanel
 		}
 	}
 
-	public void enter()
+	public void reset()
 	{
 		if (this.skin != null && !this.skin.equals(AppResources.getSkin()))
 		{
@@ -68,14 +68,14 @@ public class GamePanel extends KPanel
 
 	void destroy()
 	{
-		App.log("ImagePanel::destroy");
+		App.log("GamePanel::destroy");
 
 		this.removeAll();
 		
 		this.layoutSize = null;
 		this.inner = null;
 
-		App.log("ImagePanel::destroy done");
+		App.log("GamePanel::destroy done");
 	}
 
 	private static final long serialVersionUID = 1L;

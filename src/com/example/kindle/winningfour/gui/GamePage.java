@@ -12,6 +12,7 @@ import com.amazon.kindle.kindlet.ui.KPanel;
 import com.example.kindle.winningfour.App;
 import com.example.kindle.winningfour.boardgame.GameView;
 import com.example.kindle.winningfour.options.AppOptions;
+import com.example.kindle.winningfour.options.IOptionsListener;
 
 /**
  *
@@ -41,7 +42,17 @@ public class GamePage extends PageState
 	public void enter()
 	{
 		super.enter();
-		((ImagePanel) this.panel).enter();
+		((ImagePanel) this.panel).reset();
+		
+		App.opts.setOptionsListener(new IOptionsListener()
+		{
+			public void onOptionsChanged()
+			{
+				App.opts.apply();
+				((ImagePanel) GamePage.this.panel).reset();
+			}
+		});
+		
 		App.gamer.start();
 		App.gamer.startTimer();
 	}
@@ -49,6 +60,7 @@ public class GamePage extends PageState
 	public void leave()
 	{
 		super.leave();
+		App.opts.setOptionsListener(null);
 		this.parent.repaint();
 		App.gamer.stopTimer();
 	}

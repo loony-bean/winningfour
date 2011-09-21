@@ -16,7 +16,7 @@ public class ComputerPlayer extends Player
 {
 	public final static int MAXVAL = 10000;
     public final static int DEPTH = 5;
-    public final static int MINTIME = 500;
+    public final static int MINTIME = 1000;
 
 	public ComputerPlayer(final Color color)
 	{
@@ -263,11 +263,6 @@ public class ComputerPlayer extends Player
 	public void interrupt() throws InterruptedException
 	{
 		App.log("ComputerPlayer::interrupt");
-		
-		// TODO: AI thread stop
-		//this.worker.interrupt();
-		//this.worker.join();
-		
 		App.log("ComputerPlayer::done");
 	}
 

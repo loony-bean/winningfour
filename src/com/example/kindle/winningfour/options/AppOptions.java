@@ -12,8 +12,11 @@ import org.json.simple.parser.ParseException;
 import com.amazon.kindle.kindlet.ui.KTextOptionListMenu;
 import com.amazon.kindle.kindlet.ui.KTextOptionMenuItem;
 import com.amazon.kindle.kindlet.ui.KTextOptionPane;
+import com.example.kindle.sm.SignalEvent;
+import com.example.kindle.utils.DialogHelper;
 import com.example.kindle.utils.FileHelper;
 import com.example.kindle.winningfour.App;
+import com.example.kindle.winningfour.AppResources;
 
 /**
  * Application options manager.
@@ -59,10 +62,11 @@ public class AppOptions
     /** {@inheritDoc} */
 	private class OptionUpdater implements ItemListener
 	{
-		public OptionUpdater(final String key, JSONObject opts)
+		public OptionUpdater(final String key, JSONObject opts, final IOptionsListener listener)
 		{
 			this.key = key;
 			this.opts = opts;
+			this.listener = listener;
 		}
 		
 		public void itemStateChanged(ItemEvent e)
@@ -72,13 +76,15 @@ public class AppOptions
 				App.log(this.key + ":" + e.getItem());
 				// TODO: this does not work on high speed
 				this.opts.put(this.key, e.getItem());
+				this.listener.onOptionsChanged();
 			}
 		}
 
 		private JSONObject opts;
 		private String key;
+		private IOptionsListener listener;
 	}
-	
+
 	/**
 	 * Represents option values in options model. Consist of String items
 	 * and selection index.
@@ -90,7 +96,7 @@ public class AppOptions
 			this.values = values;
 			this.selected = selected;
 		}
-			
+
 		public String[] values;
 		public int selected;
 	}
@@ -158,11 +164,40 @@ public class AppOptions
 		{
 			String key = (String)i.next();
 			OptionValues items = (OptionValues)this.model.get(key);
-			OptionUpdater updater = new OptionUpdater(key, this.pendingOptions);
+			OptionUpdater updater = new OptionUpdater(key, this.pendingOptions, new IOptionsListener()
+			{
+				public void onOptionsChanged()
+				{
+					AppOptions.this.onOptionsChanged();
+				}
+			});
 			optionPane.addListMenu(createOptionListMenu(key, items.values, items.selected, updater));
 		}
 
 		return optionPane;
+	}
+
+	/**
+	 * Method that accepts notifications from Option Pane menu
+	 * items and collect them into one single notification feed.
+	 */
+	private void onOptionsChanged()
+	{
+		if (this.listener != null)
+		{
+			this.listener.onOptionsChanged();
+		}
+	}
+
+	/**
+	 * Sets listener that will be notified when some option on
+	 * the Option Pane changes.
+	 * 
+	 * @param listener Listener object.
+	 */
+	public void setOptionsListener(final IOptionsListener listener)
+	{
+		this.listener = listener;
 	}
 
 	/**
@@ -308,6 +343,38 @@ public class AppOptions
 		return result;
 	}
 
+	public void apply()
+	{
+		int opstat = this.getStatus();
+		if (opstat == STATUS_DISPLAY_CHANGES)
+		{
+			this.commit();
+			App.gamer.getView().reset();
+			App.gamer.repaint();
+		}
+		else if (opstat == STATUS_GAME_CHANGES)
+		{
+			if (!App.gamer.isStopped())
+			{
+				DialogHelper.confirm(App.bundle.getString(AppResources.KEY_CONFIRM_OPTIONS),
+						new Runnable() {
+							public void run() {
+								App.gamer.stop();
+								AppOptions.this.commit();
+								App.pager.pushEvent(new SignalEvent(AppResources.SIG_NEW_GAME));
+							}},
+						new Runnable() {
+							public void run() {
+								AppOptions.this.revert();
+							}});
+			}
+			else
+			{
+				this.commit();
+			}
+		}
+	}
+
 	/**
 	 * Returns list of supported skin names.
 	 * 
@@ -365,7 +432,9 @@ public class AppOptions
 		{
 			this.textOptionPane.remove(i);
 		}
-		
+
+		this.listener = null;
+
 		this.textOptionPane = null;
 	}
 	
@@ -380,4 +449,7 @@ public class AppOptions
 	
 	/** Option pane constructed by the options model. */
 	private KTextOptionPane textOptionPane;
+
+	/** Listener to be notified when some option value changes on Option Pane. */
+	private IOptionsListener listener;
 }
