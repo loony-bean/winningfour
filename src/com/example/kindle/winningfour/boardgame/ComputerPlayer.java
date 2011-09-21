@@ -16,7 +16,7 @@ public class ComputerPlayer extends Player
 {
 	public final static int MAXVAL = 10000;
     public final static int DEPTH = 5;
-    public final static int MINTIME = 1000;
+    public final static int MINTIME = 750;
 
 	public ComputerPlayer(final Color color)
 	{
@@ -24,8 +24,6 @@ public class ComputerPlayer extends Player
 
 		App.log("ComputerPlayer::create");
 
-		//this.hash = new TranspositionTable();
-		
 		this.contextReady = new Object();
 		this.workerReady = new Object();
 		this.ready = false;
@@ -72,7 +70,7 @@ public class ComputerPlayer extends Player
 			{
 				while(!this.ready)
 				{
-					this.workerReady.wait(50);
+					this.workerReady.wait(15);
 				}
 				
 				App.log("ComputerPlayer::worker wait ended");
@@ -196,14 +194,6 @@ public class ComputerPlayer extends Player
 	private int negascout(final IBoard2D board, int depth, int alpha, int beta, int pid)
 	{
 		int score = -MAXVAL;
-		//int range = TranspositionTableItem.FailLow;
-
-		//score = this.hash.lookup(board.hashCode(), depth, alpha, beta);
-		
-		//if (score != TranspositionTableItem.Unknown)
-		//{
-		//	return score;
-		//}
 
 		if (depth == 0 || this.rules.isEndGame(board))
 		{
@@ -214,8 +204,6 @@ public class ComputerPlayer extends Player
 		int b = beta;
 		boolean first = true;
 
-		//IBoard2D cloned = (IBoard2D) board.clone();
-		
         Iterator i = this.rules.getAvailableTurns(board, this.players[pid]).iterator();
         while (i.hasNext())
         {
@@ -232,31 +220,24 @@ public class ComputerPlayer extends Player
             	score = -this.negascout(board, depth - 1, -beta, -alpha, this.nextPlayer(pid));
             }
             
-            //App.log("D: " + depth + " P: " + turn.getPosition().x() + " S: " + score);
-            
             first = false;
             board.undo();
             ((Board) board).setLastTurn(last);
             
             if (score > alpha)
             {
-            	//range = TranspositionTableItem.ExactValue;
             	alpha = score;
             }
 
             if (alpha >= beta)
             {
                 // 'beta cut-off'
-            	//range = TranspositionTableItem.FailHigh;
             	break;
             }
         	// (* set new null window *)
             b = alpha + 1;
         }
         
-        //cloned = null;
-        
-		//this.hash.add(board.hashCode(), depth, alpha, range);
         return alpha;
 	}
 
@@ -286,9 +267,6 @@ public class ComputerPlayer extends Player
 		this.rules = null;
 		this.players = null;
 
-		//this.hash.destroy();
-		//this.hash = null;
-		
 		this.worker.interrupt();
 		try
 		{
@@ -311,7 +289,6 @@ public class ComputerPlayer extends Player
 	private IRules rules;
 	private IPlayer[] players;
 	private int pid;
-	//private TranspositionTable hash;
 	private Thread worker;
 	private Object contextReady;
 	private Object workerReady;

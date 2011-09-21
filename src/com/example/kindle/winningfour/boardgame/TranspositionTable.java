@@ -11,39 +11,10 @@ public class TranspositionTable
 		this.data = new HashMap();
 	}
 
-	public TranspositionTableItem lookup(int key, int depth, int alpha, int beta)
+	public TranspositionTableItem lookup(int key, int depth)
 	{
-		//int result = TranspositionTableItem.Unknown;
-		TranspositionTableItem item = (TranspositionTableItem) this.data.get(new Integer(key));
-		
-		if (item != null)
-		{
-			this.hits += 1;
-		}
-
-		return item;
-/*		if (item != null && (item.depth >= depth))
-		{
-			switch (item.range)
-			{
-			case TranspositionTableItem.FailLow:
-				if (item.score <= alpha)
-				{
-					result = alpha;
-				}
-				break;
-			case TranspositionTableItem.FailHigh:
-				if (item.score >= beta)
-				{
-					result = beta;
-				}
-				break;
-			case TranspositionTableItem.ExactValue:
-				result = item.score;
-			}
-		}
-*/
-		//return result;
+		// TODO: make use of depth
+		return (TranspositionTableItem) this.data.get(new Integer(key));
 	}
 	
 	public void add(int key, int depth, int score, int range)
@@ -52,16 +23,13 @@ public class TranspositionTable
 
 		if (item == null)
 		{
-			//if (hashtable.size() >= model.getHashelements())
-			//	return;
-
 			item = new TranspositionTableItem();
 			item.score = score;
 			item.depth = depth;
 			item.range = range;
 
 			this.data.put(new Integer(key), item);
-		}  // entry does exist but with smaller distance
+		}
 		else if (item.depth < depth)
 		{
 			item.score = score;
@@ -81,5 +49,4 @@ public class TranspositionTable
 	}
 	
 	private HashMap data;
-	private int hits;
 }

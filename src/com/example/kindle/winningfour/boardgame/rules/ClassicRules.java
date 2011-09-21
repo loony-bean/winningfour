@@ -238,7 +238,7 @@ public class ClassicRules implements IRules
 		}
 		else
 		{
-			TranspositionTableItem item = this.hash.lookup(board.hashCode(), depth, 0, 0);
+			TranspositionTableItem item = this.hash.lookup(board.hashCode(), depth);
 			if (item == null)
 			{
 				ITurn last = board.getLastTurn();

@@ -115,7 +115,7 @@ public class GameView extends Container
 		this.statusLabel.setText(this.getStatusString());
 
 		super.paint(g);
-
+		
 		if (g.getClipBounds().width == this.getSize().width)
 		{
 			AppResources.getSkin().paintBoard(g, this);

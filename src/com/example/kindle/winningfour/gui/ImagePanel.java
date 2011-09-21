@@ -2,6 +2,7 @@ package com.example.kindle.winningfour.gui;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Image;
 
 import com.amazon.kindle.kindlet.ui.KImage;
@@ -33,6 +34,11 @@ public class ImagePanel extends GamePanel
 
 		this.backgroundPane.setBounds(0, 0, this.layoutSize.width, this.layoutSize.height);
 		this.backgroundPane.setImage(image);
+	}
+	
+	public void paint(Graphics g)
+	{
+		super.paint(g);
 	}
 	
 	public void setInner(final Container inner)
