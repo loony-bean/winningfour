@@ -16,6 +16,7 @@ import com.example.kindle.utils.FileHelper;
 import com.example.kindle.winningfour.AppResources;
 import com.example.kindle.winningfour.boardgame.BoardItem;
 
+// TODO: save images in 16 grays
 public class BaseSkin implements ISkin
 {
 	public static final double DESIGN_WIDTH  = 600.0;

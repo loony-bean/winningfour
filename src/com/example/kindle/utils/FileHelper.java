@@ -107,7 +107,7 @@ public class FileHelper
 	 */
 	public static JSONObject json(final InputStream inputStream)
 	{
-		// TODO: refactor me
+		// TODO: refactor json loading
 		JSONObject result = new JSONObject();
 		JSONParser parser = new JSONParser();
 		BufferedReader reader = null;

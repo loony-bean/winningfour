@@ -36,21 +36,25 @@ public class InstructionsPage extends PageState
 
         KTextArea textArea = new KTextArea();
 
+        // TODO: automate build number increment and add branded support email link
         ArrayList text = new ArrayList();
         text.add("You and your opponent take turns putting pieces into the " +
-        		"playing area using the 5-way selector. Press Left or Right " +
+        		"playing area using the 5-way controller. Press Left or Right " +
         		"to move selector and Down, Up or Select to put a new piece. " +
         		"To win you need to connect four pieces of your color vertically, " +
         		"horizontally or diagonally.");
         text.add("");
-        text.add("You can use game options to change the board size, choose " +
-        		"computer or human to be your opponent or select who will make " +
-        		"the first turn. Also you can adjust game timer and select " +
-        		"graphical skin you like.");
+        text.add("Pressing Text (Aa) key you can alter game options to change " +
+        		"the board size, choose computer or human to be your opponent " +
+        		"or select who will make the first turn. Also you can adjust " +
+        		"game timer and select graphical skin you like.");
         text.add("");
-        text.add("After the game is done press N to start a new game.");
+        text.add("During a game of after the game is done press N to start a new game.");
         text.add("");
-        text.add("Press Back or I to return to the game.");
+        text.add("For more help send an email to winningfour@example.com.");
+        text.add("(Version 1.0 Build 1)");
+        text.add("");
+        text.add("Press Back key or I to return to the game.");
         Iterator iter = text.iterator();
         while (iter.hasNext())
         {

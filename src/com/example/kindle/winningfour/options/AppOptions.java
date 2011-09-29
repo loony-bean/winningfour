@@ -74,7 +74,6 @@ public class AppOptions
 			if (e.getStateChange() == ItemEvent.SELECTED)
 			{
 				App.log(this.key + ":" + e.getItem());
-				// TODO: this does not work on high speed
 				this.opts.put(this.key, e.getItem());
 				this.listener.onOptionsChanged();
 			}
