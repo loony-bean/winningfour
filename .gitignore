@@ -4,4 +4,4 @@ bin/
 .settings/
 .classpath
 .project
-.xls
+*.xls
